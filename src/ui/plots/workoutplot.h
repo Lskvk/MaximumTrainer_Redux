@@ -84,6 +84,9 @@ public slots:
 
     void increaseDifficulty();
     void decreaseDifficulty();
+    /// Apply a relative percentage-point change through the same state path as
+    /// the on-screen buttons, keeping the value label and emitted target in sync.
+    void adjustDifficultyBy(int percentagePoints);
 
     // Pulse the matching +/− button green on any difficulty change (keys
     // or on-screen), mirroring the gear/radio flash.

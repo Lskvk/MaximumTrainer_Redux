@@ -70,6 +70,7 @@ INCLUDEPATH += \
     ../../src/persistence/file \
     ../../src/ui \
     ../../src/ui/components \
+    ../../src/ui/plots \
     ../../src/ui/workout_editor
 
 SOURCES += \
@@ -86,7 +87,17 @@ SOURCES += \
     ../../src/model/userstudio.cpp \
     ../../src/model/trackpoint.cpp \
     ../../src/fitness/achievements/achievement.cpp \
+    ../../src/ui/components/faderlabel.cpp \
+    ../../src/ui/components/shapefactory.cpp \
     ../../src/ui/dialog_connection_method.cpp \
+    ../../src/ui/plots/curvedatacadence.cpp \
+    ../../src/ui/plots/curvedataheartrate.cpp \
+    ../../src/ui/plots/curvedatapower.cpp \
+    ../../src/ui/plots/curvedataspeed.cpp \
+    ../../src/ui/plots/workoutplot.cpp \
+    ../../src/ui/plots/zoneitem.cpp \
+    ../../src/ui/workout_editor/myqwtpickermachine.cpp \
+    ../../src/ui/workout_editor/myqwtplotpicker.cpp \
     ../../src/ui/workout_editor/repeatwidget.cpp \
     ../intervals_icu/credential_store_stub.cpp \
     tst_ui_screens.cpp
@@ -98,7 +109,11 @@ HEADERS += \
     ../../src/model/settings.h \
     ../../src/model/workout.h \
     ../../src/model/interval.h \
+    ../../src/ui/components/faderlabel.h \
+    ../../src/ui/components/shapefactory.h \
     ../../src/ui/dialog_connection_method.h \
+    ../../src/ui/plots/workoutplot.h \
+    ../../src/ui/workout_editor/myqwtplotpicker.h \
     ../../src/ui/workout_editor/repeatwidget.h
 
 FORMS += \
