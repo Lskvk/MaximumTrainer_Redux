@@ -74,7 +74,7 @@ WorkoutPlot::WorkoutPlot(QWidget *parent) : QwtPlot(parent) {
     d_picker->setTrackerPen(pen);
     pickerMachine = new MyQwtPickerMachine();
     d_picker->setStateMachine(pickerMachine );
-    connect(d_picker, SIGNAL(selected(QPointF)), this, SLOT(pointClicked(QPointF)) );
+    connect(d_picker, qOverload<const QPointF&>(&MyQwtPlotPicker::selected), this, &WorkoutPlot::pointClicked);
 
     canvas()->setStyleSheet(" QwtPlotCanvas { background-color: rgb(35, 35, 35); }");
     canvas()->setCursor(Qt::CrossCursor);

@@ -174,8 +174,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Right-click context menu on the Plan (Intervals.icu calendar) view
     ui->webView_plan->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->webView_plan, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(showPlanContextMenu(QPoint)));
+    connect(ui->webView_plan, &QWebEngineView::customContextMenuRequested, this, &MainWindow::showPlanContextMenu);
 
     // Load Intervals.icu athlete calendar, or show a setup prompt if no credentials configured
     if (!account->intervals_icu_athlete_id.isEmpty()) {
@@ -253,7 +252,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
     ftb->setCurrentIndex(0);
-    connect(ftb, SIGNAL(currentChanged(int)), this, SLOT(leftMenuChanged(int)) );
+    connect(ftb, &FancyTabBar::currentChanged, this, &MainWindow::leftMenuChanged);
 
 
     ui->tabWidget_workout->tabBar()->setObjectName("tabBarWorkout");
@@ -285,27 +284,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
     // connect Workout Dialog done with refresh Training Data page
-    connect (ui->tab_workout1, SIGNAL(executeWorkout(Workout)), this, SLOT(executeWorkout(Workout)) );
+    connect (ui->tab_workout1, &Main_WorkoutPage::executeWorkout, this, &MainWindow::executeWorkout);
 
 
     /// Connect Workout Creator --> WorkoutList Page
-    connect(ui->tab_create, SIGNAL(workoutCreated(Workout)), ui->tab_workout1, SLOT(addWorkout(Workout)));
-    connect(ui->tab_create, SIGNAL(workoutCreated(Workout)), this, SLOT(showWorkoutList()));
-    connect(ui->tab_create, SIGNAL(workoutOverwrited(Workout)), ui->tab_workout1, SLOT(overwriteWorkout(Workout)));
-    connect(ui->tab_create, SIGNAL(workoutOverwrited(Workout)), this, SLOT(showWorkoutList()));
+    connect(ui->tab_create, &WorkoutCreator::workoutCreated, ui->tab_workout1, &Main_WorkoutPage::addWorkout);
+    connect(ui->tab_create, &WorkoutCreator::workoutCreated, this, &MainWindow::showWorkoutList);
+    connect(ui->tab_create, &WorkoutCreator::workoutOverwrited, ui->tab_workout1, &Main_WorkoutPage::overwriteWorkout);
+    connect(ui->tab_create, &WorkoutCreator::workoutOverwrited, this, &MainWindow::showWorkoutList);
 
-    connect(ui->tab_workout1, SIGNAL(editWorkout(Workout)), this, SLOT(showWorkoutCreator()));
-    connect(ui->tab_workout1, SIGNAL(editWorkout(Workout)), ui->tab_create, SLOT(editWorkout(Workout)));
+    connect(ui->tab_workout1, qOverload<Workout>(&Main_WorkoutPage::editWorkout), this, &MainWindow::showWorkoutCreator);
+    connect(ui->tab_workout1, qOverload<Workout>(&Main_WorkoutPage::editWorkout), ui->tab_create, &WorkoutCreator::editWorkout);
 
 
-    connect(ui->tab_create, SIGNAL(showStatusBarMessage(QString, int)), ui->widget_bottomMenu, SLOT(setGeneralMessage(QString,int)));
+    connect(ui->tab_create, &WorkoutCreator::showStatusBarMessage, ui->widget_bottomMenu, qOverload<const QString&, int>(&BottomBar::setGeneralMessage));
 
 
     /// Update create workout graph on FTP and LTHR change
-    connect(this, SIGNAL(ftpAndTabProfileChanged()), ui->tab_create, SLOT(computeWorkout()) );
+    connect(this, &MainWindow::ftpAndTabProfileChanged, ui->tab_create, &WorkoutCreator::computeWorkout);
     ///Also update workout metrics based on FTP
-    connect(this, SIGNAL(ftpAndTabProfileChanged()), ui->tab_workout1, SLOT(updateTableViewMetrics()) );
-    connect(this, SIGNAL(ftpAndTabProfileChanged()), ui->tab_workout1, SLOT(refreshMapWorkout()) );
+    connect(this, &MainWindow::ftpAndTabProfileChanged, ui->tab_workout1, &Main_WorkoutPage::updateTableViewMetrics);
+    connect(this, &MainWindow::ftpAndTabProfileChanged, ui->tab_workout1, &Main_WorkoutPage::refreshMapWorkout);
 
 
     /// Load Settings
@@ -365,7 +364,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     qDebug() << "Test1";
 
-    connect(planObject, SIGNAL(signal_goToWorkout(QString)), this, SLOT(goToWorkoutPlanFilter(QString)) );
+    connect(planObject, &PlanObject::signal_goToWorkout, this, &MainWindow::goToWorkoutPlanFilter);
 
     // Native Studio page: enabling studio mode / changing rider count routes
     // through the same MainWindow logic the old web page used.
@@ -460,7 +459,7 @@ void MainWindow::goToWorkoutPlanFilter(const QString& workoutId) {
 
     m_pendingIntervalsWorkoutId = workoutId;
     ui->widget_bottomMenu->setGeneralMessage(tr("Downloading workout from Intervals.icu..."));
-    connect(replyIntervalsIcuZwo, SIGNAL(finished()), this, SLOT(onIntervalsIcuWorkoutDownloaded()));
+    connect(replyIntervalsIcuZwo, &QNetworkReply::finished, this, &MainWindow::onIntervalsIcuWorkoutDownloaded);
 }
 
 
@@ -553,7 +552,7 @@ void MainWindow::reloadPlanWebView() {
 void MainWindow::showPlanContextMenu(const QPoint &pos) {
 
     QMenu *menu = new QMenu(ui->webView_plan);
-    menu->addAction(tr("Refresh"), this, SLOT(reloadPlanWebView()));
+    menu->addAction(tr("Refresh"), this, &MainWindow::reloadPlanWebView);
     // popup() instead of exec(): a nested event loop is fatal on WASM.
     menu->setAttribute(Qt::WA_DeleteOnClose);
     menu->popup(ui->webView_plan->mapToGlobal(pos));
@@ -1180,7 +1179,7 @@ void MainWindow::releaseWebEngineViews()
 void MainWindow::scheduleScreenshotQuit()
 {
     releaseWebEngineViews();
-    QTimer::singleShot(300, qApp, SLOT(quit()));
+    QTimer::singleShot(300, qApp, &QCoreApplication::quit);
 }
 
 //QMENUBAR
@@ -1485,25 +1484,25 @@ void MainWindow::startSimulatedWorkout(const Workout &workout)
         simHub->setRowingMode(account->rowing_mode);
         simHub->setUserID(i + 1);
 
-        connect(simHub, SIGNAL(signal_hr(int,int)),               w, SLOT(HrDataReceived(int,int)));
-        connect(simHub, SIGNAL(signal_cadence(int,int)),          w, SLOT(CadenceDataReceived(int,int)));
-        connect(simHub, SIGNAL(signal_speed(int,double)),         w, SLOT(TrainerSpeedDataReceived(int,double)));
-        connect(simHub, SIGNAL(signal_power(int,int)),            w, SLOT(PowerDataReceived(int,int)));
-        connect(simHub, SIGNAL(signal_balance(int,int)),          w, SLOT(PowerBalanceDataReceived(int,int)));
-        connect(simHub, SIGNAL(signal_pedal(int,double,double,double,double,double)), w, SLOT(pedalMetricReceived(int,double,double,double,double,double)));
-        connect(simHub, SIGNAL(signal_oxygen(int,double,double)), w, SLOT(OxygenValueChanged(int,double,double)));
+        connect(simHub, &SimulatorHub::signal_hr, w, &WorkoutDialog::HrDataReceived);
+        connect(simHub, &SimulatorHub::signal_cadence, w, &WorkoutDialog::CadenceDataReceived);
+        connect(simHub, &SimulatorHub::signal_speed, w, &WorkoutDialog::TrainerSpeedDataReceived);
+        connect(simHub, &SimulatorHub::signal_power, w, &WorkoutDialog::PowerDataReceived);
+        connect(simHub, &SimulatorHub::signal_balance, w, &WorkoutDialog::PowerBalanceDataReceived);
+        connect(simHub, &SimulatorHub::signal_pedal, w, &WorkoutDialog::pedalMetricReceived);
+        connect(simHub, &SimulatorHub::signal_oxygen, w, &WorkoutDialog::OxygenValueChanged);
 
-        connect(w, SIGNAL(setLoad(int,double)),  simHub, SLOT(setLoad(int,double)));
-        connect(w, SIGNAL(setSlope(int,double)), simHub, SLOT(setSlope(int,double)));
-        connect(w, SIGNAL(stopDecodingMsgHub()), simHub, SLOT(stopDecodingMsg()));
+        connect(w, &WorkoutDialog::setLoad, simHub, &SimulatorHub::setLoad);
+        connect(w, &WorkoutDialog::setSlope, simHub, &SimulatorHub::setSlope);
+        connect(w, &WorkoutDialog::stopDecodingMsgHub, simHub, &SimulatorHub::stopDecodingMsg);
 
         simHubs.append(simHub);
     }
     w->enableTrainerControl();
 
-    connect(w, SIGNAL(fitFileReady(QString, QString, QString)), this, SLOT(checkToUploadFile(QString,QString,QString)));
-    connect(w, SIGNAL(ftp_lthr_changed()), ui->tab_workout1, SLOT(updateTableViewMetrics()));
-    connect(w, SIGNAL(ftpUserStudioChanged(QVector<UserStudio>)), this, SLOT(updateVecStudio(QVector<UserStudio>)));
+    connect(w, &WorkoutDialog::fitFileReady, this, &MainWindow::checkToUploadFile);
+    connect(w, &WorkoutDialog::ftp_lthr_changed, ui->tab_workout1, &Main_WorkoutPage::updateTableViewMetrics);
+    connect(w, &WorkoutDialog::ftpUserStudioChanged, this, &MainWindow::updateVecStudio);
 
     connect(w, &QDialog::finished, this, [this, simHubs]() {
         workoutOver();
@@ -1579,23 +1578,23 @@ void MainWindow::startWorkoutWithConnectedHub(const Workout &workout, BtleHub *b
     w->setAttribute(Qt::WA_DeleteOnClose);
     w->setWindowModality(Qt::ApplicationModal);
 
-    connect(btleHub, SIGNAL(signal_hr(int,int)),               w, SLOT(HrDataReceived(int,int)));
-    connect(btleHub, SIGNAL(signal_cadence(int,int)),          w, SLOT(CadenceDataReceived(int,int)));
-    connect(btleHub, SIGNAL(signal_speed(int,double)),         w, SLOT(TrainerSpeedDataReceived(int,double)));
-    connect(btleHub, SIGNAL(signal_power(int,int)),            w, SLOT(PowerDataReceived(int,int)));
-    connect(btleHub, SIGNAL(signal_balance(int,int)),          w, SLOT(PowerBalanceDataReceived(int,int)));
-    connect(btleHub, SIGNAL(signal_pedal(int,double,double,double,double,double)), w, SLOT(pedalMetricReceived(int,double,double,double,double,double)));
-    connect(btleHub, SIGNAL(signal_oxygen(int,double,double)), w, SLOT(OxygenValueChanged(int,double,double)));
+    connect(btleHub, &BtleHub::signal_hr, w, &WorkoutDialog::HrDataReceived);
+    connect(btleHub, &BtleHub::signal_cadence, w, &WorkoutDialog::CadenceDataReceived);
+    connect(btleHub, &BtleHub::signal_speed, w, &WorkoutDialog::TrainerSpeedDataReceived);
+    connect(btleHub, &BtleHub::signal_power, w, &WorkoutDialog::PowerDataReceived);
+    connect(btleHub, &BtleHub::signal_balance, w, &WorkoutDialog::PowerBalanceDataReceived);
+    connect(btleHub, &BtleHub::signal_pedal, w, &WorkoutDialog::pedalMetricReceived);
+    connect(btleHub, &BtleHub::signal_oxygen, w, &WorkoutDialog::OxygenValueChanged);
     connect(btleHub, &BtleHub::signal_battery, w, &WorkoutDialog::batteryStatusReceived);
 
     // Surface BLE disconnections mid-workout so WorkoutDialog can pause and
     // the user sees the DOM reconnect overlay (WASM) or a status message.
     connect(btleHub, &BtleHub::connectionError, w, &WorkoutDialog::onBleConnectionError);
 
-    connect(w, SIGNAL(setLoad(int,double)),  btleHub, SLOT(setLoad(int,double)));
-    connect(w, SIGNAL(setSlope(int,double)), btleHub, SLOT(setSlope(int,double)));
-    connect(w, SIGNAL(setResistance(int,int)), btleHub, SLOT(setResistanceLevel(int,int)));
-    connect(w, SIGNAL(stopDecodingMsgHub()), btleHub, SLOT(stopDecodingMsg()));
+    connect(w, &WorkoutDialog::setLoad, btleHub, &BtleHub::setLoad);
+    connect(w, &WorkoutDialog::setSlope, btleHub, &BtleHub::setSlope);
+    connect(w, &WorkoutDialog::setResistance, btleHub, &BtleHub::setResistanceLevel);
+    connect(w, &WorkoutDialog::stopDecodingMsgHub, btleHub, &BtleHub::stopDecodingMsg);
     // Virtual shifting prefers FTMS resistance level (0x04) for an instant,
     // gear-like feel; tell the dialog whether this trainer supports it (the
     // feature read may already have completed, so seed it now and also listen).
@@ -1614,9 +1613,9 @@ void MainWindow::startWorkoutWithConnectedHub(const Workout &workout, BtleHub *b
     connect(w, &WorkoutDialog::reconnectDevice, btleHub, &BtleHub::scanForDevice);
 #endif
 
-    connect(w, SIGNAL(fitFileReady(QString, QString, QString)), this, SLOT(checkToUploadFile(QString,QString,QString)));
-    connect(w, SIGNAL(ftp_lthr_changed()), ui->tab_workout1, SLOT(updateTableViewMetrics()));
-    connect(w, SIGNAL(ftpUserStudioChanged(QVector<UserStudio>)), this, SLOT(updateVecStudio(QVector<UserStudio>)));
+    connect(w, &WorkoutDialog::fitFileReady, this, &MainWindow::checkToUploadFile);
+    connect(w, &WorkoutDialog::ftp_lthr_changed, ui->tab_workout1, &Main_WorkoutPage::updateTableViewMetrics);
+    connect(w, &WorkoutDialog::ftpUserStudioChanged, this, &MainWindow::updateVecStudio);
 
     connect(w, &QDialog::finished, this, [this, btleHub]() {
         workoutOver();
@@ -1648,9 +1647,9 @@ void MainWindow::startWorkoutWithHubs(const Workout &workout,
     QSet<BtleHub*> allHubs;
     wireHubsToDialog(w, hubsByRole, allHubs);
 
-    connect(w, SIGNAL(fitFileReady(QString, QString, QString)), this, SLOT(checkToUploadFile(QString,QString,QString)));
-    connect(w, SIGNAL(ftp_lthr_changed()), ui->tab_workout1, SLOT(updateTableViewMetrics()));
-    connect(w, SIGNAL(ftpUserStudioChanged(QVector<UserStudio>)), this, SLOT(updateVecStudio(QVector<UserStudio>)));
+    connect(w, &WorkoutDialog::fitFileReady, this, &MainWindow::checkToUploadFile);
+    connect(w, &WorkoutDialog::ftp_lthr_changed, ui->tab_workout1, &Main_WorkoutPage::updateTableViewMetrics);
+    connect(w, &WorkoutDialog::ftpUserStudioChanged, this, &MainWindow::updateVecStudio);
 
     connect(w, &QDialog::finished, this, [this, allHubs]() {
         workoutOver();
@@ -1692,7 +1691,7 @@ void MainWindow::wireHubsToDialog(WorkoutDialog *w,
         allHubs.insert(hub);
         connect(hub, &BtleHub::signal_battery,  w, &WorkoutDialog::batteryStatusReceived);
         connect(hub, &BtleHub::connectionError, w, &WorkoutDialog::onBleConnectionError);
-        connect(w, SIGNAL(stopDecodingMsgHub()), hub, SLOT(stopDecodingMsg()));
+        connect(w, &WorkoutDialog::stopDecodingMsgHub, hub, &BtleHub::stopDecodingMsg);
     }
 
     BtleHub *powerHub   = nullptr;
@@ -1703,25 +1702,25 @@ void MainWindow::wireHubsToDialog(WorkoutDialog *w,
     auto wireHr = [&](BtleHub *hub) {
         if (hrHub == hub) return;
         hrHub = hub;
-        connect(hub, SIGNAL(signal_hr(int,int)), w, SLOT(HrDataReceived(int,int)));
+        connect(hub, &BtleHub::signal_hr, w, &WorkoutDialog::HrDataReceived);
     };
 
     auto wirePower = [&](BtleHub *hub) {
         if (powerHub == hub) return;          // already wired from this device
         powerHub = hub;
-        connect(hub, SIGNAL(signal_power(int,int)), w, SLOT(PowerDataReceived(int,int)));
-        connect(hub, SIGNAL(signal_balance(int,int)), w, SLOT(PowerBalanceDataReceived(int,int)));
-        connect(hub, SIGNAL(signal_pedal(int,double,double,double,double,double)), w, SLOT(pedalMetricReceived(int,double,double,double,double,double)));
+        connect(hub, &BtleHub::signal_power, w, &WorkoutDialog::PowerDataReceived);
+        connect(hub, &BtleHub::signal_balance, w, &WorkoutDialog::PowerBalanceDataReceived);
+        connect(hub, &BtleHub::signal_pedal, w, &WorkoutDialog::pedalMetricReceived);
     };
     auto wireCadence = [&](BtleHub *hub) {
         if (cadenceHub == hub) return;
         cadenceHub = hub;
-        connect(hub, SIGNAL(signal_cadence(int,int)), w, SLOT(CadenceDataReceived(int,int)));
+        connect(hub, &BtleHub::signal_cadence, w, &WorkoutDialog::CadenceDataReceived);
     };
     auto wireSpeed = [&](BtleHub *hub) {
         if (speedHub == hub) return;
         speedHub = hub;
-        connect(hub, SIGNAL(signal_speed(int,double)), w, SLOT(TrainerSpeedDataReceived(int,double)));
+        connect(hub, &BtleHub::signal_speed, w, &WorkoutDialog::TrainerSpeedDataReceived);
     };
 
     // Wire the trainer first so resistance control is set up and its data takes
@@ -1735,9 +1734,9 @@ void MainWindow::wireHubsToDialog(WorkoutDialog *w,
         // mark the Heart Rate slot "provided by trainer" next time it opens.
         connect(hub, &BtleHub::signal_trainerProvidesHr, this,
                 [riderIndex]() { BtleSensorStore::setTrainerProvidesHr(true, riderIndex); });
-        connect(w, SIGNAL(setLoad(int,double)),  hub, SLOT(setLoad(int,double)));
-        connect(w, SIGNAL(setSlope(int,double)), hub, SLOT(setSlope(int,double)));
-        connect(w, SIGNAL(setResistance(int,int)), hub, SLOT(setResistanceLevel(int,int)));
+        connect(w, &WorkoutDialog::setLoad, hub, &BtleHub::setLoad);
+        connect(w, &WorkoutDialog::setSlope, hub, &BtleHub::setSlope);
+        connect(w, &WorkoutDialog::setResistance, hub, &BtleHub::setResistanceLevel);
         connect(hub, &BtleHub::signal_resistanceLevelSupported,
                 w, &WorkoutDialog::setResistanceLevelSupported);
         w->setResistanceLevelSupported(hub->resistanceLevelSupported());
@@ -1758,7 +1757,7 @@ void MainWindow::wireHubsToDialog(WorkoutDialog *w,
         wireHr(hubsByRole.value(BtleSensorRole::Trainer));
     if (hubsByRole.contains(BtleSensorRole::Oxygen))
         connect(hubsByRole.value(BtleSensorRole::Oxygen),
-                SIGNAL(signal_oxygen(int,double,double)), w, SLOT(OxygenValueChanged(int,double,double)));
+                &BtleHub::signal_oxygen, w, &WorkoutDialog::OxygenValueChanged);
 }
 
 // Studio variant: each rider already had its saved sensors connected and its
@@ -1776,9 +1775,9 @@ void MainWindow::startWorkoutWithStudioHubs(const Workout &workout,
     for (const QPair<int, QMap<BtleSensorRole, BtleHub*>> &rider : riderHubs)
         wireHubsToDialog(w, rider.second, allHubs, rider.first);
 
-    connect(w, SIGNAL(fitFileReady(QString, QString, QString)), this, SLOT(checkToUploadFile(QString,QString,QString)));
-    connect(w, SIGNAL(ftp_lthr_changed()), ui->tab_workout1, SLOT(updateTableViewMetrics()));
-    connect(w, SIGNAL(ftpUserStudioChanged(QVector<UserStudio>)), this, SLOT(updateVecStudio(QVector<UserStudio>)));
+    connect(w, &WorkoutDialog::fitFileReady, this, &MainWindow::checkToUploadFile);
+    connect(w, &WorkoutDialog::ftp_lthr_changed, ui->tab_workout1, &Main_WorkoutPage::updateTableViewMetrics);
+    connect(w, &WorkoutDialog::ftpUserStudioChanged, this, &MainWindow::updateVecStudio);
 
     connect(w, &QDialog::finished, this, [this, allHubs]() {
         workoutOver();
@@ -2012,20 +2011,13 @@ void MainWindow::launchDemoWorkout()
     m_ssSimHub->setRowingMode(account->rowing_mode); // demo follows the app mode
     m_ssWorkoutDlg = new WorkoutDialog(makeDemoWorkout(), lstRadio, vecUserStudio, this);
 
-    connect(m_ssSimHub, SIGNAL(signal_hr(int,int)),
-            m_ssWorkoutDlg, SLOT(HrDataReceived(int,int)));
-    connect(m_ssSimHub, SIGNAL(signal_cadence(int,int)),
-            m_ssWorkoutDlg, SLOT(CadenceDataReceived(int,int)));
-    connect(m_ssSimHub, SIGNAL(signal_speed(int,double)),
-            m_ssWorkoutDlg, SLOT(TrainerSpeedDataReceived(int,double)));
-    connect(m_ssSimHub, SIGNAL(signal_power(int,int)),
-            m_ssWorkoutDlg, SLOT(PowerDataReceived(int,int)));
-    connect(m_ssSimHub, SIGNAL(signal_balance(int,int)),
-            m_ssWorkoutDlg, SLOT(PowerBalanceDataReceived(int,int)));
-    connect(m_ssSimHub, SIGNAL(signal_pedal(int,double,double,double,double,double)),
-            m_ssWorkoutDlg, SLOT(pedalMetricReceived(int,double,double,double,double,double)));
-    connect(m_ssSimHub, SIGNAL(signal_oxygen(int,double,double)),
-            m_ssWorkoutDlg, SLOT(OxygenValueChanged(int,double,double)));
+    connect(m_ssSimHub, &SimulatorHub::signal_hr, m_ssWorkoutDlg, &WorkoutDialog::HrDataReceived);
+    connect(m_ssSimHub, &SimulatorHub::signal_cadence, m_ssWorkoutDlg, &WorkoutDialog::CadenceDataReceived);
+    connect(m_ssSimHub, &SimulatorHub::signal_speed, m_ssWorkoutDlg, &WorkoutDialog::TrainerSpeedDataReceived);
+    connect(m_ssSimHub, &SimulatorHub::signal_power, m_ssWorkoutDlg, &WorkoutDialog::PowerDataReceived);
+    connect(m_ssSimHub, &SimulatorHub::signal_balance, m_ssWorkoutDlg, &WorkoutDialog::PowerBalanceDataReceived);
+    connect(m_ssSimHub, &SimulatorHub::signal_pedal, m_ssWorkoutDlg, &WorkoutDialog::pedalMetricReceived);
+    connect(m_ssSimHub, &SimulatorHub::signal_oxygen, m_ssWorkoutDlg, &WorkoutDialog::OxygenValueChanged);
 
     m_ssSimHub->start();
     m_ssWorkoutDlg->enableTrainerControl();   // demo represents a trainer workout (shows the gear UI)
@@ -2086,7 +2078,7 @@ void MainWindow::runSensorCheck(const QString &outDir)
     // Start the workout so targets/ERG engage (then loads should be emitted).
     QMetaObject::invokeMethod(m_ssWorkoutDlg, "start_or_pause_workout", Qt::QueuedConnection);
 
-    QTimer::singleShot(3000, this, SLOT(sensorCheckNextStep()));
+    QTimer::singleShot(3000, this, &MainWindow::sensorCheckNextStep);
 }
 
 void MainWindow::sensorCheckNextStep()
@@ -2151,7 +2143,7 @@ void MainWindow::sensorCheckNextStep()
         return;
     }
     }
-    QTimer::singleShot(900, this, SLOT(sensorCheckNextStep()));
+    QTimer::singleShot(900, this, &MainWindow::sensorCheckNextStep);
 }
 
 void MainWindow::showDemoRaceView()
@@ -2208,7 +2200,7 @@ void MainWindow::startScreenshotMode(const QString &outputDir)
     QCoreApplication::processEvents();
 
     // Kick off the first step after the window has had time to fully paint.
-    QTimer::singleShot(2000, this, SLOT(screenshotNextStep()));
+    QTimer::singleShot(2000, this, &MainWindow::screenshotNextStep);
 }
 
 void MainWindow::screenshotNextStep()
@@ -2381,12 +2373,12 @@ void MainWindow::screenshotNextStep()
             SimulatorHub *simHub = new SimulatorHub(this);
         simHub->setRowingMode(account->rowing_mode);
             simHub->setUserID(i + 1);
-            connect(simHub, SIGNAL(signal_hr(int,int)),      m_ssWorkoutDlg, SLOT(HrDataReceived(int,int)));
-            connect(simHub, SIGNAL(signal_cadence(int,int)), m_ssWorkoutDlg, SLOT(CadenceDataReceived(int,int)));
-            connect(simHub, SIGNAL(signal_speed(int,double)),m_ssWorkoutDlg, SLOT(TrainerSpeedDataReceived(int,double)));
-            connect(simHub, SIGNAL(signal_power(int,int)),   m_ssWorkoutDlg, SLOT(PowerDataReceived(int,int)));
-            connect(simHub, SIGNAL(signal_balance(int,int)), m_ssWorkoutDlg, SLOT(PowerBalanceDataReceived(int,int)));
-            connect(simHub, SIGNAL(signal_pedal(int,double,double,double,double,double)), m_ssWorkoutDlg, SLOT(pedalMetricReceived(int,double,double,double,double,double)));
+            connect(simHub, &SimulatorHub::signal_hr, m_ssWorkoutDlg, &WorkoutDialog::HrDataReceived);
+            connect(simHub, &SimulatorHub::signal_cadence, m_ssWorkoutDlg, &WorkoutDialog::CadenceDataReceived);
+            connect(simHub, &SimulatorHub::signal_speed, m_ssWorkoutDlg, &WorkoutDialog::TrainerSpeedDataReceived);
+            connect(simHub, &SimulatorHub::signal_power, m_ssWorkoutDlg, &WorkoutDialog::PowerDataReceived);
+            connect(simHub, &SimulatorHub::signal_balance, m_ssWorkoutDlg, &WorkoutDialog::PowerBalanceDataReceived);
+            connect(simHub, &SimulatorHub::signal_pedal, m_ssWorkoutDlg, &WorkoutDialog::pedalMetricReceived);
             simHub->start();
             m_ssStudioHubs.append(simHub);
         }
@@ -2429,7 +2421,7 @@ void MainWindow::screenshotNextStep()
     // Schedule the next step after its delay.
     const int numDelays = static_cast<int>(sizeof(ssDelays) / sizeof(ssDelays[0]));
     if (step < numDelays)
-        QTimer::singleShot(ssDelays[step], this, SLOT(screenshotNextStep()));
+        QTimer::singleShot(ssDelays[step], this, &MainWindow::screenshotNextStep);
     else
         scheduleScreenshotQuit();
 }

@@ -61,7 +61,7 @@ void myCreatorPlot::init() {
 
     pickerMachine = new MyQwtPickerMachine();
     d_picker->setStateMachine(pickerMachine );
-    connect(d_picker, SIGNAL(selected(QPointF)), this, SLOT(pointClicked(QPointF)) );
+    connect(d_picker, qOverload<const QPointF&>(&MyQwtPlotPicker::selected), this, &myCreatorPlot::pointClicked);
 }
 
 

@@ -70,7 +70,7 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
     buildIntervalSummaryGroup();
 
 
-    connect(ui->listWidget_settings, SIGNAL(currentRowChanged(int)), this, SLOT(currentListViewSelectionChanged(int)) );
+    connect(ui->listWidget_settings, &QListWidget::currentRowChanged, this, &DialogConfig::currentListViewSelectionChanged);
 
     ui->listWidget_settings->setCurrentRow(0);
     ///-----
@@ -86,9 +86,9 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
     this->soundPlayer =  qApp->property("SoundPlayer").value<SoundPlayer*>();
 
 
-    connect(ui->horizontalSlider_volume, SIGNAL(valueChanged(int)), this, SLOT(sliderValueMoved(int)));
-    connect(ui->horizontalSlider_volume, SIGNAL(sliderPressed()), this, SLOT(sliderSoundPressed()));
-    connect(ui->horizontalSlider_volume, SIGNAL(sliderReleased()), this, SLOT(sliderSoundReleased()));
+    connect(ui->horizontalSlider_volume, &QSlider::valueChanged, this, &DialogConfig::sliderValueMoved);
+    connect(ui->horizontalSlider_volume, &QSlider::sliderPressed, this, &DialogConfig::sliderSoundPressed);
+    connect(ui->horizontalSlider_volume, &QSlider::sliderReleased, this, &DialogConfig::sliderSoundReleased);
 
 
     initUi();
@@ -140,19 +140,14 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
     ui->slider_volumeRadio->setValue(volume);
 
 
-    connect(ui->tableView_radio, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(RadioDoubleClicked(QModelIndex)) );
-
-    //    connect(ui->tableView_workout->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-    //            this, SLOT(tableViewSelectionChanged(QItemSelection,QItemSelection)));
-    //    connect(ui->tableView_workout, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)) );
-    //    connect(ui->tableView_workout->verticalHeader(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)) );
+    connect(ui->tableView_radio, &TableViewHover::doubleClicked, this, &DialogConfig::RadioDoubleClicked);
 
     ui->pushButton_prevRadio->setVisible(false);
     ui->pushButton_nextRadio->setVisible(false);
 
 
-    connect(ui->slider_volumeRadio, SIGNAL(valueChanged(int)), this, SIGNAL(signal_volumeRadioChanged(int)) );
-    connect(ui->pushButton_playPause, SIGNAL(clicked()), this, SLOT(playPauseRadio()) );
+    connect(ui->slider_volumeRadio, &QSlider::valueChanged, this, &DialogConfig::signal_volumeRadioChanged);
+    connect(ui->pushButton_playPause, &QPushButton::clicked, this, &DialogConfig::playPauseRadio);
 
 
 }

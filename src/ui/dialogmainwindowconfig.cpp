@@ -113,7 +113,7 @@ DialogMainWindowConfig::DialogMainWindowConfig(QWidget *parent) : QDialog(parent
     addNav(":/image/icon/intervals",   tr("Intervals.icu"), 2);
 
 
-    connect(ui->listWidget_settings, SIGNAL(currentRowChanged(int)), this, SLOT(currentListViewSelectionChanged(int)) );
+    connect(ui->listWidget_settings, &QListWidget::currentRowChanged, this, &DialogMainWindowConfig::currentListViewSelectionChanged);
 
     ui->listWidget_settings->setCurrentRow(0);
 
@@ -130,7 +130,7 @@ void DialogMainWindowConfig::initUI() {
     ui->label_stravaUnlink->setText(tr("Unlink"));
     // Light blue that stays readable on both the dark and light Preferences themes.
     ui->label_stravaUnlink->setStyleSheet("background-color : transparent; color : #5a9fd4; text-decoration: underline;");
-    connect(ui->label_stravaUnlink, SIGNAL(clicked(bool)), this, SLOT(unlinkStravaClicked()) );
+    connect(ui->label_stravaUnlink, &FaderLabel::clicked, this, &DialogMainWindowConfig::unlinkStravaClicked);
 
     if (account->strava_access_token != "") {
         stravaLinked(true);
@@ -174,7 +174,7 @@ void DialogMainWindowConfig::stravaLinked(bool linked) {
         ui->label_connectStrava->setVisible(false);
 
         qDebug() << "before disc linked end!";
-        disconnect(ui->label_connectStrava, SIGNAL(clicked(bool)), this, SLOT(stravaLabelClicked()) );
+        disconnect(ui->label_connectStrava, &FaderLabel::clicked, this, &DialogMainWindowConfig::stravaLabelClicked);
 
         ui->label_stravaUnlink->setVisible(true);
         ui->label_stravaUnlink->setCursor(Qt::PointingHandCursor);
@@ -186,7 +186,7 @@ void DialogMainWindowConfig::stravaLinked(bool linked) {
         ui->label_connectStrava->setStyleSheet("image: url(:/image/icon/strava);");
         ui->label_connectStrava->setCursor(Qt::PointingHandCursor);
         ui->label_connectStrava->setVisible(true);
-        connect(ui->label_connectStrava, SIGNAL(clicked(bool)), this, SLOT(stravaLabelClicked()) );
+        connect(ui->label_connectStrava, &FaderLabel::clicked, this, &DialogMainWindowConfig::stravaLabelClicked);
 
         ui->label_stravaUnlink->setVisible(false);
     }
@@ -226,7 +226,7 @@ void DialogMainWindowConfig::unlinkStravaClicked() {
     qDebug() << "unlinkStravaClicked";
 
     replyStravaDeauthorization = ExtRequest::stravaDeauthorization(account->strava_access_token);
-    connect(replyStravaDeauthorization, SIGNAL(finished()), this, SLOT(stravaUnlinkFinished()) );
+    connect(replyStravaDeauthorization, &QNetworkReply::finished, this, &DialogMainWindowConfig::stravaUnlinkFinished);
 }
 
 

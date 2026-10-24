@@ -42,6 +42,8 @@ signals:
 
 
 public slots:
+    void on_pushButton_prevRadio_clicked();
+    void on_pushButton_nextRadio_clicked();
     void radioStartedPlaying();
     void radioStoppedPlaying();
 
@@ -94,8 +96,6 @@ private slots:
     // Internet Radio
     void RadioDoubleClicked(QModelIndex);
     void playNextOrPreviousRadio(bool next);
-    void on_pushButton_prevRadio_clicked();
-    void on_pushButton_nextRadio_clicked();
 
     // Radio list editor (Add / Edit / Delete buttons under the table).
     // Each persists the full radio list to the local radios.json after the

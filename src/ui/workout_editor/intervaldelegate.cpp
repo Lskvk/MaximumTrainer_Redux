@@ -37,22 +37,22 @@ QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
     /// Power
     else if (index.column() == 2 ) {
         PowerEditor *editor = new PowerEditor(parent);
-        connect (editor, SIGNAL(endEdit()),    this, SLOT(closeWidgetEditor()) );
-        connect (editor, SIGNAL(cancelEdit()), this, SLOT(cancelWidgetEditor()) );
+        connect (editor, &PowerEditor::endEdit, this, &IntervalDelegate::closeWidgetEditor);
+        connect (editor, &PowerEditor::cancelEdit, this, &IntervalDelegate::cancelWidgetEditor);
         return editor;
     }
     /// Cadence
     else if (index.column() == 3 ) {
         CadenceEditor *editor = new CadenceEditor(parent);
-        connect (editor, SIGNAL(endEdit()),    this, SLOT(closeWidgetEditor()) );
-        connect (editor, SIGNAL(cancelEdit()), this, SLOT(cancelWidgetEditor()) );
+        connect (editor, &CadenceEditor::endEdit, this, &IntervalDelegate::closeWidgetEditor);
+        connect (editor, &CadenceEditor::cancelEdit, this, &IntervalDelegate::cancelWidgetEditor);
         return editor;
     }
     /// Heart Rate
     else if (index.column() == 4 ) {
         HrEditor *editor = new HrEditor(parent);
-        connect (editor, SIGNAL(endEdit()),    this, SLOT(closeWidgetEditor()) );
-        connect (editor, SIGNAL(cancelEdit()), this, SLOT(cancelWidgetEditor()) );
+        connect (editor, &HrEditor::endEdit, this, &IntervalDelegate::closeWidgetEditor);
+        connect (editor, &HrEditor::cancelEdit, this, &IntervalDelegate::cancelWidgetEditor);
         return editor;
     }
     /// Display Msg
@@ -63,8 +63,8 @@ QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
     /// Repeat Perc
     else if (index.column() == 6 ) {
         RepeatIncreaseEditor *editor = new RepeatIncreaseEditor(parent);
-        connect (editor, SIGNAL(endEdit()),    this, SLOT(closeWidgetEditor()) );
-        connect (editor, SIGNAL(cancelEdit()), this, SLOT(cancelWidgetEditor()) );
+        connect (editor, &RepeatIncreaseEditor::endEdit, this, &IntervalDelegate::closeWidgetEditor);
+        connect (editor, &RepeatIncreaseEditor::cancelEdit, this, &IntervalDelegate::cancelWidgetEditor);
         return editor;
 
     }

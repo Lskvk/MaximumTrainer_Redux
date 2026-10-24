@@ -170,25 +170,25 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     clock1->moveToThread(thread);
 
     ///This --> Clock
-    connect(this, SIGNAL(startClock()), clock1, SLOT(startClock()) );
-    connect(this, SIGNAL(pauseClock()), clock1, SLOT(pauseClock()) );
-    connect(this, SIGNAL(resumeClock()), clock1, SLOT(resumeClock()) );
-    connect(this, SIGNAL(finishClock()), clock1, SLOT(finishClock()) );
+    connect(this, &WorkoutDialog::startClock, clock1, &Clock::startClock);
+    connect(this, &WorkoutDialog::pauseClock, clock1, &Clock::pauseClock);
+    connect(this, &WorkoutDialog::resumeClock, clock1, &Clock::resumeClock);
+    connect(this, &WorkoutDialog::finishClock, clock1, &Clock::finishClock);
 
-    connect(this, SIGNAL(sendUserInfo(int, double,double,int)), clock1, SLOT(receiveUserInfo(int, double,double,int)) );
-    connect(this, SIGNAL(sendPowerData(int, int)), clock1, SLOT(receivePowerData(int, int)) );
-    //    connect(this, SIGNAL(sendSlopeData(int,double)), clock1, SLOT(receiveSlopeData(int, double)) );
-    connect(this, SIGNAL(startClockSpeed()), clock1, SLOT(startClockSpeed()) );
+    connect(this, &WorkoutDialog::sendUserInfo, clock1, &Clock::receiveUserInfo);
+    connect(this, &WorkoutDialog::sendPowerData, clock1, &Clock::receivePowerData);
+    //    connect(this, &WorkoutDialog::sendSlopeData, clock1, &Clock::receiveSlopeData);
+    connect(this, &WorkoutDialog::startClockSpeed, clock1, &Clock::startClockSpeed);
 
     ///Clock --> This
-    connect(clock1, SIGNAL(oneCyclePassed(double)), this, SLOT(updateRealTimeGraph(double)) );
-    connect(clock1, SIGNAL(oneSecPassed(double)), this, SLOT(update1sec(double)) );
-    connect(clock1, SIGNAL(updateTimePaused(double)), this, SLOT(updatePausedTime(double)) );
-    connect(clock1, SIGNAL(virtualSpeed(int,double,double)), this, SLOT(VirtualSpeedDataReceived(int,double,double)) );
+    connect(clock1, &Clock::oneCyclePassed, this, &WorkoutDialog::updateRealTimeGraph);
+    connect(clock1, &Clock::oneSecPassed, this, &WorkoutDialog::update1sec);
+    connect(clock1, &Clock::updateTimePaused, this, &WorkoutDialog::updatePausedTime);
+    connect(clock1, &Clock::virtualSpeed, this, &WorkoutDialog::VirtualSpeedDataReceived);
 
-    connect(clock1, SIGNAL(finished()), thread, SLOT(quit()));
-    connect(clock1, SIGNAL(finished()), clock1, SLOT(deleteLater()));
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    connect(clock1, &Clock::finished, thread, &QThread::quit);
+    connect(clock1, &Clock::finished, clock1, &Clock::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
 
     thread->start();
     ///----------------------------------------------------
@@ -208,7 +208,7 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     timerIgnoreClickPlot = new QTimer(this);
     bignoreClickPlot = true;
     timerIgnoreClickPlot->start(1000);
-    connect(timerIgnoreClickPlot, SIGNAL(timeout()), this, SLOT(ignoreClickPlot()) );
+    connect(timerIgnoreClickPlot, &QTimer::timeout, this, &WorkoutDialog::ignoreClickPlot);
 
     // Sensor dropout watchdog — fires every second while WorkoutDialog is open.
     m_dropoutWatchdog = new QTimer(this);
@@ -220,7 +220,7 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     /// Sounds timer
     timerCheckToActivateSound = new QTimer(this);
     timerCheckToActivateSound->setInterval(4000);
-    connect(timerCheckToActivateSound, SIGNAL(timeout()), this, SLOT(activateSoundBool()) );
+    connect(timerCheckToActivateSound, &QTimer::timeout, this, &WorkoutDialog::activateSoundBool);
     soundsActive = false;
 
     durationReactivateSameSoundMsec = 10000; //to edit if 10sec is too long
@@ -232,10 +232,10 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     timerCheckReactivateSoundPowerTooHigh->setInterval(durationReactivateSameSoundMsec);
     timerCheckReactivateSoundCadenceTooLow->setInterval(durationReactivateSameSoundMsec);
     timerCheckReactivateSoundCadenceTooHigh->setInterval(durationReactivateSameSoundMsec);
-    connect(timerCheckReactivateSoundPowerTooLow, SIGNAL(timeout()), this, SLOT(activateSoundPowerTooLow()) );
-    connect(timerCheckReactivateSoundPowerTooHigh, SIGNAL(timeout()), this, SLOT(activateSoundPowerTooHigh()) );
-    connect(timerCheckReactivateSoundCadenceTooLow, SIGNAL(timeout()), this, SLOT(activateSoundCadenceTooLow()) );
-    connect(timerCheckReactivateSoundCadenceTooHigh, SIGNAL(timeout()), this, SLOT(activateSoundCadenceTooHigh()) );
+    connect(timerCheckReactivateSoundPowerTooLow, &QTimer::timeout, this, &WorkoutDialog::activateSoundPowerTooLow);
+    connect(timerCheckReactivateSoundPowerTooHigh, &QTimer::timeout, this, &WorkoutDialog::activateSoundPowerTooHigh);
+    connect(timerCheckReactivateSoundCadenceTooLow, &QTimer::timeout, this, &WorkoutDialog::activateSoundCadenceTooLow);
+    connect(timerCheckReactivateSoundCadenceTooHigh, &QTimer::timeout, this, &WorkoutDialog::activateSoundCadenceTooHigh);
     soundPowerTooLowActive = true;
     soundPowerTooHighActive = true;
     soundCadenceTooLowActive = true;
@@ -456,7 +456,7 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     widgetAchievement->setAttribute(Qt::WA_TransparentForMouseEvents,true);
 
     timerLastAnimationAchievementComplete = new QTimer(this);
-    connect(timerLastAnimationAchievementComplete, SIGNAL(timeout()), this, SLOT(lastAchievementAnimationDone()) );
+    connect(timerLastAnimationAchievementComplete, &QTimer::timeout, this, &WorkoutDialog::lastAchievementAnimationDone);
     achievementCurrentlyPlaying = false;
     widgetAchievement->setVisible(false);
     ////////////////////////////////////-----------------------------------------
@@ -480,16 +480,16 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     loadInterface();
 
 
-    connect(ui->widget_topMenu, SIGNAL(config()), this, SLOT(showConfig()));
-    connect(ui->widget_topMenu, SIGNAL(expand()), this, SLOT(expandWindow()));
-    connect(ui->widget_topMenu, SIGNAL(exit()), this, SLOT(closeWindow()));
-    connect(ui->widget_topMenu, SIGNAL(startOrPause()), this, SLOT(start_or_pause_workout()));
-    connect(ui->widget_topMenu, SIGNAL(lap()), this, SLOT(lapButtonPressed()) );
+    connect(ui->widget_topMenu, &TopMenuWorkout::config, this, &WorkoutDialog::showConfig);
+    connect(ui->widget_topMenu, &TopMenuWorkout::expand, this, &WorkoutDialog::expandWindow);
+    connect(ui->widget_topMenu, &TopMenuWorkout::exit, this, &WorkoutDialog::closeWindow);
+    connect(ui->widget_topMenu, &TopMenuWorkout::startOrPause, this, &WorkoutDialog::start_or_pause_workout);
+    connect(ui->widget_topMenu, &TopMenuWorkout::lap, this, &WorkoutDialog::lapButtonPressed);
     // On-screen virtual-shift arrows mirror the Up/Down keys.
     connect(ui->widget_topMenu, &TopMenuWorkout::gearUp,   this, [this]{ shiftGear(+1); });
     connect(ui->widget_topMenu, &TopMenuWorkout::gearDown, this, [this]{ shiftGear(-1); });
     setupZwiftClick();   // opt-in Zwift Click v2 (right) controller, direct BLE
-    connect(this, SIGNAL(insideConfig(bool)), ui->widget_topMenu, SLOT(changeConfigIcon(bool)));
+    connect(this, &WorkoutDialog::insideConfig, ui->widget_topMenu, &TopMenuWorkout::changeConfigIcon);
 
     // Make the splitter gutters easy to grab — the 1px default was nearly
     // impossible to hit. The handle is now 10px (see .ui) with a subtle fill
@@ -499,17 +499,17 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
                        "QSplitter::handle:vertical:hover { background: #5a6473; }"));
 
 
-    connect(this, SIGNAL(increaseDifficulty()), ui->widget_workoutPlot, SLOT(increaseDifficulty()) );
-    connect(this, SIGNAL(decreaseDifficulty()), ui->widget_workoutPlot, SLOT(decreaseDifficulty()) );
-    connect(ui->widget_workoutPlot, SIGNAL(workoutDifficultyChanged(int)), this, SLOT(adjustWorkoutDifficulty(int)) );
-    connect(ui->widget_workoutPlot, SIGNAL(intervalClicked(int,double,double,bool)), this, SLOT(moveToInterval(int,double,double,bool)) );
+    connect(this, &WorkoutDialog::increaseDifficulty, ui->widget_workoutPlot, &WorkoutPlot::increaseDifficulty);
+    connect(this, &WorkoutDialog::decreaseDifficulty, ui->widget_workoutPlot, &WorkoutPlot::decreaseDifficulty);
+    connect(ui->widget_workoutPlot, &WorkoutPlot::workoutDifficultyChanged, this, &WorkoutDialog::adjustWorkoutDifficulty);
+    connect(ui->widget_workoutPlot, &WorkoutPlot::intervalClicked, this, &WorkoutDialog::moveToInterval);
 
 
     // Achievement
-    connect(achievementManager, SIGNAL(achievementCompleted(Achievement)), this, SLOT(achievementReceived(Achievement)) );
+    connect(achievementManager, &ManagerAchievement::achievementCompleted, this, &WorkoutDialog::achievementReceived);
     // Video
-    connect(this, SIGNAL(playPlayer()), ui->widgetVideo, SLOT(resume()) );
-    connect(this, SIGNAL(pausePlayer()), ui->widgetVideo, SLOT(pause()) );
+    connect(this, &WorkoutDialog::playPlayer, ui->widgetVideo, &QtMediaPlayer::resume);
+    connect(this, &WorkoutDialog::pausePlayer, ui->widgetVideo, &QtMediaPlayer::pause);
 
 
     // Initialise DataWorkout
@@ -602,31 +602,31 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     radioPlayer->setVisible(false);
     radioPlayer->setRadio(true);
 
-    connect(dconfig, SIGNAL(signal_connectToRadioUrl(QString)), radioPlayer, SLOT(openUrlRadio(QString)) );
-    connect(dconfig, SIGNAL(signal_volumeRadioChanged(int)), radioPlayer, SLOT(changeVolume(int)) );
-    connect(dconfig, SIGNAL(signal_stopPlayingRadio()), radioPlayer, SLOT(stop()) );
+    connect(dconfig, &DialogConfig::signal_connectToRadioUrl, radioPlayer, &QtMediaPlayer::openUrlRadio);
+    connect(dconfig, &DialogConfig::signal_volumeRadioChanged, radioPlayer, &QtMediaPlayer::changeVolume);
+    connect(dconfig, &DialogConfig::signal_stopPlayingRadio, radioPlayer, &QtMediaPlayer::stop);
 
-    connect(radioPlayer, SIGNAL(playing()), dconfig, SLOT(radioStartedPlaying()) );
-    connect(radioPlayer, SIGNAL(paused()), dconfig, SLOT(radioStoppedPlaying()) );
-    connect(radioPlayer, SIGNAL(stopped()), dconfig, SLOT(radioStoppedPlaying()) );
-    connect(radioPlayer, SIGNAL(playing()), ui->widget_topMenu, SLOT(radioStartedPlaying()) );
-    connect(radioPlayer, SIGNAL(paused()), ui->widget_topMenu, SLOT(radioStoppedPlaying()) );
-    connect(radioPlayer, SIGNAL(stopped()), ui->widget_topMenu, SLOT(radioStoppedPlaying()) );
+    connect(radioPlayer, &QtMediaPlayer::playing, dconfig, &DialogConfig::radioStartedPlaying);
+    connect(radioPlayer, &QtMediaPlayer::paused, dconfig, &DialogConfig::radioStoppedPlaying);
+    connect(radioPlayer, &QtMediaPlayer::stopped, dconfig, &DialogConfig::radioStoppedPlaying);
+    connect(radioPlayer, &QtMediaPlayer::playing, ui->widget_topMenu, &TopMenuWorkout::radioStartedPlaying);
+    connect(radioPlayer, &QtMediaPlayer::paused, ui->widget_topMenu, &TopMenuWorkout::radioStoppedPlaying);
+    connect(radioPlayer, &QtMediaPlayer::stopped, ui->widget_topMenu, &TopMenuWorkout::radioStoppedPlaying);
 #endif
 
-    connect(dconfig, SIGNAL(radioStatus(QString)), ui->widget_topMenu, SLOT(updateRadioStatus(QString)) );
+    connect(dconfig, &DialogConfig::radioStatus, ui->widget_topMenu, &TopMenuWorkout::updateRadioStatus);
 
     //radio
-    connect(this, SIGNAL(F6previous()), dconfig, SLOT(on_pushButton_prevRadio_clicked()) );
-    connect(this, SIGNAL(F7playPause()), dconfig, SLOT(playPauseRadio()) );
-    connect(this, SIGNAL(F8next()), dconfig, SLOT(on_pushButton_nextRadio_clicked()) );
-    connect(ui->widget_topMenu, SIGNAL(prevRadio()), dconfig, SLOT(on_pushButton_prevRadio_clicked()) );
-    connect(ui->widget_topMenu, SIGNAL(playPauseRadio()), dconfig, SLOT(playPauseRadio()) );
-    connect(ui->widget_topMenu, SIGNAL(nextRadio()), dconfig, SLOT(on_pushButton_nextRadio_clicked()) );
+    connect(this, &WorkoutDialog::F6previous, dconfig, &DialogConfig::on_pushButton_prevRadio_clicked);
+    connect(this, &WorkoutDialog::F7playPause, dconfig, &DialogConfig::playPauseRadio);
+    connect(this, &WorkoutDialog::F8next, dconfig, &DialogConfig::on_pushButton_nextRadio_clicked);
+    connect(ui->widget_topMenu, &TopMenuWorkout::prevRadio, dconfig, &DialogConfig::on_pushButton_prevRadio_clicked);
+    connect(ui->widget_topMenu, &TopMenuWorkout::playPauseRadio, dconfig, &DialogConfig::playPauseRadio);
+    connect(ui->widget_topMenu, &TopMenuWorkout::nextRadio, dconfig, &DialogConfig::on_pushButton_nextRadio_clicked);
 
     // Radio volume indicator in the top bar — reflects the config slider, so it
     // updates whether the volume changes via the dialog or a keyboard shortcut.
-    connect(dconfig, SIGNAL(signal_volumeRadioChanged(int)), ui->widget_topMenu, SLOT(updateRadioVolume(int)) );
+    connect(dconfig, &DialogConfig::signal_volumeRadioChanged, ui->widget_topMenu, &TopMenuWorkout::updateRadioVolume);
     ui->widget_topMenu->updateRadioVolume(dconfig->radioVolume());
 
     // Flash the matching top-bar control on each radio action (any source: keys
@@ -769,7 +769,7 @@ void WorkoutDialog::animateAchievement() {
     request.setUrl(QUrl(achievement.getIconUrl()));
     request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
     replyGetBixmap = managerWS->get(request);
-    connect(replyGetBixmap, SIGNAL(finished()), this, SLOT(slotFinishedGetPixmap()) );
+    connect(replyGetBixmap, &QNetworkReply::finished, this, &WorkoutDialog::slotFinishedGetPixmap);
     widgetAchievement->setVisible(true);
     widgetAchievement->fadeInAndFadeOutAfterPause(600, 2000, 6500);
     timerLastAnimationAchievementComplete->start(9000); ///Check other achievement to play in the queue
@@ -3966,55 +3966,55 @@ void WorkoutDialog::connectDataWorkout() {
 
     if (account->enable_studio_mode) {
         for (int i=0; i<account->nb_user_studio; i++) {
-            connect(arrDataWorkout[i], SIGNAL(maxPowerIntervalChanged(double)), arrUserStudioWidget[i], SLOT(setMaxIntervalPower(double)) );
-            connect(arrDataWorkout[i], SIGNAL(maxPowerWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setMaxWorkoutPower(double)) );
-            connect(arrDataWorkout[i], SIGNAL(avgPowerIntervalChanged(double)), arrUserStudioWidget[i], SLOT(setAvgIntervalPower(double)) );
-            connect(arrDataWorkout[i], SIGNAL(avgPowerWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setAvgWorkoutPower(double)) );
+            connect(arrDataWorkout[i], &DataWorkout::maxPowerIntervalChanged, arrUserStudioWidget[i], &UserStudioWidget::setMaxIntervalPower);
+            connect(arrDataWorkout[i], &DataWorkout::maxPowerWorkoutChanged, arrUserStudioWidget[i], &UserStudioWidget::setMaxWorkoutPower);
+            connect(arrDataWorkout[i], &DataWorkout::avgPowerIntervalChanged, arrUserStudioWidget[i], &UserStudioWidget::setAvgIntervalPower);
+            connect(arrDataWorkout[i], &DataWorkout::avgPowerWorkoutChanged, arrUserStudioWidget[i], &UserStudioWidget::setAvgWorkoutPower);
 
-            connect(arrDataWorkout[i], SIGNAL(maxCadenceIntervalChanged(double)), arrUserStudioWidget[i], SLOT(setMaxIntervalCad(double)) );
-            connect(arrDataWorkout[i], SIGNAL(maxCadenceWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setMaxWorkoutCad(double)) );
-            connect(arrDataWorkout[i], SIGNAL(avgCadenceIntervalChanged(double)), arrUserStudioWidget[i], SLOT(setAvgIntervalCad(double)) );
-            connect(arrDataWorkout[i], SIGNAL(avgCadenceWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setAvgWorkoutCad(double)) );
+            connect(arrDataWorkout[i], &DataWorkout::maxCadenceIntervalChanged, arrUserStudioWidget[i], &UserStudioWidget::setMaxIntervalCad);
+            connect(arrDataWorkout[i], &DataWorkout::maxCadenceWorkoutChanged, arrUserStudioWidget[i], &UserStudioWidget::setMaxWorkoutCad);
+            connect(arrDataWorkout[i], &DataWorkout::avgCadenceIntervalChanged, arrUserStudioWidget[i], &UserStudioWidget::setAvgIntervalCad);
+            connect(arrDataWorkout[i], &DataWorkout::avgCadenceWorkoutChanged, arrUserStudioWidget[i], &UserStudioWidget::setAvgWorkoutCad);
 
-            connect(arrDataWorkout[i], SIGNAL(maxHrIntervalChanged(double)), arrUserStudioWidget[i], SLOT(setMaxIntervalHr(double)) );
-            connect(arrDataWorkout[i], SIGNAL(maxHrWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setMaxWorkoutHr(double)) );
-            connect(arrDataWorkout[i], SIGNAL(avgHrIntervalChanged(double)), arrUserStudioWidget[i], SLOT(setAvgIntervalHr(double)) );
-            connect(arrDataWorkout[i], SIGNAL(avgHrWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setAvgWorkoutHr(double)) );
+            connect(arrDataWorkout[i], &DataWorkout::maxHrIntervalChanged, arrUserStudioWidget[i], &UserStudioWidget::setMaxIntervalHr);
+            connect(arrDataWorkout[i], &DataWorkout::maxHrWorkoutChanged, arrUserStudioWidget[i], &UserStudioWidget::setMaxWorkoutHr);
+            connect(arrDataWorkout[i], &DataWorkout::avgHrIntervalChanged, arrUserStudioWidget[i], &UserStudioWidget::setAvgIntervalHr);
+            connect(arrDataWorkout[i], &DataWorkout::avgHrWorkoutChanged, arrUserStudioWidget[i], &UserStudioWidget::setAvgWorkoutHr);
 
-            connect(arrDataWorkout[i], SIGNAL(normalizedPowerChanged(double)), arrUserStudioWidget[i], SLOT(setNormalizedPower(double)) );
-            connect(arrDataWorkout[i], SIGNAL(intensityFactorChanged(double)), arrUserStudioWidget[i], SLOT(setIntensityFactor(double)) );
-            connect(arrDataWorkout[i], SIGNAL(tssChanged(double)), arrUserStudioWidget[i], SLOT(setTrainingStressScore(double)) );
-            connect(arrDataWorkout[i], SIGNAL(caloriesWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setCalories(double)) );
+            connect(arrDataWorkout[i], &DataWorkout::normalizedPowerChanged, arrUserStudioWidget[i], &UserStudioWidget::setNormalizedPower);
+            connect(arrDataWorkout[i], &DataWorkout::intensityFactorChanged, arrUserStudioWidget[i], &UserStudioWidget::setIntensityFactor);
+            connect(arrDataWorkout[i], &DataWorkout::tssChanged, arrUserStudioWidget[i], &UserStudioWidget::setTrainingStressScore);
+            connect(arrDataWorkout[i], &DataWorkout::caloriesWorkoutChanged, arrUserStudioWidget[i], &UserStudioWidget::setCalories);
 
 
         }
     }
 
-    connect(arrDataWorkout[0], SIGNAL(maxHrIntervalChanged(double)), ui->wid_1_infoBoxHr, SLOT(maxIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(maxHrWorkoutChanged(double)), ui->wid_1_infoBoxHr, SLOT(maxWorkoutChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgHrIntervalChanged(double)), ui->wid_1_infoBoxHr, SLOT(avgIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgHrWorkoutChanged(double)), ui->wid_1_infoBoxHr, SLOT(avgWorkoutChanged(double)) );
+    connect(arrDataWorkout[0], &DataWorkout::maxHrIntervalChanged, ui->wid_1_infoBoxHr, &InfoWidget::maxIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::maxHrWorkoutChanged, ui->wid_1_infoBoxHr, &InfoWidget::maxWorkoutChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgHrIntervalChanged, ui->wid_1_infoBoxHr, &InfoWidget::avgIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgHrWorkoutChanged, ui->wid_1_infoBoxHr, &InfoWidget::avgWorkoutChanged);
 
-    connect(arrDataWorkout[0], SIGNAL(maxCadenceIntervalChanged(double)), ui->wid_3_infoBoxCadence, SLOT(maxIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(maxCadenceWorkoutChanged(double)), ui->wid_3_infoBoxCadence, SLOT(maxWorkoutChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgCadenceIntervalChanged(double)), ui->wid_3_infoBoxCadence, SLOT(avgIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgCadenceWorkoutChanged(double)), ui->wid_3_infoBoxCadence, SLOT(avgWorkoutChanged(double)) );
+    connect(arrDataWorkout[0], &DataWorkout::maxCadenceIntervalChanged, ui->wid_3_infoBoxCadence, &InfoWidget::maxIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::maxCadenceWorkoutChanged, ui->wid_3_infoBoxCadence, &InfoWidget::maxWorkoutChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgCadenceIntervalChanged, ui->wid_3_infoBoxCadence, &InfoWidget::avgIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgCadenceWorkoutChanged, ui->wid_3_infoBoxCadence, &InfoWidget::avgWorkoutChanged);
 
-    connect(arrDataWorkout[0], SIGNAL(maxSpeedIntervalChanged(double)), ui->wid_4_infoBoxSpeed, SLOT(maxIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(maxSpeedWorkoutChanged(double)), ui->wid_4_infoBoxSpeed, SLOT(maxWorkoutChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgSpeedIntervalChanged(double)), ui->wid_4_infoBoxSpeed, SLOT(avgIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgSpeedWorkoutChanged(double)), ui->wid_4_infoBoxSpeed, SLOT(avgWorkoutChanged(double)) );
+    connect(arrDataWorkout[0], &DataWorkout::maxSpeedIntervalChanged, ui->wid_4_infoBoxSpeed, &InfoWidget::maxIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::maxSpeedWorkoutChanged, ui->wid_4_infoBoxSpeed, &InfoWidget::maxWorkoutChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgSpeedIntervalChanged, ui->wid_4_infoBoxSpeed, &InfoWidget::avgIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgSpeedWorkoutChanged, ui->wid_4_infoBoxSpeed, &InfoWidget::avgWorkoutChanged);
 
-    connect(arrDataWorkout[0], SIGNAL(maxPowerIntervalChanged(double)), ui->wid_2_infoBoxPower, SLOT(maxIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(maxPowerWorkoutChanged(double)), ui->wid_2_infoBoxPower, SLOT(maxWorkoutChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgPowerIntervalChanged(double)), ui->wid_2_infoBoxPower, SLOT(avgIntervalChanged(double)) );
-    connect(arrDataWorkout[0], SIGNAL(avgPowerWorkoutChanged(double)), ui->wid_2_infoBoxPower, SLOT(avgWorkoutChanged(double)) );
+    connect(arrDataWorkout[0], &DataWorkout::maxPowerIntervalChanged, ui->wid_2_infoBoxPower, &InfoWidget::maxIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::maxPowerWorkoutChanged, ui->wid_2_infoBoxPower, &InfoWidget::maxWorkoutChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgPowerIntervalChanged, ui->wid_2_infoBoxPower, &InfoWidget::avgIntervalChanged);
+    connect(arrDataWorkout[0], &DataWorkout::avgPowerWorkoutChanged, ui->wid_2_infoBoxPower, &InfoWidget::avgWorkoutChanged);
 
-    connect(arrDataWorkout[0], SIGNAL(normalizedPowerChanged(double)), ui->wid_5_infoWorkout, SLOT(NP_Changed(double)) );
-    connect(arrDataWorkout[0], SIGNAL(intensityFactorChanged(double)), ui->wid_5_infoWorkout, SLOT(IF_Changed(double)) );
-    connect(arrDataWorkout[0], SIGNAL(tssChanged(double)), ui->wid_5_infoWorkout, SLOT(TSS_Changed(double)) );
-    connect(arrDataWorkout[0], SIGNAL(caloriesWorkoutChanged(double)), ui->wid_5_infoWorkout, SLOT(calories_Changed(double)) );
-    connect(arrDataWorkout[0], SIGNAL(totalDistanceChanged(double)), ui->wid_5_infoWorkout, SLOT(distanceChanged(double)) );
+    connect(arrDataWorkout[0], &DataWorkout::normalizedPowerChanged, ui->wid_5_infoWorkout, &infosWorkout::NP_Changed);
+    connect(arrDataWorkout[0], &DataWorkout::intensityFactorChanged, ui->wid_5_infoWorkout, &infosWorkout::IF_Changed);
+    connect(arrDataWorkout[0], &DataWorkout::tssChanged, ui->wid_5_infoWorkout, &infosWorkout::TSS_Changed);
+    connect(arrDataWorkout[0], &DataWorkout::caloriesWorkoutChanged, ui->wid_5_infoWorkout, &infosWorkout::calories_Changed);
+    connect(arrDataWorkout[0], &DataWorkout::totalDistanceChanged, ui->wid_5_infoWorkout, &infosWorkout::distanceChanged);
     // Mirror the workout's real ride distance into the race HUD so the game's
     // DIST readout matches the session widget (the race keeps its own internal
     // power-model distance only for the player-vs-opponent gap).

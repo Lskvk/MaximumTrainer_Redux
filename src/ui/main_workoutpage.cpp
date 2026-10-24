@@ -107,10 +107,10 @@ Main_WorkoutPage::Main_WorkoutPage(QWidget *parent) : QWidget(parent), ui(new Ui
     ui->tableView_workout->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
-    connect(ui->tableView_workout->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(tableViewSelectionChanged(QItemSelection,QItemSelection)));
-    connect(ui->tableView_workout, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)) );
-    connect(ui->tableView_workout->verticalHeader(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)) );
+    connect(ui->tableView_workout->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &Main_WorkoutPage::tableViewSelectionChanged);
+    connect(ui->tableView_workout, &TableViewHover::customContextMenuRequested, this, &Main_WorkoutPage::customMenuRequested);
+    connect(ui->tableView_workout->verticalHeader(), &QWidget::customContextMenuRequested, this, &Main_WorkoutPage::customMenuRequested);
 
 
     contextMenu = new QMenu(this);
@@ -124,12 +124,12 @@ Main_WorkoutPage::Main_WorkoutPage(QWidget *parent) : QWidget(parent), ui(new Ui
     contextMenu->addSeparator();
     actionRefresh = contextMenu->addAction(QIcon(":/image/icon/refresh"), tr("Refresh"));
 
-    connect(actionEdit, SIGNAL(triggered()), this, SLOT(editWorkout()) );
-    connect(actionDelete, SIGNAL(triggered()), this, SLOT(deleteWorkout()) );
-    connect(actionSetAsDone, SIGNAL(triggered()), this, SLOT(setAsDone()) );
-    connect(actionOpenFolder, SIGNAL(triggered()), this, SLOT(openFolderWorkout()) );
-    connect(actionAddToQueue, SIGNAL(triggered()), this, SLOT(addToQueue()));
-    connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refreshUserWorkout()) );
+    connect(actionEdit, &QAction::triggered, this, qOverload<>(&Main_WorkoutPage::editWorkout));
+    connect(actionDelete, &QAction::triggered, this, &Main_WorkoutPage::deleteWorkout);
+    connect(actionSetAsDone, &QAction::triggered, this, &Main_WorkoutPage::setAsDone);
+    connect(actionOpenFolder, &QAction::triggered, this, &Main_WorkoutPage::openFolderWorkout);
+    connect(actionAddToQueue, &QAction::triggered, this, &Main_WorkoutPage::addToQueue);
+    connect(actionRefresh, &QAction::triggered, this, &Main_WorkoutPage::refreshUserWorkout);
     actionEdit->setEnabled(false);
     actionDelete->setEnabled(false);
     actionOpenFolder->setEnabled(false);
