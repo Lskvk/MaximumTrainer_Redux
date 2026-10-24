@@ -12,7 +12,6 @@ RadioTableModel::RadioTableModel(QObject *parent) : QAbstractTableModel(parent) 
     activeIndex = QModelIndex();
 }
 
-//-----------------------------------------------------------
 void RadioTableModel::setActiveIndex(QModelIndex index) {
 
     beginResetModel();
@@ -25,13 +24,11 @@ void RadioTableModel::setActiveIndex(QModelIndex index) {
 }
 
 
-//------------------------------------------------------------
 void RadioTableModel::changeRowHovered(int row) {
     this->rowHovered = row;
 }
 
 
-//------------------------------------------------------------
 void RadioTableModel::addListRadio(QList<Radio> lstRadio) {
 
     beginResetModel();
@@ -40,7 +37,6 @@ void RadioTableModel::addListRadio(QList<Radio> lstRadio) {
 }
 
 
-//------------------------------------------------------------
 Radio RadioTableModel::getRadioAtRow(const QModelIndex &index) {
 
     qDebug() << "GetRadioAtRow" << index.row();
@@ -49,7 +45,6 @@ Radio RadioTableModel::getRadioAtRow(const QModelIndex &index) {
     qDebug() << "Done GetRadioAtRow" << index.row();
 }
 
-// ------------------------------------------------------------------------------------------
 void RadioTableModel::addRadio(const Radio& radio) {
 
     const int row = lstRadio.size();
@@ -59,7 +54,6 @@ void RadioTableModel::addRadio(const Radio& radio) {
 }
 
 
-// ------------------------------------------------------------------------------------------
 void RadioTableModel::replaceRadioAtRow(int row, const Radio& radio) {
 
     if (row < 0 || row >= lstRadio.size())
@@ -70,7 +64,6 @@ void RadioTableModel::replaceRadioAtRow(int row, const Radio& radio) {
 }
 
 
-// ------------------------------------------------------------------------------------------
 void RadioTableModel::removeRadioAtRow(int row) {
 
     if (row < 0 || row >= lstRadio.size())
@@ -82,13 +75,11 @@ void RadioTableModel::removeRadioAtRow(int row) {
 }
 
 
-// ------------------------------------------------------------------------------------------
 QList<Radio> RadioTableModel::getAllRadios() const {
     return lstRadio;
 }
 
 
-// ------------------------------------------------------------------------------------------
 int RadioTableModel::rowCount(const QModelIndex &parent) const {
 
     Q_UNUSED(parent);
@@ -97,7 +88,6 @@ int RadioTableModel::rowCount(const QModelIndex &parent) const {
 }
 
 
-// ------------------------------------------------------------------------------------------
 int RadioTableModel::columnCount(const QModelIndex &parent) const {
 
     Q_UNUSED(parent);
@@ -106,7 +96,6 @@ int RadioTableModel::columnCount(const QModelIndex &parent) const {
 }
 
 
-// --------------------------------------------------------------------------------------------
 QVariant RadioTableModel::headerData(int section, Qt::Orientation  orientation, int role) const {
 
 
@@ -154,7 +143,6 @@ QVariant RadioTableModel::headerData(int section, Qt::Orientation  orientation, 
 
 }
 
-// ------------------------------------------------------------------------------------------
 QVariant RadioTableModel::data(const QModelIndex &index, int role) const {
 
 

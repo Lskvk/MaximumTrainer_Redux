@@ -25,7 +25,6 @@ Util::Util() {
 QList<Radio> Util::parseJsonRadioList(QString data) {
 
 
-
     QJsonDocument jsonResponse = QJsonDocument::fromJson(data.toUtf8());
 
     QJsonArray jsonArray = jsonResponse.array();
@@ -185,14 +184,12 @@ qint64 Util::parseStravaActivityId(QString data) {
 }
 
 
-//--------------------------------------------------------------------------
 QString Util::cleanQString(QString toClean) {
 
     QString toReturn = toClean;
     toReturn.remove(QRegularExpression(QString::fromUtf8("[-`~!@#$%^&*()_—+=|:;<>«»,.?/{}\'\"\\[\\]\\\\]")));
     return toReturn;
 }
-//--------------------------------------------------------------------------
 QString Util::cleanForOsSaving(QString toClean) {
 
     QString toReturn = toClean;
@@ -201,7 +198,6 @@ QString Util::cleanForOsSaving(QString toClean) {
 
 
 }
-//--------------------------------------------------------------------------
 QTime Util::convertMinutesToQTime(double minutes) {
 
     QTime myTime(0, 0, 0);
@@ -215,7 +211,6 @@ QTime Util::convertMinutesToQTime(double minutes) {
 
 
 //static QStringList getListFiles(QString fileType); //.workout
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QStringList Util::getListFiles(QString fileType) {
 
     QStringList lstPath;
@@ -239,7 +234,6 @@ QStringList Util::getListFiles(QString fileType) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Util::openWorkoutFolder(QString workoutPath) {
 
     qDebug() << "openWorkoutFolder";
@@ -258,7 +252,6 @@ void Util::openWorkoutFolder(QString workoutPath) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Util::openHistoryFolder() {
 
     QString path = getSystemPathHistory() + QDir::separator();
@@ -266,7 +259,6 @@ void Util::openHistoryFolder() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool Util::checkFolderPathIsValidForWrite(QString path) {
 
     bool status = true;
@@ -288,7 +280,6 @@ bool Util::checkFolderPathIsValidForWrite(QString path) {
 }
 
 
-//------------------------------------------------------------------
 QString Util::getMaximumTrainerDocumentPath() {
 
     QString writableLocation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
@@ -305,20 +296,16 @@ QString Util::getMaximumTrainerDocumentPath() {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QString Util::getSystemPathHistory() {
     return Util::getSystemPathHelperReturnDefaultLoc("history");
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QString Util::getSystemPathWorkout() {
     return Util::getSystemPathHelperReturnDefaultLoc("workout");
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QString Util::getSystemPathHelperReturnDefaultLoc(QString docType) {
 
     QString folderName;
@@ -345,7 +332,6 @@ QString Util::getSystemPathHelperReturnDefaultLoc(QString docType) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool Util::checkFileNameAlreadyExist(QString pathFile) {
 
     QFile file(pathFile);
@@ -354,7 +340,6 @@ bool Util::checkFileNameAlreadyExist(QString pathFile) {
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Util::deleteLocalFile(QString filePath) {
 
 
@@ -389,7 +374,6 @@ quint32 Util::crc32buf(const QByteArray& data)
                 [](quint32 oldcrc32, char buf){ return updateCRC32(buf, oldcrc32); });
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QByteArray Util::zipFileHelperConvertToGzip(const QByteArray& data) {
 
     //  Strip the first six bytes (a 4-byte length put on by qCompress and a 2-byte zlib header)
@@ -419,7 +403,6 @@ QByteArray Util::zipFileHelperConvertToGzip(const QByteArray& data) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool Util::zipFileToDisk(QString filename, QString zipFilename, bool useGzip) {
 
     QFile infile(filename);
@@ -470,7 +453,6 @@ bool Util::unzipFile(QString zipFilename , QString filename) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QPixmap Util::loadIconForDpr(const QString &resourcePath, int logicalSize, qreal devicePixelRatio)
 {
     if (devicePixelRatio <= 0.0)
@@ -563,7 +545,6 @@ QColor Util::getColor(Color color) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
 QString Util::showCurrentTimeAsString(const QTime &time) {
 
 
@@ -583,7 +564,6 @@ QString Util::showCurrentTimeAsString(const QTime &time) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
 QString Util::showQTimeAsString(const QTime &time) {
 
 
@@ -595,7 +575,6 @@ QString Util::showQTimeAsString(const QTime &time) {
     }
 }
 
-//-----------------------------------------------------
 QString Util::showQTimeAsStringWithMs(const QTime &time) {
 
     if (time.hour()>=1) {
@@ -607,7 +586,6 @@ QString Util::showQTimeAsStringWithMs(const QTime &time) {
 }
 
 
-//--------------------------------------------------------------------------
 double Util::convertQTimeToSecD(const QTime &time) {
 
     QTime time0(0,0,0,0);
@@ -616,11 +594,9 @@ double Util::convertQTimeToSecD(const QTime &time) {
 }
 
 
-//--------------------------------------------------------------------------
 //double Util::convertQTimeToMinutes(const QTime &timeElasped) {
 
 
-/////////////////////////////////////////////////////////////////////////////////////
 QString Util::getStringFromUCHAR(unsigned char* ch) {
 
     QString temp;
@@ -813,7 +789,6 @@ void Util::parseJsonIntervalsIcuOAuthToken(const QString &data)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Extract the "error" field from a JSON error payload returned by the
 // intervals-cors-proxy Cloudflare Worker.  Returns an empty QString when the
 // body is empty, non-JSON, non-object, or has no "error" key — never throws.
@@ -828,9 +803,7 @@ QString Util::parseJsonIntervalsIcuOAuthErrorPayload(const QString &data)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Local radio list — stored as JSON under the MaximumTrainer document root.
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 QString Util::getLocalRadioListPath() {
 

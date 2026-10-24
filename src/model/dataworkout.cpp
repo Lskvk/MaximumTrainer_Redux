@@ -20,7 +20,6 @@ DataWorkout::~DataWorkout() {
     closeFitFile();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
 DataWorkout::DataWorkout(Workout workout, int userftp, QObject *parent) : QObject(parent)  {
 
     this->workout = workout;
@@ -117,13 +116,11 @@ DataWorkout::DataWorkout(Workout workout, int userftp, QObject *parent) : QObjec
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::setStartTimeWorkout(QDateTime dt) {
 
     this->startTimeWorkout = dt;
 }
 
-//----------------------------------------------------------------------------
 void DataWorkout::initFitFile(bool createDir, QString username, QString nameWorkout, QDateTime timeStarted, bool rowing) {
     fitCreator.initialize_FIT_File(createDir, username, nameWorkout, timeStarted, rowing);
 }
@@ -140,7 +137,6 @@ void DataWorkout::writeEndFile(double timeNow) {
                             nbLap);
 
 }
-//----------------------------------------------------------------------------
 QString DataWorkout::getFitFilename() {
 
     if (fitCreator.getFileIsComplete())
@@ -149,7 +145,6 @@ QString DataWorkout::getFitFilename() {
 }
 
 
-//-----------------------------------------------------------------------------------------------
 void DataWorkout::updateData(bool studioMode, int secReceived,
                              double averageHr1sec, double averageCadence1sec, double averageSpeed1sec, double averagePower1sec,
                              double rightPedal, double avgLeftTorqueEff, double avgRightTorqueEff, double avgLeftPedalSmooth, double avgRightPedalSmooth, double avgCombinedPedalSmooth,
@@ -287,7 +282,6 @@ void DataWorkout::updateData(bool studioMode, int secReceived,
 }
 
 
-//-----------------------------------------------------------------------------------------------
 void DataWorkout::checkUpdateMaxHr(int value) {
 
     // Update Max Interval & Max Workout
@@ -301,7 +295,6 @@ void DataWorkout::checkUpdateMaxHr(int value) {
     }
 }
 
-//-----------------------------------------------------------------------------------------------
 void DataWorkout::checkUpdateMaxCad(int value) {
 
     // Update Max Interval & Max Workout
@@ -316,7 +309,6 @@ void DataWorkout::checkUpdateMaxCad(int value) {
 
 }
 
-//-----------------------------------------------------------------------------------------------
 void DataWorkout::checkUpdateMaxSpeed(double value) {
 
     // Update Max Interval & Max Workout
@@ -330,7 +322,6 @@ void DataWorkout::checkUpdateMaxSpeed(double value) {
     }
 }
 
-//-----------------------------------------------------------------------------------------------
 void DataWorkout::checkUpdateMaxPower(int value) {
 
     // Update Max Interval & Max Workout
@@ -344,7 +335,6 @@ void DataWorkout::checkUpdateMaxPower(int value) {
     }
 }
 
-//-----------------------------------------------------------------------------------------------
 void DataWorkout::updateDistance(double metersToAdd) {
 
     totalMeters += metersToAdd;
@@ -354,7 +344,6 @@ void DataWorkout::updateDistance(double metersToAdd) {
 }
 
 
-//-----------------------------------------------------------------------------------------------
 void DataWorkout::changeInterval(double timeStarted, double timeNow, int timePaused_msec, bool workoutOver, bool testInterval) {
 
 
@@ -410,7 +399,6 @@ void DataWorkout::changeInterval(double timeStarted, double timeNow, int timePau
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::hrDataReceived(double value) {
 
 
@@ -443,7 +431,6 @@ void DataWorkout::hrDataReceived(double value) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::cadDataReceived(double value) {
 
 
@@ -476,7 +463,6 @@ void DataWorkout::cadDataReceived(double value) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::speedDataReceived(double value) {
 
 
@@ -510,7 +496,6 @@ void DataWorkout::speedDataReceived(double value) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::powerDataReceived(int secReceived, double value) {
 
     //Update Calories
@@ -553,7 +538,6 @@ void DataWorkout::powerDataReceived(int secReceived, double value) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
 
 
@@ -614,7 +598,6 @@ void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int DataWorkout::getFTP() {
 
 
@@ -633,7 +616,6 @@ int DataWorkout::getFTP() {
     }
 
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int DataWorkout::getFTP_normal() {
 
     double moyenne = meanPowerTest.first() * 0.95;
@@ -641,7 +623,6 @@ int DataWorkout::getFTP_normal() {
     return ((int)(moyenne + 0.5));
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int DataWorkout::getFTP_8min() {
 
     double moyenne = meanPowerTest.first();
@@ -655,7 +636,6 @@ int DataWorkout::getFTP_8min() {
 }
 
 
-//---------------------------------------------------------------
 int DataWorkout::getLTHR() {
 
     if (meanHrTest.isEmpty()) {

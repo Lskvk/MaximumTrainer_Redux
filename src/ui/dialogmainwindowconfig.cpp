@@ -64,8 +64,6 @@ DialogMainWindowConfig::~DialogMainWindowConfig()
 }
 
 
-
-
 DialogMainWindowConfig::DialogMainWindowConfig(QWidget *parent) : QDialog(parent), ui(new Ui::DialogMainWindowConfig)
 {
     // Strava login runs in the system browser (StravaOAuthFlow) — Strava blocks
@@ -126,8 +124,6 @@ DialogMainWindowConfig::DialogMainWindowConfig(QWidget *parent) : QDialog(parent
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogMainWindowConfig::initUI() {
 
     // Strava
@@ -169,8 +165,6 @@ void DialogMainWindowConfig::initUI() {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////
 void DialogMainWindowConfig::stravaLinked(bool linked) {
 
     qDebug() << "strava linked!";
@@ -202,7 +196,6 @@ void DialogMainWindowConfig::stravaLinked(bool linked) {
 }
 
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::stravaLabelClicked() {
 
     // Open the Strava login in the user's system browser and capture the
@@ -227,7 +220,6 @@ void DialogMainWindowConfig::stravaLabelClicked() {
 }
 
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::unlinkStravaClicked() {
 
 
@@ -238,8 +230,6 @@ void DialogMainWindowConfig::unlinkStravaClicked() {
 }
 
 
-
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::stravaUnlinkFinished() {
 
     qDebug() << "stravaUnlinkFinished";
@@ -261,9 +251,6 @@ void DialogMainWindowConfig::stravaUnlinkFinished() {
 }
 
 
-
-
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::currentListViewSelectionChanged(int section) {
 
     // The nav order no longer matches the stacked-page order; each row stores its
@@ -278,9 +265,6 @@ void DialogMainWindowConfig::currentListViewSelectionChanged(int section) {
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////
 void DialogMainWindowConfig::showEvent(QShowEvent *event) {
 
     QDialog::showEvent(event);
@@ -296,7 +280,6 @@ void DialogMainWindowConfig::showEvent(QShowEvent *event) {
     updateProfileSyncLabel();
 }
 
-///////////////////////////////////////////////////////////////////////
 /// Show where FTP/LTHR came from when the last intervals.icu login synced
 /// them (the stamp is cleared when the user edits the values manually).
 void DialogMainWindowConfig::updateProfileSyncLabel() {
@@ -312,7 +295,6 @@ void DialogMainWindowConfig::updateProfileSyncLabel() {
 }
 
 
-///////////////////////////////////////////////////////////////////////
 void DialogMainWindowConfig::reject() {
 
     qDebug() << "rejected, put back settings value!";
@@ -323,7 +305,6 @@ void DialogMainWindowConfig::reject() {
 }
 
 
-//---------------------------------------------------------------------------
 void DialogMainWindowConfig::accept() {
     qDebug() << "ACCEPT, save settings";
 
@@ -420,8 +401,6 @@ void DialogMainWindowConfig::accept() {
 }
 
 
-
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::onTestIntervalsConnectionClicked()
 {
 #ifndef GC_WASM_BUILD
@@ -460,7 +439,6 @@ void DialogMainWindowConfig::onTestIntervalsConnectionClicked()
 #endif
 }
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::onTestIntervalsConnectionFinished()
 {
 #ifndef GC_WASM_BUILD
@@ -498,7 +476,6 @@ void DialogMainWindowConfig::onTestIntervalsConnectionFinished()
 #endif
 }
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::setOnlineMode(bool isOnline)
 {
 #ifndef GC_WASM_BUILD
@@ -594,7 +571,6 @@ QWidget *DialogMainWindowConfig::createLoggingPage()
     return page;
 }
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::loadLoggingSettings()
 {
     if (!m_comboLogLevel) return;
@@ -618,7 +594,6 @@ void DialogMainWindowConfig::loadLoggingSettings()
     m_btnOpenLog->setEnabled(enabled);
 }
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::saveLoggingSettings()
 {
     if (!m_comboLogLevel) return;
@@ -633,7 +608,6 @@ void DialogMainWindowConfig::saveLoggingSettings()
     Logger::instance().saveConfig();
 }
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::onLogFileEnabledToggled(bool checked)
 {
     if (!m_editLogFilePath) return;
@@ -642,7 +616,6 @@ void DialogMainWindowConfig::onLogFileEnabledToggled(bool checked)
     m_btnOpenLog->setEnabled(checked);
 }
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::onBrowseLogFileClicked()
 {
     const QString current = m_editLogFilePath->text().trimmed();
@@ -660,7 +633,6 @@ void DialogMainWindowConfig::onBrowseLogFileClicked()
     }
 }
 
-//---------------------------------------------------------------------------------------------
 void DialogMainWindowConfig::onOpenLogFileClicked()
 {
     QString path = m_editLogFilePath->text().trimmed();

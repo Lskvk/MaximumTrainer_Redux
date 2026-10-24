@@ -5,7 +5,6 @@
 #include <QFont>
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 QPainterPath ShapeFactory::path( QList<QPointF> lstPoints ) {
 
     QPainterPath path;
@@ -23,7 +22,6 @@ QPainterPath ShapeFactory::path( QList<QPointF> lstPoints ) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 QPainterPath ShapeFactory::path( Shape shape, const QPointF &pos, const QSizeF &size )
 {
     QRectF rect;

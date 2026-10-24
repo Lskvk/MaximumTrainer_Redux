@@ -103,7 +103,6 @@ public:
     }
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////
     QTime getDurationQTime() const;
     static QString getStepTypeToString(StepType type);
     QString getDisplayMessage() const;

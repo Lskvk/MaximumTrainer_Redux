@@ -11,7 +11,6 @@ RepeatWidget::~RepeatWidget() {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 RepeatWidget::RepeatWidget(RepeatData *data, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RepeatWidget)
@@ -51,7 +50,6 @@ RepeatWidget::RepeatWidget(RepeatData *data, QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 
     Q_UNUSED(watched);
@@ -70,19 +68,16 @@ bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-//---------------------------------------------------------
 void RepeatWidget::setRightWidth(int width) {
     ui->widget_right->setFixedWidth(width);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool RepeatWidget::myLessThan(RepeatWidget* left, RepeatWidget* right) {
 
     return (left->getRepeatData()->getFirstRow() < right->getRepeatData()->getFirstRow());
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
 void RepeatWidget::on_pushButton_delete_clicked()
 {
     emit deleteSignal(data->getId());

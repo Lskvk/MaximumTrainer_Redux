@@ -46,7 +46,6 @@ TimeWidget::TimeWidget(QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void TimeWidget::setTargetPower(double percentageFTP, int range) {
 
     if (percentageFTP > 0) {
@@ -75,7 +74,6 @@ void TimeWidget::setTargetPower(double percentageFTP, int range) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void TimeWidget::setTargetCadence(int cadence, int range) {
 
     if (cadence > 0) {
@@ -102,7 +100,6 @@ void TimeWidget::setTargetCadence(int cadence, int range) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void TimeWidget::setTargetHeartRate(double percentageLTHR, int range) {
 
     if (percentageLTHR > 0) {
@@ -130,7 +127,6 @@ void TimeWidget::setTargetHeartRate(double percentageLTHR, int range) {
 
 }
 
-//-----------------------------------------------------
 void TimeWidget::showIntervalRemaining(bool show) {
 
     intervalEnabled = show;
@@ -162,7 +158,6 @@ bool TimeWidget::hasVisibleContent() const {
 }
 
 
-//-----------------------------------------------------
 void TimeWidget::setFreeRideMode() {
 
     ui->label_intervalTime->setToolTip(tr("Elapsed Interval"));
@@ -182,19 +177,16 @@ void TimeWidget::setMAPMode() {
 }
 
 
-//-----------------------------------------------------
 void TimeWidget::setWorkoutTime(QTime time) {
 
     ui->label_timeElapsed->setText(Util::showQTimeAsString(time));
 }
 
-//-----------------------------------------------------
 void TimeWidget::setWorkoutRemainingTime(QTime time) {
 
     ui->label_remainingTime->setText(Util::showQTimeAsString(time));
 }
 
-//-----------------------------------------------------
 void TimeWidget::setIntervalTime(QTime time) {
 
     ui->label_intervalTime->setText(Util::showQTimeAsString(time));

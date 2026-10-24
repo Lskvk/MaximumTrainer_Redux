@@ -28,19 +28,16 @@ BalanceWidget::BalanceWidget(QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setShowMode(int display) {
     this->showMode = display;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setStopped(bool b) {
     this->isStopped = b;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setValue(int value) {
 
     ui->horizontalSlider->setValue(value);
@@ -81,7 +78,6 @@ void BalanceWidget::setValue(int value) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::removeZone() {
 
     zoneRange = -1;
@@ -91,7 +87,6 @@ void BalanceWidget::removeZone() {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setZone(int target, int range) {
 
 
@@ -121,7 +116,6 @@ void BalanceWidget::setZone(int target, int range) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::pedalMetricChanged(double leftTorqueEff, double rightTorqueEff,
                                        double leftPedalSmooth, double rightPedalSmooth, double combinedPedalSmooth) {
 

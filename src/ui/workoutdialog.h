@@ -88,7 +88,6 @@ public:
     void updateTimeWidgetVisibility();
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 signals:
     ///Clock
     void startClock();
@@ -284,7 +283,6 @@ private:
     void sureYouWantToQuit();
 
 
-    //-----------------------------------------
 private:
     bool isUsingSlopeMode;
 
@@ -418,7 +416,6 @@ private:
 
 
     void checkPairingCompleted();
-    /////////////////////////
 
 
     QString bakStylesheet;

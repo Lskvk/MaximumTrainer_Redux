@@ -12,13 +12,10 @@ RepeatIncreaseEditor::~RepeatIncreaseEditor()
 }
 
 
-
-
 RepeatIncreaseEditor::RepeatIncreaseEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RepeatIncreaseEditor)
 {
-
 
 
     ui->setupUi(this);
@@ -27,9 +24,6 @@ RepeatIncreaseEditor::RepeatIncreaseEditor(QWidget *parent) :
     setAutoFillBackground(true);
     setAttribute(Qt::WA_NoMousePropagation);
     setWindowFlags(Qt::WindowStaysOnTopHint);
-
-
-
 
 
     ui->gridLayout->setRowMinimumHeight(0,26);
@@ -52,7 +46,6 @@ RepeatIncreaseEditor::RepeatIncreaseEditor(QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void RepeatIncreaseEditor::setInterval(const Interval &interval) {
 
     qDebug() << "RepeatIncreaseEditor start setInterval!";
@@ -67,7 +60,6 @@ void RepeatIncreaseEditor::setInterval(const Interval &interval) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void RepeatIncreaseEditor::on_doubleSpinBox_increaseFTP_valueChanged(double arg1)
 {
     myInterval.setRepeatIncreaseFTP(arg1);

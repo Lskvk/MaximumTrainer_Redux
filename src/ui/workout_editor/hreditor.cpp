@@ -38,7 +38,6 @@ HrEditor::HrEditor(QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void HrEditor::setInterval(const Interval &interval) {
     this->myInterval = interval;
 
@@ -56,7 +55,6 @@ void HrEditor::setInterval(const Interval &interval) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void HrEditor::on_comboBox_hr_currentIndexChanged(int index)
 {
     int hrStepType = index;
@@ -75,7 +73,6 @@ void HrEditor::on_comboBox_hr_currentIndexChanged(int index)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void HrEditor::on_spinBox_lthrStart_valueChanged(double arg1)
 {
 
@@ -89,7 +86,6 @@ void HrEditor::on_spinBox_lthrStart_valueChanged(double arg1)
     }
 
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
 void HrEditor::on_spinBox_lthrEnd_valueChanged(double arg1)
 {
 
@@ -120,7 +116,6 @@ void HrEditor::on_pushButton_default_clicked()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void HrEditor::on_comboBox_LTHRorBpm_currentIndexChanged(int index)
 {
 

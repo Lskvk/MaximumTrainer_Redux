@@ -19,7 +19,6 @@ TableViewHover::TableViewHover(QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool TableViewHover::eventFilter(QObject *watched, QEvent *event) {
 
 
@@ -35,7 +34,6 @@ bool TableViewHover::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TableViewHover::selectionChanged (const QItemSelection & selected, const QItemSelection & deselected ) {
 
 
@@ -56,7 +54,6 @@ void TableViewHover::selectionChanged (const QItemSelection & selected, const QI
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TableViewHover::mouseMoveEvent(QMouseEvent* event) {
 
 
@@ -108,9 +105,7 @@ void TableViewHover::mouseMoveEvent(QMouseEvent* event) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// leaveEvent - Fire when mouse leave the widget
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TableViewHover::leaveEvent(QEvent *event) {
 
 
@@ -125,7 +120,6 @@ void TableViewHover::leaveEvent(QEvent *event) {
 }
 
 
-//-------------------------------------------------------------
 void TableViewHover::focusOutEvent(QFocusEvent* event) {
 
 

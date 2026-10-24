@@ -23,9 +23,6 @@ class QLabel;
 class QToolButton;
 
 
-
-
-
 class QwtPlotCurve;
 class QwtPlotDirectPainter;
 
@@ -40,7 +37,6 @@ public:
     WorkoutPlot(QWidget *parent = 0);
     void setWorkoutData(Workout workout, bool firstInit);
     void setUserData(double FTP, double LTHR);
-
 
 
     void showHideTargetPower(bool show);
@@ -71,13 +67,11 @@ public:
     bool eventFilter(QObject *watched, QEvent *event);
 
 
-
 signals:
     void workoutDifficultyChanged(int percentageIncrease);
     void intervalClicked(int positionInterval, double secondClicked, double startIntervalSec, bool showConfirmation);
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////
 public slots:
     void updateMarkerTimeNow(double sec);
     void pointClicked(QPointF);
@@ -93,9 +87,6 @@ public slots:
     void flashDifficulty(bool increase);
 
 
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 private :
     void init(bool firstInit);
     void clearPlot();
@@ -104,8 +95,6 @@ private :
     void addShapeFromPoints(const QString &title, const QColor &color, QList<QPointF> lstPoints, int positionZ, bool antiliasing);
 
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 private:
     int max_power;
 
@@ -160,7 +149,6 @@ private:
 
     //to ignore clicked signal emits 2 times in a row
     double lastXClicked;
-
 
 
 };

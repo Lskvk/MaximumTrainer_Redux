@@ -13,9 +13,7 @@
 #include "workout.h"
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// DESTRUCTOR
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 Main_WorkoutPage::~Main_WorkoutPage() {
     delete ui;
 
@@ -23,9 +21,7 @@ Main_WorkoutPage::~Main_WorkoutPage() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// CONSTRUCTOR
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 Main_WorkoutPage::Main_WorkoutPage(QWidget *parent) : QWidget(parent), ui(new Ui::Main_WorkoutPage) {
 
     ui->setupUi(this);
@@ -141,7 +137,6 @@ Main_WorkoutPage::Main_WorkoutPage(QWidget *parent) : QWidget(parent), ui(new Ui
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::parseIncludedWorkouts() {
 
     xmlUtil = new XmlUtil(this);
@@ -165,14 +160,12 @@ void Main_WorkoutPage::parseIncludedWorkouts() {
     tableModel->addListWorkout(lstWorkout);
 
 }
-//-----------------------------------------------------
 void Main_WorkoutPage::parseUserWorkouts() {
 
     xmlUtil = new XmlUtil(this);
     QList<Workout> lstWorkoutUser = xmlUtil->getLstUserWorkout();
     tableModel->addListWorkout(lstWorkoutUser);
 }
-//-----------------------------------------------------
 void Main_WorkoutPage::parseMapWorkout(int userFTP) {
 
     Workout workout = WorkoutUtil::getWorkoutMap(userFTP);
@@ -181,7 +174,6 @@ void Main_WorkoutPage::parseMapWorkout(int userFTP) {
 }
 
 
-//---------------------------------------------------------------------------------------------------------
 void Main_WorkoutPage::applyFiltersToInputs() {
 
     /// Push the persisted nameFilter/planFilter/creatorFilter/typeFilter
@@ -198,7 +190,6 @@ void Main_WorkoutPage::applyFiltersToInputs() {
 }
 
 
-//---------------------------------------------------------------------------------------------------------
 void Main_WorkoutPage::onFilterTypeIndexChanged(int index) {
 
     const int typeId = ui->comboBox_filter_type->itemData(index).toInt();
@@ -218,7 +209,6 @@ void Main_WorkoutPage::onFilterTypeIndexChanged(int index) {
 }
 
 
-//---------------------------------------------------------------------------------------------------------
 void Main_WorkoutPage::on_pushButton_filter_clear_clicked() {
 
     /// Resetting the inputs triggers the textChanged / currentIndexChanged
@@ -230,7 +220,6 @@ void Main_WorkoutPage::on_pushButton_filter_clear_clicked() {
 }
 
 
-//---------------------------------------------------------------------------------------------------------
 void Main_WorkoutPage::tableViewSelectionChanged(QItemSelection, QItemSelection) {
 
 
@@ -280,7 +269,6 @@ void Main_WorkoutPage::tableViewSelectionChanged(QItemSelection, QItemSelection)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::customMenuRequested(const QPoint& pos) {
 
     qDebug() << "customMenuRequested2";
@@ -294,7 +282,6 @@ void Main_WorkoutPage::customMenuRequested(const QPoint& pos) {
     qDebug() << "customMenuRequested End";
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::addWorkout(const Workout& workout) {
 
     qDebug() << "Main_WorkoutPage::addWorkout";
@@ -320,7 +307,6 @@ void Main_WorkoutPage::addWorkout(const Workout& workout) {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::overwriteWorkout(const Workout& workout) {
 
     qDebug() << "Main_WorkoutPage::overwriteWorkout";
@@ -342,7 +328,6 @@ void Main_WorkoutPage::overwriteWorkout(const Workout& workout) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::openFolderWorkout() {
 
     Workout workout = tableModel->getWorkoutAtRow(indexSourceSelected);
@@ -352,7 +337,6 @@ void Main_WorkoutPage::openFolderWorkout() {
 }
 
 
-//--------------------------------------------------------------------------------------
 void Main_WorkoutPage::addToQueue() {
 
     Workout workout = tableModel->getWorkoutAtRow(indexSourceSelected);
@@ -361,7 +345,6 @@ void Main_WorkoutPage::addToQueue() {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::editWorkout() {
 
     qDebug() << "editWorkout";
@@ -376,7 +359,6 @@ void Main_WorkoutPage::editWorkout() {
 }
 
 
-//--------------------------------------------------------------------------------------------
 void Main_WorkoutPage::deleteWorkout() {
 
 
@@ -402,7 +384,6 @@ void Main_WorkoutPage::deleteWorkout() {
 
 }
 
-//--------------------------------------------------------------------------------------------
 void Main_WorkoutPage::setAsDone() {
 
 
@@ -420,7 +401,6 @@ void Main_WorkoutPage::setAsDone() {
 }
 
 
-//--------------------------------------------------------------------------------------------
 void Main_WorkoutPage::on_tableView_workout_doubleClicked(const QModelIndex &index) {
 
 
@@ -439,13 +419,11 @@ void Main_WorkoutPage::on_tableView_workout_doubleClicked(const QModelIndex &ind
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::updateTableViewMetrics() {
     tableModel->updateWorkoutsMetrics();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::setFilterPlanName(const QString& plan) {
 
     qDebug() << "setFilterPlanName";
@@ -466,7 +444,6 @@ void Main_WorkoutPage::setFilterPlanName(const QString& plan) {
     ui->tableView_workout->scrollToTop();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::setFilterWorkoutName(const QString& workoutName) {
 
     qDebug() << "setFilterWorkoutName";
@@ -481,7 +458,6 @@ void Main_WorkoutPage::setFilterWorkoutName(const QString& workoutName) {
 }
 
 
-//-------------------------------------------------------------
 void Main_WorkoutPage::saveFilterFields() {
 
     QSettings settings;
@@ -494,7 +470,6 @@ void Main_WorkoutPage::saveFilterFields() {
     settings.setValue("typeFilter", typeFilter);
     settings.endGroup();
 }
-//-------------------------------------------------------------
 void Main_WorkoutPage::loadFilterFields() {
 
     QSettings settings;
@@ -513,7 +488,6 @@ void Main_WorkoutPage::loadFilterFields() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::filterChanged(const QString& field, const QString& value) {
 
     proxyModel->setSortCaseSensitivity(Qt::CaseSensitive);
@@ -551,7 +525,6 @@ void Main_WorkoutPage::filterChanged(const QString& field, const QString& value)
 }
 
 
-//----------------------------------------------------------------------------
 void Main_WorkoutPage::filterChangedWorkoutType(bool includedWorkout) {
 
     qDebug() << "included workout should be used" << includedWorkout;
@@ -574,7 +547,6 @@ void Main_WorkoutPage::filterChangedWorkoutType(bool includedWorkout) {
 }
 
 
-//------------------------------------------------------------------------------
 void Main_WorkoutPage::on_checkBox_clicked(bool checked)
 {
     qDebug() << "OK NOW INCLUDED WORKOUT SHOULD BE INCLUDED?" << checked;
@@ -583,7 +555,6 @@ void Main_WorkoutPage::on_checkBox_clicked(bool checked)
 }
 
 
-//-------------------------------------------------------------------------
 void Main_WorkoutPage::refreshUserWorkout() {
 
     //Delete user workout and reparse them
@@ -591,7 +562,6 @@ void Main_WorkoutPage::refreshUserWorkout() {
     parseUserWorkouts();
 }
 
-//--------------------------------------------------------------
 void Main_WorkoutPage::refreshMapWorkout() {
 
     tableModel->deleleteMapWorkout();
@@ -599,7 +569,6 @@ void Main_WorkoutPage::refreshMapWorkout() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::paintEvent(QPaintEvent *) {
     QStyleOption opt;
     opt.initFrom(this);

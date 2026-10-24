@@ -24,9 +24,7 @@
 #include "myqwtpickermachine.h"
 
 
-////////////////////////////////////////////////////////////////////////////////
 /// TimeScaleDraw
-////////////////////////////////////////////////////////////////////////////////
 class TimeScaleDraw: public QwtScaleDraw {
 public:
     TimeScaleDraw( const QTime &base ):
@@ -44,7 +42,6 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
 WorkoutPlotZoomer::~WorkoutPlotZoomer() {
 
     qDeleteAll(lstTargetShape);
@@ -74,7 +71,6 @@ WorkoutPlotZoomer::WorkoutPlotZoomer(QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::clearPlot() {
 
     //Delete old target
@@ -89,14 +85,12 @@ void WorkoutPlotZoomer::clearPlot() {
 }
 
 
-//////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::setUserData(double FTP, double LTHR) {
     this->FTP = FTP;
     this->LTHR = LTHR;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::setWorkoutData(Workout workout, GRAPH_TYPE graph, bool firstInit) {
 
     this->workout = workout;
@@ -141,9 +135,7 @@ void WorkoutPlotZoomer::setStopped(bool b) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// init
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::init(GRAPH_TYPE graph, bool firstInit) {
 
 
@@ -247,7 +239,6 @@ void WorkoutPlotZoomer::init(GRAPH_TYPE graph, bool firstInit) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::drawGraphIntervalsCadence() {
 
 
@@ -273,7 +264,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsCadence() {
     int i=0;
     Interval lastVal;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     foreach (Interval val, workout.getLstInterval()) {
 
 
@@ -336,7 +326,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsCadence() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::drawGraphIntervalsPower() {
 
 
@@ -362,7 +351,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsPower() {
     Interval lastVal;
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     foreach (Interval val, workout.getLstInterval()) {
 
 
@@ -426,7 +414,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsPower() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::drawGraphIntervalsHeartrate() {
 
 
@@ -450,7 +437,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsHeartrate() {
     int i=0;
     Interval lastVal;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     foreach (Interval val, workout.getLstInterval()) {
 
 
@@ -510,9 +496,7 @@ void WorkoutPlotZoomer::drawGraphIntervalsHeartrate() {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 /// SLOT
-////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::updateCurve(double timeNow, int value) {
 
     if (samples.size() > 90 )  ///After 15sec, half-graph ((15*4=60) of data, we can erase past data not shown on graph for faster replot
@@ -525,7 +509,6 @@ void WorkoutPlotZoomer::updateCurve(double timeNow, int value) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::moveIntervalTime(double timeNow_msec) {
 
 
@@ -541,7 +524,6 @@ void WorkoutPlotZoomer::moveIntervalTime(double timeNow_msec) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::moveIntervalTarget(double target, int range) {
 
 
@@ -575,7 +557,6 @@ void WorkoutPlotZoomer::moveIntervalTarget(double target, int range) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::addMarkerInterval(double time) {
 
     QwtPlotMarker *d_marker1 = new QwtPlotMarker();
@@ -587,7 +568,6 @@ void WorkoutPlotZoomer::addMarkerInterval(double time) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::updateTextLabelValue(int value) {
 
 
@@ -651,7 +631,6 @@ void WorkoutPlotZoomer::updateTextLabelValue(int value) {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::setCanvasColor(CanvasColor color) {
 
     if (m_canvasColor == color)
@@ -681,7 +660,6 @@ void WorkoutPlotZoomer::setCanvasColor(CanvasColor color) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::targetChanged(double percentageTarget, int range ) {
 
     int targetValue = percentageTarget;
@@ -704,7 +682,6 @@ void WorkoutPlotZoomer::targetChanged(double percentageTarget, int range ) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::addShapeFromPoints(const QString &title, const QColor &color, QList<QPointF> lstPoints, int positionZ, bool antiliasing) {
 
     QwtPlotShapeItem *item = new QwtPlotShapeItem(title);
@@ -729,7 +706,6 @@ void WorkoutPlotZoomer::addShapeFromPoints(const QString &title, const QColor &c
 }
 
 
-//--------------------------------------------------------------
 void WorkoutPlotZoomer::setPosition(double timeMsec)  {
 
     moveIntervalTime(timeMsec);

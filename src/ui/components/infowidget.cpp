@@ -53,7 +53,6 @@ InfoWidget::InfoWidget(QWidget *parent) : QWidget(parent), ui(new Ui::InfoWidget
 //    ui->gridLayout->addWidget(labelValue,0,4,1,1, Qt::AlignLeft);
 
 
-//////////////////////////////////////////////////////////////
 void InfoWidget::setUserData(double FTP, double LTHR) {
     this->FTP = FTP;
     this->LTHR = LTHR;
@@ -61,7 +60,6 @@ void InfoWidget::setUserData(double FTP, double LTHR) {
 
 
 ///Only for speed widget
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setValue(double v) {
 
     // Rowing (Beta): the speed channel carries the pace-equivalent km/h from
@@ -114,7 +112,6 @@ void InfoWidget::setTrainerSpeed(double v) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setValue( int value ) {
 
 
@@ -171,7 +168,6 @@ void InfoWidget::setValue( int value ) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::targetChanged(double percentageValue, int range) {
 
 
@@ -202,7 +198,6 @@ void InfoWidget::targetChanged(double percentageValue, int range) {
     this->targetRange = range;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 
 void InfoWidget::maxIntervalChanged(double avg) {
 
@@ -220,7 +215,6 @@ void InfoWidget::maxIntervalChanged(double avg) {
     }
 
 }
-//----------------------------------------------------
 void InfoWidget::maxWorkoutChanged(double avg) {
 
     if (type == InfoWidget::SPEED) {
@@ -235,7 +229,6 @@ void InfoWidget::maxWorkoutChanged(double avg) {
         ui->label_maxWorkout->setText(QString::number(qRound(avg)));
     }
 }
-//----------------------------------------------------
 void InfoWidget::avgIntervalChanged(double avg) {
 
     if (useMile)
@@ -245,7 +238,6 @@ void InfoWidget::avgIntervalChanged(double avg) {
     ui->label_avgInterval->setText(text);
 
 }
-//----------------------------------------------------
 void InfoWidget::avgWorkoutChanged(double avg) {
 
     if (useMile)
@@ -256,7 +248,6 @@ void InfoWidget::avgWorkoutChanged(double avg) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setTypeInfoBox(TypeInfoBox type) {
 
 
@@ -312,7 +303,6 @@ void InfoWidget::setTypeInfoBox(TypeInfoBox type) {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setRowingMode(bool rowing) {
     rowingMode = rowing;
     if (!rowing)
@@ -332,7 +322,6 @@ void InfoWidget::setRowingMode(bool rowing) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setStopped(bool b) {
     isStopped = b;
 }

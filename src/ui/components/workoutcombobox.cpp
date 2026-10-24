@@ -10,7 +10,6 @@ WorkoutComboBox::WorkoutComboBox(QWidget *parent) : QComboBox(parent) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutComboBox::updateUi() {
 
     this->clear();
@@ -22,7 +21,6 @@ void WorkoutComboBox::updateUi() {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutComboBox::changeEvent(QEvent *event) {
 
     if (event->type() == QEvent::LanguageChange) {

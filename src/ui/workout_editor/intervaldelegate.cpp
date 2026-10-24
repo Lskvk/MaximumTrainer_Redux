@@ -13,12 +13,10 @@
 #include "tableviewinterval.h"
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //void IntervalDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 //{
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::setParentWidget(QWidget *parent) {
 
     this->parent = parent;
@@ -26,7 +24,6 @@ void IntervalDelegate::setParentWidget(QWidget *parent) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 
 {
@@ -77,7 +74,6 @@ QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::closeWidgetEditor() {
 
     qDebug() << "CLOSE EDITOR NOW!";
@@ -89,7 +85,6 @@ void IntervalDelegate::closeWidgetEditor() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::cancelWidgetEditor() {
 
     // Close without committing — discards the edit (Cancel button).
@@ -99,7 +94,6 @@ void IntervalDelegate::cancelWidgetEditor() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 
@@ -145,7 +139,6 @@ void IntervalDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                     const QModelIndex &index) const
 {
@@ -198,7 +191,6 @@ void IntervalDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::updateEditorGeometry(QWidget *editor,  const QStyleOptionViewItem &option, const QModelIndex &index ) const {
 
     editor->setGeometry(option.rect);
@@ -232,7 +224,6 @@ void IntervalDelegate::updateEditorGeometry(QWidget *editor,  const QStyleOption
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QSize IntervalDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 

@@ -4,22 +4,16 @@
 #include <QSettings>
 
 
-
 Settings::~Settings() {
     qDebug() << "destructor Settings;";
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Constructor - load settings
 Settings::Settings(QObject *parent) : QObject(parent)  {
 
 
-
     QSettings settings;
-
 
 
     settings.beginGroup("SettingsGeneral");
@@ -35,18 +29,14 @@ Settings::Settings(QObject *parent) : QObject(parent)  {
     settings.endGroup();
 
 
-
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Settings::saveGeneralSettings() {
 
     QSettings settings;
 
     qDebug() << "saveGeneralSettings!";
-
 
 
     settings.beginGroup("SettingsGeneral");
@@ -64,9 +54,5 @@ void Settings::saveGeneralSettings() {
     settings.endGroup();
 
 
-
-
 }
-
-
 

@@ -4,7 +4,6 @@
 #include "util.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QDataStream& operator<<(QDataStream& stream, const Interval& obj) {
 
 
@@ -39,7 +38,6 @@ QDataStream& operator<<(QDataStream& stream, const Interval& obj) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QDataStream& operator>>(QDataStream& stream, Interval& obj) {
 
 
@@ -83,7 +81,6 @@ QDataStream& operator>>(QDataStream& stream, Interval& obj) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Interval::Interval() {
 
 
@@ -112,7 +109,6 @@ Interval::Interval() {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Interval::Interval(QTime duration, QString displayMessage,
                    StepType powerStepType, double targetFTP_start, double targetFTP_end, int FTP_range, double rightPowerTarget,
                    StepType cadenceStepType, int targetCadence_start, int targetCadence_end, int cadence_range,
@@ -151,7 +147,6 @@ Interval::Interval(QTime duration, QString displayMessage,
 }
 
 
-//-----------------------------------------------------
 QTime Interval::getDurationQTime() const {
     return this->duration;
 }
@@ -161,7 +156,6 @@ QString Interval::getDisplayMessage() const {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QString Interval::getStepTypeToString(StepType type) {
     if (type == Interval::NONE) {
         return QApplication::translate("Interval", "None", 0);

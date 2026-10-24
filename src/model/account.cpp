@@ -8,7 +8,6 @@ Account::~Account() {
 }
 
 
-
 Account::Account(QObject *parent) : QObject(parent)  {
 
     // -------------- Set Default values
@@ -71,8 +70,6 @@ Account::Account(QObject *parent) : QObject(parent)  {
     // Load encrypted third-party service credentials from the platform credential store.
     strava_access_token         = CredentialStore::load("strava",        "access_token");
     strava_refresh_token        = CredentialStore::load("strava",        "refresh_token");
-
-
 
 
     // -----------------------------------  Settings ----------------------------------------------------------------------
@@ -138,7 +135,6 @@ Account::Account(QObject *parent) : QObject(parent)  {
     offset_power = 0;
 
 
-
     show_seperator_interval = true;
     show_grid = false;
     show_hr_target = true;
@@ -195,7 +191,6 @@ Account::Account(QObject *parent) : QObject(parent)  {
 
     email_clean = "user1";
     hashWorkoutDone = QSet<QString>();
-    //------------------------------
 
     // Override the display/sound defaults above with any locally-persisted
     // values (the server-side putAccount endpoint is defunct, so these are the
@@ -505,7 +500,4 @@ void Account::saveAppTheme()
     s.setValue("app_theme", qBound(0, app_theme, 2));
     s.endGroup();
 }
-
-
-
 

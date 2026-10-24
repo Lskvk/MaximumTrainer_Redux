@@ -32,7 +32,6 @@ infosWorkout::~infosWorkout()
 //}
 
 
-//------------------------------------------------------
 void infosWorkout::setStopped(bool b) {
 
     isStopped = b;
@@ -46,7 +45,6 @@ void infosWorkout::setDistanceInMile(bool b) {
 }
 
 
-//------------------------------------------------------
 void infosWorkout::setDistanceVisible(bool b) {
 
     ui->label_distance->setVisible(b);
@@ -54,7 +52,6 @@ void infosWorkout::setDistanceVisible(bool b) {
 
 }
 
-//--------------------------------------------------
 void infosWorkout::NP_Changed(double val) {
 
 
@@ -63,14 +60,12 @@ void infosWorkout::NP_Changed(double val) {
 }
 
 
-//--------------------------------------------------
 void infosWorkout::IF_Changed(double val) {
 
     ui->label_if->setText(locale.toString(val, 'f', 2));
 
 }
 
-//--------------------------------------------------
 void infosWorkout::distanceChanged(double meters) {
 
     if (inMile) {
@@ -83,7 +78,6 @@ void infosWorkout::distanceChanged(double meters) {
 }
 
 
-//--------------------------------------------------
 void infosWorkout::TSS_Changed(double val) {
 
 
@@ -91,7 +85,6 @@ void infosWorkout::TSS_Changed(double val) {
 }
 
 
-//--------------------------------------------------
 void infosWorkout::calories_Changed(double val) {
 
     ui->label_kcal->setText(QString::number((int)val)); //do not show decimals

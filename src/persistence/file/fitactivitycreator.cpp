@@ -32,7 +32,6 @@ FitActivityCreator::FitActivityCreator() {
 }
 
 
-//---------------------------------------------------------------------------------------------------------------------------------
 QString FitActivityCreator::generateFileName(bool createDir, QString username, QString nameWorkout, QDateTime startTimeWorkout) {
 
     qDebug() << "generateFileName";
@@ -54,7 +53,6 @@ QString FitActivityCreator::generateFileName(bool createDir, QString username, Q
 }
 
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, QString nameWorkout, QDateTime startTimeWorkout, bool rowing) {
     m_rowing = rowing;
 
@@ -108,7 +106,6 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
 }
 
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::close_FIT_File() {
 
 
@@ -132,7 +129,6 @@ void FitActivityCreator::close_FIT_File() {
 }
 
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::closeAndDeleteFile() {
 
     if (!fileIsOpen)
@@ -152,7 +148,6 @@ void FitActivityCreator::closeAndDeleteFile() {
 
 }
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::writeEndFile(double timeNow,
                                       double avgSpeedKph, double avgCadence, double avgPower, double avgHr,
                                       double maxSpeedKph, double maxCadence, double maxPower, double maxHr,
@@ -228,7 +223,6 @@ void FitActivityCreator::writeEndFile(double timeNow,
 }
 
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::writeLapMesg(double timeStarted, double timeNow, int timePaused_msec,
                                       double avgSpeedKph, double avgCadence, double avgPower, double avgHr,
                                       double maxSpeedKph, double maxCadence, double maxPower, double maxHr,
@@ -299,7 +293,6 @@ void FitActivityCreator::writeLapMesg(double timeStarted, double timeNow, int ti
 }
 
 
-//----------------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::writeRecord(int timeNow,
                                      double averageHr1sec, double averageCadence1sec, double averageSpeed1sec, double averagePower1sec,
                                      double rightPedal, double avgLeftTorqueEff, double avgRightTorqueEff, double avgLeftPedalSmooth, double avgRightPedalSmooth, double avgCombinedPedalSmooth,

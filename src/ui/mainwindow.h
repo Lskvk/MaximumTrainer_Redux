@@ -41,7 +41,6 @@ class WorkoutDialog;
 class SimulatorHub;
 
 
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -50,7 +49,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void closeEvent(QCloseEvent *event);
-
 
 
 signals :
@@ -141,17 +139,14 @@ public slots:
     void showWorkoutCreator();
 
 
-
     void setPmForCadence(bool usedFor);
     void setPmForSpeed(bool usedFor);
-
 
 
     void workoutExecuting();
     void workoutOver();
 
     void checkToUploadFile(const QString& filename, const QString& nameOnly, const QString& description);
-
 
 
 private slots:
@@ -226,8 +221,6 @@ private:
     QList<int> lstTypeDevicePaired;
     int pairingResponseNumber;
     bool pairingResponseAlreadySent;
-    //-----------------------
-
 
 
     Ui::MainWindow *ui;

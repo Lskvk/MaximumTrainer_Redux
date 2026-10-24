@@ -8,7 +8,6 @@ WorkoutUtil::WorkoutUtil()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
 QList<Workout> WorkoutUtil::getListWorkoutBase() {
 
 
@@ -22,7 +21,6 @@ QList<Workout> WorkoutUtil::getListWorkoutBase() {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
 Workout WorkoutUtil::getWorkoutMap(int userFTP) {
 
 
@@ -30,19 +28,10 @@ Workout WorkoutUtil::getWorkoutMap(int userFTP) {
 }
 
 
-
-
-
-
-
-
-
 //http://www.canadian-cycling.com/cca/documents/protocolMAPe.pdf
 //http://cyclingtrainingnuts.blogspot.ca/2013/03/maximal-aerobic-power-test-so-short-yet.html
 //http://semiprocycling.com/map
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Workout WorkoutUtil::MAP(int userFTP) {
-
 
 
     //Le dernier palier complété donne la PAM.
@@ -59,7 +48,6 @@ Workout WorkoutUtil::MAP(int userFTP) {
     QList<RepeatData> lstRepeat;
 
 
-
     double userFTP_d = userFTP;
     int startValueWatts = 60;
 
@@ -73,8 +61,6 @@ Workout WorkoutUtil::MAP(int userFTP) {
         startValueWatts = 150;
     else                    //  ]300-inf
         startValueWatts = 180;
-
-
 
 
     Interval intervalW1(QTime::fromString( "00:05:00", "hh:mm:ss"), QApplication::translate("WorkoutUtil", "Warm up", 0),
@@ -99,7 +85,6 @@ Workout WorkoutUtil::MAP(int userFTP) {
                         Interval::FLAT, 115, 0, 5,
                         Interval::NONE, 0, 0, 0,
                         false, 0, 0, 0);
-
 
 
     Interval intervalW5(QTime::fromString( "00:01:00", "hh:mm:ss"), QApplication::translate("WorkoutUtil", "1' Easy", 0),
@@ -133,7 +118,6 @@ Workout WorkoutUtil::MAP(int userFTP) {
                         Interval::NONE, 0, 0, 0,
                         Interval::NONE, 0, 0, 0,
                         false, 0, 0, 0);
-
 
 
     // using conversion 85%PAM = FTP
@@ -177,7 +161,6 @@ Workout WorkoutUtil::MAP(int userFTP) {
     lstInterval.append(intervalt1);
     lstInterval.append(intervalt2);
 
-    //-------------------------------
 
     lstInterval.append(intervalCd);
 
@@ -197,10 +180,7 @@ Workout WorkoutUtil::MAP(int userFTP) {
 }
 
 
-
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Workout WorkoutUtil::FTP() {
-
 
 
     QList<Interval> lstInterval;
@@ -265,9 +245,6 @@ Workout WorkoutUtil::FTP() {
 }
 
 
-
-
-//--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Workout WorkoutUtil::FTP_8min() {
 
 
@@ -334,7 +311,4 @@ Workout WorkoutUtil::FTP_8min() {
 
     return workout;
 }
-
-
-
 

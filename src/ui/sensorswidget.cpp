@@ -426,7 +426,6 @@ void SensorsWidget::onClearClicked(int rowIndex)
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 void SensorsWidget::refreshRowingMode()
 {
     const bool rowing = m_account && m_account->rowing_mode;

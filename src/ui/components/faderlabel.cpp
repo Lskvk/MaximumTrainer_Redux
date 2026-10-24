@@ -23,13 +23,11 @@ FaderLabel::FaderLabel(QWidget *parent) :
 }
 
 
-//---------------------------------------------------
 void FaderLabel::fadeOutAfterTimer() {
 
     fadeOut(this->tmpDurationFadeOut);
 }
 
-//---------------------------------------------------------------------------------
 void FaderLabel::fadeIn(int durationMs) {
 
     anim->stop();
@@ -42,7 +40,6 @@ void FaderLabel::fadeIn(int durationMs) {
 
 }
 
-//---------------------------------------------------------------------------------
 void FaderLabel::fadeOut(int durationMs) {
 
     anim->stop();
@@ -54,7 +51,6 @@ void FaderLabel::fadeOut(int durationMs) {
 }
 
 
-//--------------------------------------------------------------------------------
 void FaderLabel::fadeOutAfterPause(int fadeDuration, int pause) {
 
     this->tmpDurationFadeOut = fadeDuration;
@@ -62,7 +58,6 @@ void FaderLabel::fadeOutAfterPause(int fadeDuration, int pause) {
 
 }
 
-//-------------------------------------------------------------------------------------------------
 void FaderLabel::fadeInAndFadeOutAfterPause(int fadeInDuration, int fadeOutDuration, int pause) {
 
     fadeIn(fadeInDuration);
@@ -72,7 +67,6 @@ void FaderLabel::fadeInAndFadeOutAfterPause(int fadeInDuration, int fadeOutDurat
 
 }
 
-//-----------------------------------------------------------------------------------------------------
 void FaderLabel::mousePressEvent ( QMouseEvent * event ) {
 
     Q_UNUSED(event);

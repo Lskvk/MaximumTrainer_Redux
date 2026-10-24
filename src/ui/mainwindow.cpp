@@ -431,10 +431,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//---------------------------------------------------------------------------------
 void MainWindow::goToWorkoutPlanFilter(const QString& workoutId) {
 
     qDebug() << "mainWindow Plan workout ID" << workoutId;
@@ -468,7 +464,6 @@ void MainWindow::goToWorkoutPlanFilter(const QString& workoutId) {
 }
 
 
-//---------------------------------------------------------------------------------
 void MainWindow::onIntervalsIcuWorkoutDownloaded() {
 
     if (!replyIntervalsIcuZwo) return;
@@ -536,7 +531,6 @@ void MainWindow::onIntervalsIcuWorkoutDownloaded() {
 }
 
 
-//---------------------------------------------------------------------------------
 void MainWindow::reloadPlanWebView() {
 
     if (!account->intervals_icu_athlete_id.isEmpty()) {
@@ -556,7 +550,6 @@ void MainWindow::reloadPlanWebView() {
 }
 
 
-//---------------------------------------------------------------------------------
 void MainWindow::showPlanContextMenu(const QPoint &pos) {
 
     QMenu *menu = new QMenu(ui->webView_plan);
@@ -567,7 +560,6 @@ void MainWindow::showPlanContextMenu(const QPoint &pos) {
 }
 
 // trigger after a .zwo file downloaded from Intervals.icu is saved
-//---------------------------------------------------------------------------------
 void MainWindow::goToWorkoutNameFilterFromIntervals(const QString &workoutName) {
 
     qDebug() << "Intervals.icu workout downloaded:" << workoutName;
@@ -726,7 +718,6 @@ void MainWindow::saveAndNavigateToWorkout(const Workout &workout, const QString 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////
 // Launch the queue from item #1 (triggered by the Start button). Dequeues the
 // first workout itself and runs it directly; the normal finished()→advance chain
 // then handles the rest. Dequeuing here is what prevents the double-run the issue
@@ -811,7 +802,6 @@ void MainWindow::tryAdvanceWorkoutQueue()
     countdown->open();
 }
 
-/////////////////////////////////////////////////////////////////////////////////
 void MainWindow::workoutExecuting() {
 
     this->setDisabled(true);
@@ -823,7 +813,6 @@ void MainWindow::workoutExecuting() {
         ftb->setTabEnabled(i, false);
 
 }
-/////////////////////////////////////////////////////////////////////
 void MainWindow::workoutOver() {
 
     this->setDisabled(false);
@@ -840,7 +829,6 @@ void MainWindow::workoutOver() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::leftMenuChanged(int tabSelected) {
 
 
@@ -869,7 +857,6 @@ void MainWindow::leftMenuChanged(int tabSelected) {
 }
 
 
-//------------------------------------------------------------
 void MainWindow::createWebChannelPlan() {
 
     qDebug() << "createWebChannelPlan";
@@ -912,7 +899,6 @@ void MainWindow::createWebChannelPlan() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::updateVecStudio(QVector<UserStudio> vecUserStudio) {
 
     this->vecUserStudio = vecUserStudio;
@@ -923,7 +909,6 @@ void MainWindow::updateVecStudio(QVector<UserStudio> vecUserStudio) {
     UserStudio::saveStudioConfig(this->vecUserStudio);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QVector<UserStudio> MainWindow::prepareStudioRiders(bool simulator) {
 
     QVector<UserStudio> riders = vecUserStudio;   // copy; never persisted from here
@@ -979,7 +964,6 @@ QVector<UserStudio> MainWindow::prepareStudioRiders(bool simulator) {
 //int speedID;          = 6
 //int fecID;            = 7
 //int wheelCircMM;      = 8
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::updateFieldForUser(int riderID, int fieldNumber, QVariant value) {
 
     qDebug() << "updateDisplayNameForUser" << riderID << "fieldNumber" << fieldNumber << "value" << value;
@@ -1019,7 +1003,6 @@ void MainWindow::updateFieldForUser(int riderID, int fieldNumber, QVariant value
     vecUserStudio.replace(riderID-1, myUserStudio);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::enableStudioMode(bool enable) {
 
     account->enable_studio_mode = enable;
@@ -1045,7 +1028,6 @@ void MainWindow::enableStudioMode(bool enable) {
     account->saveDisplayPrefs();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::setNumberUserStudio(int nbUser) {
 
     qDebug() << "setNumberUserStudio" << nbUser;
@@ -1055,13 +1037,11 @@ void MainWindow::setNumberUserStudio(int nbUser) {
     account->saveDisplayPrefs();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::showWorkoutCreator() {
 
     ui->tabWidget_workout->setCurrentIndex(1);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::showWorkoutList() {
 
     qDebug() << "showWorkoutList!*";
@@ -1069,7 +1049,6 @@ void MainWindow::showWorkoutList() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::loadSettings() {
 
 
@@ -1092,7 +1071,6 @@ void MainWindow::loadSettings() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::saveSettings() {
 
 
@@ -1115,7 +1093,6 @@ void MainWindow::saveSettings() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::closeEvent(QCloseEvent *event) {
 
 
@@ -1207,13 +1184,11 @@ void MainWindow::scheduleScreenshotQuit()
 }
 
 //QMENUBAR
-/////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionExit_triggered()
 {
     this->close();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_actionLogout_triggered()
 {
     // Confirm asynchronously: QMessageBox::question() spins a nested event
@@ -1237,8 +1212,6 @@ void MainWindow::performLogout()
 }
 
 
-//----------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------
 void MainWindow::on_actionAbout_MT_triggered()
 {
     const QString appName = QCoreApplication::applicationName();
@@ -1261,21 +1234,18 @@ void MainWindow::on_actionAbout_MT_triggered()
 
 
 }
-//-----------------------------------------------
 void MainWindow::on_actionAbout_Qt_triggered()
 {
     QMessageBox::aboutQt(this);
 
 
 }
-//-----------------------------------------------
 void MainWindow::on_actionRequest_Help_triggered()
 {
     // Open the online user guide in the user's default browser.
     QDesktopServices::openUrl(QUrl(QStringLiteral(
         "https://maximumtrainer.github.io/MaximumTrainer_Redux/user-guide.html")));
 }
-//-----------------------------------------------
 void MainWindow::on_actionKeyboard_Shortcuts_triggered()
 {
     // open(), not exec(): a nested event loop is fatal on WASM.
@@ -1283,17 +1253,14 @@ void MainWindow::on_actionKeyboard_Shortcuts_triggered()
     dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->open();
 }
-//-----------------------------------------------
 void MainWindow::on_actionPreferences_triggered()
 {
     dconfig->open();
 }
-//-----------------------------------------------
 void MainWindow::on_actionWorkout_triggered()
 {
     Util::openWorkoutFolder("null");
 }
-//-----------------------------------------------
 void MainWindow::on_actionHistory_triggered()
 {
     // "Folder → Open History Folder": open the history folder in the file
@@ -1302,7 +1269,6 @@ void MainWindow::on_actionHistory_triggered()
 }
 
 
-//------------------------------------------------------
 void MainWindow::addWorkoutToQueue(const Workout &workout)
 {
     m_workoutQueue->addWorkout(workout.getFilePath(), workout.getName());
@@ -1315,7 +1281,6 @@ void MainWindow::addWorkoutToQueue(const Workout &workout)
 }
 
 
-//------------------------------------------------------
 void MainWindow::on_actionCreate_New_triggered()
 {
 
@@ -1328,7 +1293,6 @@ void MainWindow::on_actionCreate_New_triggered()
 }
 
 
-//------------------------------------------------------
 void MainWindow::on_actionOpen_Ride_triggered()
 {
 
@@ -1346,7 +1310,6 @@ void MainWindow::on_actionOpen_Ride_triggered()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::executeWorkout(Workout workout) {
 
     // Re-entrancy guard: the launch flow below runs nested event loops (the
@@ -1496,7 +1459,6 @@ void MainWindow::executeWorkout(Workout workout) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::startSimulatedWorkout(const Workout &workout)
 {
     // In Studio mode simulate every selected rider; otherwise a single rider.
@@ -1563,7 +1525,6 @@ void MainWindow::startSimulatedWorkout(const Workout &workout)
 
 
 #ifdef GC_WASM_BUILD
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::startWasmBleWorkout(const Workout &workout)
 {
     // Browser BLE picker via open(); the connect wait is signal-driven (the
@@ -1606,7 +1567,6 @@ void MainWindow::startWasmBleWorkout(const Workout &workout)
 #endif // GC_WASM_BUILD
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::startWorkoutWithConnectedHub(const Workout &workout, BtleHub *btleHub)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1674,7 +1634,6 @@ void MainWindow::startWorkoutWithConnectedHub(const Workout &workout, BtleHub *b
 
 
 #ifndef GC_WASM_BUILD
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::startWorkoutWithHubs(const Workout &workout,
                                       const QMap<BtleSensorRole, BtleHub*> &hubsByRole)
 {
@@ -1837,7 +1796,6 @@ void MainWindow::startWorkoutWithStudioHubs(const Workout &workout,
 #endif // GC_WASM_BUILD
 
 
-//-------------------------------------------------------
 QString MainWindow::loadPathImport() const {
 
     QSettings settings;
@@ -1849,7 +1807,6 @@ QString MainWindow::loadPathImport() const {
     return path;
 
 }
-//------------------------------------------------------------------
 void MainWindow::savePathImport(const QString& filepath) {
 
     QSettings settings;
@@ -1860,7 +1817,6 @@ void MainWindow::savePathImport(const QString& filepath) {
 }
 
 
-//------------------------------------------------------------------------------
 void MainWindow::on_actionSingle_Workout_triggered()
 {
     QString file = QFileDialog::getOpenFileName(this, tr("Import"),
@@ -1886,7 +1842,6 @@ void MainWindow::on_actionSingle_Workout_triggered()
 
 }
 
-//------------------------------------------------------------------------------
 void MainWindow::on_actionMultiple_Workouts_triggered()
 {
     qDebug() << "Multiple Workouts importer";
@@ -1908,7 +1863,6 @@ void MainWindow::on_actionMultiple_Workouts_triggered()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::checkToUploadFile(const QString& filename, const QString& nameOnly, const QString& description) {
 
     Q_UNUSED(description);
@@ -1926,7 +1880,6 @@ void MainWindow::checkToUploadFile(const QString& filename, const QString& nameO
     // the same activity twice.
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::onNetworkOnlineChanged(bool isOnline)
 {
     // Enable or disable the Intervals.icu sidebar tab (index 1).
@@ -1953,21 +1906,16 @@ void MainWindow::slotSystemThemeChanged()
 }
 
 
-///////////////////////////////////////////////////////////////
 void MainWindow::setPmForCadence(bool usedFor) {
 
     qDebug() << "setPmForCadence" << usedFor;
     account->use_pm_for_cadence = usedFor;
 }
-///////////////////////////////////////////////////////////////
 void MainWindow::setPmForSpeed(bool usedFor) {
 
     qDebug() << "setPmForSpeed" << usedFor;
     account->use_pm_for_speed = usedFor;
 }
-///////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // ─────────────────────────────────────────────────────────────────────────────

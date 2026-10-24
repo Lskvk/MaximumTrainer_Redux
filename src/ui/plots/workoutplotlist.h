@@ -11,7 +11,6 @@
 #include "account.h"
 
 
-
 class QwtPlotCurve;
 class QwtPlotDirectPainter;
 
@@ -26,21 +25,17 @@ public:
     WorkoutPlotList(QWidget *parent = 0);
     void setWorkoutData(Workout workout);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 private :
     void init();
     void drawGraphIntervals();
     void addShapeFromPoints(const QString &title, const QColor &color, QList<QPointF> lstPoints, int positionZ, bool antiliasing);
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 private:
     int max_power;
 
     Workout workout;
     Account *account;
-
 
 
     QwtPlotCurve *powerTargetCurve;

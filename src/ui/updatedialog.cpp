@@ -29,9 +29,6 @@ UpdateDialog::UpdateDialog(const QString &latestVersion, QWidget *parent) : QDia
 }
 
 
-
-
-//--------------------------------
 void UpdateDialog::accept() {
 
     QDesktopServices::openUrl(QUrl(urlGitHubReleasesPage));

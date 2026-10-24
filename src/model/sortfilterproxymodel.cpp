@@ -10,7 +10,6 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent) : QSortFilterProxyMo
 }
 
 
-//----------------------------------------------------------------------------------
 void SortFilterProxyModel::setFilterKeyColumns(const QList<qint32> &filterColumns)
 {
     m_columnPatterns.clear();
@@ -26,7 +25,6 @@ void SortFilterProxyModel::addFilterColumn(qint32 column) {
 }
 
 
-//----------------------------------------------------------------------------------
 void SortFilterProxyModel::addFilterFixedString(qint32 column, const QString &pattern)
 {
     if(!m_columnPatterns.contains(column)) {
@@ -37,13 +35,11 @@ void SortFilterProxyModel::addFilterFixedString(qint32 column, const QString &pa
 
 }
 
-//----------------------------------------------------------------------------------
 //void SortFilterProxyModel::addFilterInt(int value)
 //{
 //    typeWorkout = value;
 
 
-//----------------------------------------------------------------------------------
 void SortFilterProxyModel::addFilterWorkoutType(Workout::WORKOUT_NAME workoutType) {
 
     if (workoutType == Workout::INCLUDED_WORKOUT) {
@@ -56,7 +52,6 @@ void SortFilterProxyModel::addFilterWorkoutType(Workout::WORKOUT_NAME workoutTyp
 }
 
 
-//----------------------------------------------------------------------------------
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
 
@@ -72,7 +67,6 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &so
 
     if (!showWorkoutIncluded && workout.getWorkoutNameEnum() != Workout::USER_MADE)
         return false;
-    //--------------
 
 
     bool ret = false;

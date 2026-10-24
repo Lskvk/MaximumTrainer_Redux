@@ -41,15 +41,12 @@ public:
     QString getFitFilename();
 
 
-
     void setStartTimeWorkout(QDateTime dt);
-
 
 
     // Retrive Test results
     int getFTP();
     int getLTHR();
-    //-----------------
 
     // Interval average accessors — valid until the next changeInterval() call
     double getAvgIntervalPower() const { return avgIntervalPower; }
@@ -58,10 +55,6 @@ public:
     int    getNbPointsIntervalPower() const { return nbPointsIntervalPower; }
 
 
-
-
-
-    /////////////////////////////////////////////////////////////////////////
 signals:
     void maxCadenceIntervalChanged(double cadence);
     void maxCadenceWorkoutChanged(double cadence);
@@ -92,11 +85,6 @@ signals:
     void totalDistanceChanged(double distanceMeters);
 
 
-
-
-
-
-
 private :
     void hrDataReceived(double averageHr1sec);
     void cadDataReceived(double averageCadence1sec);
@@ -109,7 +97,6 @@ private :
     //-- helpers getPowerResultTest
     int getFTP_normal();
     int getFTP_8min();
-
 
 
 private:
@@ -130,7 +117,6 @@ private:
     double normalizedPower;
     double intensityFactor;
     double trainingStressScore;
-
 
 
     // To keep lap average data
@@ -176,7 +162,6 @@ private:
     int nbPointsWorkoutSpeed;
 
 
-
     /// Power -------------------------
     double avgIntervalPower;
     double maxIntervalPower;
@@ -218,15 +203,7 @@ private:
     int numberTimeUsedLastSaturatedHemoglobinPercent = 0;
 
 
-
-
-
-
-
-
 };
-
-
 
 
 #endif // DATAWORKOUT_H

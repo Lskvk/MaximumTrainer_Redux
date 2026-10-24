@@ -14,7 +14,6 @@ class Workout
     //http://qt-project.org/doc/qt-4.8/containers.html#assignable-data-types
 public:
 
-    //----------------------------
     enum Type
     {
         T_ENDURANCE,
@@ -28,7 +27,6 @@ public:
     QString getTypeToString() const;
 
 
-    //----------------------------
     enum WORKOUT_NAME
     {
         USER_MADE,

@@ -11,12 +11,7 @@
 #include "interval.h"
 
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////
 /// TimeScaleDraw
-////////////////////////////////////////////////////////////////////////////////
 class TimeScaleDraw: public QwtScaleDraw {
 public:
     TimeScaleDraw( const QTime &base ):
@@ -32,8 +27,6 @@ private:
 };
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////
 myCreatorPlot::myCreatorPlot(QWidget *parent) :QwtPlot(parent){
 
     this->account = qApp->property("Account").value<Account*>();
@@ -45,32 +38,25 @@ myCreatorPlot::myCreatorPlot(QWidget *parent) :QwtPlot(parent){
 
 }
 
-//---------------------------------------
 myCreatorPlot::~myCreatorPlot() {
 
     lstBackgroundShape.clear();
 }
 
 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void myCreatorPlot::init() {
 
     setAutoReplot(true);
     setMouseTracking(true);
 
 
-
     QTime timeStartWorkout(0, 0, 0);
     setAxisScaleDraw( QwtPlot::xBottom, new TimeScaleDraw( timeStartWorkout ) );
-
 
 
     d_picker = new MyQwtPlotPicker( QwtPlot::xBottom, QwtPlot::yLeft,
                                     QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn,
                                     this->canvas() );
-
 
 
     pickerMachine = new MyQwtPickerMachine();
@@ -79,11 +65,6 @@ void myCreatorPlot::init() {
 }
 
 
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
 void myCreatorPlot::updateWorkout(Workout workout) {
 
 
@@ -96,11 +77,9 @@ void myCreatorPlot::updateWorkout(Workout workout) {
     drawGraphIntervals();
 
 
-
 }
 
 
-//------------------------------------------------
 void myCreatorPlot::ajustScales() {
 
 
@@ -111,7 +90,6 @@ void myCreatorPlot::ajustScales() {
         max_power = account->FTP;
 
     setAxisScale( QwtPlot::yLeft, 0.0, max_power+50, 50);
-
 
 
     int secTotal = Util::convertQTimeToSecD(workout.getDurationQTime());
@@ -206,10 +184,6 @@ void myCreatorPlot::ajustScales() {
 }
 
 
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void myCreatorPlot::pointClicked(QPointF pt) {
 
 
@@ -217,8 +191,6 @@ void myCreatorPlot::pointClicked(QPointF pt) {
         emit rightClickedGraph(pt);  /// this is the graph spot coords, not good place to show
         return;
     }
-
-
 
 
     QwtPlotShapeItem *shapeItemClicked = itemAt(pt);
@@ -231,10 +203,8 @@ void myCreatorPlot::pointClicked(QPointF pt) {
     }
 
 
-
 }
 
-//---------------------------------------------------------------
 QwtPlotShapeItem* myCreatorPlot::itemAt(const QPointF pos) {
 
 
@@ -248,9 +218,6 @@ QwtPlotShapeItem* myCreatorPlot::itemAt(const QPointF pos) {
 }
 
 
-
-
-//-----------------------------------------------------------------------------------------------------
 void myCreatorPlot::updateBackgroundHighlight(QSet<QString> setIntervalToHightlight) {
 
     qDebug() << "updateBackgroundHighlight  start";
@@ -270,10 +237,8 @@ void myCreatorPlot::updateBackgroundHighlight(QSet<QString> setIntervalToHightli
     replot();
 
 
-
 }
 
-//----------------------------------------------------
 void myCreatorPlot::removeHightlight() {
 
     qDebug() << "remove highlithing here";
@@ -288,7 +253,6 @@ void myCreatorPlot::removeHightlight() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void myCreatorPlot::drawGraphIntervals() {
 
     lstBackgroundShape.clear();
@@ -323,7 +287,6 @@ void myCreatorPlot::drawGraphIntervals() {
     QPointF btnRightH;
 
 
-
     int ftp = account->FTP;
     int lthr = account->LTHR;
     int maxPower = workout.getMaxPowerPourcent() * ftp + 200;
@@ -331,7 +294,6 @@ void myCreatorPlot::drawGraphIntervals() {
     int i=0;
     Interval lastVal;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     foreach (Interval val, workout.getLstInterval()) {
 
 
@@ -350,9 +312,6 @@ void myCreatorPlot::drawGraphIntervals() {
         lstPointsBg.append(btnRightBg);
         QString shapeName = QString::number(val.getSourceRowLstInterval());
         addShapeFromPoints(shapeName, colorBg, lstPointsBg, 1, false, true);
-
-
-
 
 
         /// POWER SHAPE
@@ -417,7 +376,6 @@ void myCreatorPlot::drawGraphIntervals() {
         }
 
 
-
         /// Power Balance
         if (val.getRightPowerTarget() != -1) {
             QwtPlotMarker *d_markerBalance = new QwtPlotMarker();
@@ -457,7 +415,6 @@ void myCreatorPlot::drawGraphIntervals() {
         }
 
 
-
         /// MARKER SEPARATE INTERVALS
         if (i!=0 && i < workout.getNbInterval() ) {
             QwtPlotMarker *d_marker1 = new QwtPlotMarker();
@@ -476,8 +433,6 @@ void myCreatorPlot::drawGraphIntervals() {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void myCreatorPlot::addShapeFromPoints(const QString &title, const QColor &color, QList<QPointF> lstPoints,
                                        int positionZ, bool antiliasing, bool isBackgroundItem) {
 
@@ -492,7 +447,6 @@ void myCreatorPlot::addShapeFromPoints(const QString &title, const QColor &color
     item->setPen(pen);
     item->setZ(positionZ);
     item->attach(this);
-
 
 
     QLinearGradient linearGrad(lstPoints.at(0), lstPoints.at(1));
@@ -517,8 +471,6 @@ void myCreatorPlot::addShapeFromPoints(const QString &title, const QColor &color
 }
 
 
-
-//----------------------------------------------------------------------------------------------
 QString myCreatorPlot::getSavePathExport() {
 
 
@@ -530,7 +482,6 @@ QString myCreatorPlot::getSavePathExport() {
 
     return path;
 }
-//-----------------------------------------------
 void myCreatorPlot::savePathExport(QString path) {
 
     QSettings settings;
@@ -539,6 +490,4 @@ void myCreatorPlot::savePathExport(QString path) {
     settings.setValue("savePathExport", path);
     settings.endGroup();
 }
-
-
 

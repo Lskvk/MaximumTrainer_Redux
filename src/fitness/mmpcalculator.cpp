@@ -14,9 +14,7 @@
 #include "fit_record_mesg_listener.hpp"
 #include "fit_runtime_exception.hpp"
 
-// ---------------------------------------------------------------------------
 // Internal FIT Record listener
-// ---------------------------------------------------------------------------
 namespace {
 
 class PowerSeriesReader : public fit::RecordMesgListener
@@ -58,9 +56,7 @@ private:
 
 } // anonymous namespace
 
-// ---------------------------------------------------------------------------
 // MmpCalculator
-// ---------------------------------------------------------------------------
 
 QVector<int> MmpCalculator::readPowerSeries(const QString &fitFilePath)
 {

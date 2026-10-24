@@ -17,7 +17,6 @@ XmlUtil::XmlUtil(QObject *parent) :QObject(parent) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 void XmlUtil::parseWorkoutDone(Account *account, QXmlStreamReader& xml) {
 
     qDebug() << "parseWorkoutDone";
@@ -47,7 +46,6 @@ void XmlUtil::parseWorkoutDone(Account *account, QXmlStreamReader& xml) {
 
 
 ///Read xml file (.save file), construct Settings Object and Account QSet from it
-////////////////////////////////////////////////////////////////////////////////////////////////
 void XmlUtil::parseLocalSaveFile(Account *account) {
 
     qDebug() << "\n\n Parsing Local Save file!";
@@ -121,7 +119,6 @@ void XmlUtil::parseLocalSaveFile(Account *account) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool XmlUtil::saveLocalSaveFile(Account *account) {
 
 
@@ -185,7 +182,6 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
 
 
 ///Save QSet to xml file (.save file)
-//---------------------------------------------------------------------------------------------
 //bool XmlUtil::saveLstWorkoutDone(QString email_clean, QSet<QString> hashWorkout) {
 
 
@@ -205,7 +201,6 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
 //        writer.writeEndElement();  /// WorkoutDone
 
 
-//---------------------------------------------------------------------------------------------
 QList<Workout> XmlUtil::parseWorkoutLstPath(QStringList lstPath, Workout::WORKOUT_NAME workoutType) {
 
     QList<Workout> lstWorkout;
@@ -228,7 +223,6 @@ QList<Workout> XmlUtil::parseWorkoutLstPath(QStringList lstPath, Workout::WORKOU
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<Workout> XmlUtil::getLstWorkoutFtpKickstart() {
 
     QStringList lstWorkoutPat;
@@ -245,7 +239,6 @@ QList<Workout> XmlUtil::getLstWorkoutFtpKickstart() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<Workout> XmlUtil::getLstWorkoutPolarized3x() {
 
     QStringList lstWorkoutPat;
@@ -256,7 +249,6 @@ QList<Workout> XmlUtil::getLstWorkoutPolarized3x() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<Workout> XmlUtil::getLstWorkoutVo2ShockBlock() {
 
     QStringList lstWorkoutPat;
@@ -270,7 +262,6 @@ QList<Workout> XmlUtil::getLstWorkoutVo2ShockBlock() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<Workout> XmlUtil::getLstWorkoutBaseCamp() {
 
     QStringList lstWorkoutPat;
@@ -290,7 +281,6 @@ QList<Workout> XmlUtil::getLstWorkoutBaseCamp() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<Workout> XmlUtil::getLstWorkoutLunchCrunch() {
 
     QStringList lstWorkoutPat;
@@ -307,7 +297,6 @@ QList<Workout> XmlUtil::getLstWorkoutLunchCrunch() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 QList<Workout> XmlUtil::getLstWorkoutHeartRateBase() {
 
     QStringList lstWorkoutPat;
@@ -324,7 +313,6 @@ QList<Workout> XmlUtil::getLstWorkoutHeartRateBase() {
 }
 
 
-//---------------------------------------------------------------------------------------------
 /// Workout files on user system
 QList<Workout> XmlUtil::getLstUserWorkout() {
 
@@ -332,7 +320,6 @@ QList<Workout> XmlUtil::getLstUserWorkout() {
     return parseWorkoutLstPath(lstWorkoutPat, Workout::USER_MADE);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QString XmlUtil::parseFileNameFromPath(QString filePath) {
 
     QFileInfo fileInfo(filePath);
@@ -340,7 +327,6 @@ QString XmlUtil::parseFileNameFromPath(QString filePath) {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Trackpoint XmlUtil::parseTrackpoint(QXmlStreamReader &xml) {
 
 
@@ -383,7 +369,6 @@ Trackpoint XmlUtil::parseTrackpoint(QXmlStreamReader &xml) {
     return tp;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Workout XmlUtil::parseSingleWorkoutXml(QString filePath) {
 
     //    qDebug() << "OK GO TO PARSE THIS WORKOUT" << filePath;
@@ -457,7 +442,6 @@ Workout XmlUtil::parseSingleWorkoutXml(QString filePath) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Interval XmlUtil::parseInterval(QXmlStreamReader &xml) {
 
 
@@ -590,7 +574,6 @@ Interval XmlUtil::parseInterval(QXmlStreamReader &xml) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 RepeatData XmlUtil::parseRepeat(QXmlStreamReader &xml) {
 
 
@@ -625,7 +608,6 @@ RepeatData XmlUtil::parseRepeat(QXmlStreamReader &xml) {
 }
 
 
-//-------------------------------------------------------------------------------------
 bool XmlUtil::createWorkoutXml(Workout workout, QString destinationPath) {
 
 
