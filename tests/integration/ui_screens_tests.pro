@@ -49,6 +49,7 @@ linux {
 win32 {
     !isEmpty(QWT_INSTALL) {
         INCLUDEPATH += $${QWT_INSTALL}/include
+        DEFINES     += QWT_DLL
         CONFIG(release, debug|release): LIBS += -L$${QWT_INSTALL}/lib -lqwt
         CONFIG(debug,   debug|release): LIBS += -L$${QWT_INSTALL}/lib -lqwtd
     }
