@@ -106,7 +106,6 @@ void WorkoutPlotList::drawGraphIntervals() {
     int ftp = account->FTP;
     int lthr = account->LTHR;
     double time = 0;
-    int i=0;
     Interval lastVal;
 
     foreach (Interval val, workout.getLstInterval()) {
@@ -176,18 +175,7 @@ void WorkoutPlotList::drawGraphIntervals() {
         }
 
 
-        /// MARKER SEPARATE INTERVALS
-        //        if (i!=0 && i < workout.getNbInterval() ) {
-        //            QwtPlotMarker *d_marker1 = new QwtPlotMarker();
-        //            d_marker1->setValue( time, 0.0 );
-        //            d_marker1->setLineStyle( QwtPlotMarker::VLine );
-        //            d_marker1->setLabelAlignment( Qt::AlignRight | Qt::AlignBottom );
-        //            d_marker1->setLinePen( Qt::lightGray, 0, Qt::DashLine );
-        //            d_marker1->setZ(3);
-        //            d_marker1->attach( this );
-        //        }
         time += secInterval;
-        i++;
         lastVal = val;
     }
 

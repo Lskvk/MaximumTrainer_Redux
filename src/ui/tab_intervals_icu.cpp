@@ -73,8 +73,8 @@ EM_JS(void, js_exposeIntervalsTestApi, (), {
     // this does not depend on any optional Emscripten EXPORTED_RUNTIME_METHODS.
     window.mt_setIntervalsCredentials = function(apiKey, athleteId) {
         var enc    = new TextEncoder();
-        var keyBuf = enc.encode(String(apiKey   || '') + '\0');
-        var idBuf  = enc.encode(String(athleteId || '') + '\0');
+        var keyBuf = enc.encode(String(apiKey   || "") + '\0');
+        var idBuf  = enc.encode(String(athleteId || "") + '\0');
         var keyPtr = _malloc(keyBuf.length);
         var idPtr  = _malloc(idBuf.length);
         HEAPU8.set(keyBuf, keyPtr);

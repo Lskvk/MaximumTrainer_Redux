@@ -54,7 +54,7 @@ public:
                            QList<Radio> lstRadio, QVector<UserStudio> vecUserStudio, QWidget *parent = 0);
     ~WorkoutDialog();
 
-    void reject();
+    void reject() override;
 
     /// Mark a controllable trainer (FTMS / simulator) as wired for this solo
     /// workout so sendLoads()/sendSlopes() emit ERG targets.  Historically
@@ -261,7 +261,7 @@ private:
     void checkMAPTestOver();
 
 
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
     void initUI();
     double calculateNewTargetPower();

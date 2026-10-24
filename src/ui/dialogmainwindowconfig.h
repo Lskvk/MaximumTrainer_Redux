@@ -26,8 +26,8 @@ public:
     explicit DialogMainWindowConfig(QWidget *parent = 0);
     ~DialogMainWindowConfig();
 
-    void accept();
-    void reject();
+    void accept() override;
+    void reject() override;
 
 protected:
     void showEvent(QShowEvent *event) override;

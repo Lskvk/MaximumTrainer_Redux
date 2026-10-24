@@ -49,9 +49,14 @@ QString CredentialStore::load(const QString &service, const QString &key)
     if (status != errSecSuccess || !result)
         return {};
 
-    NSData   *data = (__bridge_transfer NSData *)result;
+    // Built without ARC: release the copied keychain item and the string
+    // explicitly (a __bridge_transfer cast does nothing here and leaked both).
+    NSData   *data = (__bridge NSData *)result;
     NSString *str  = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    return QString::fromNSString(str);
+    const QString value = QString::fromNSString(str);
+    [str release];
+    CFRelease(result);
+    return value;
 }
 
 void CredentialStore::remove(const QString &service, const QString &key)

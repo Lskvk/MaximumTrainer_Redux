@@ -141,7 +141,7 @@ public:
     }
 
 private:
-    FIT_STRING_CONVERSION_ERROR errorCode;
+    [[maybe_unused]] FIT_STRING_CONVERSION_ERROR errorCode;
 };
 
 ///////////////////////////////////////////////////////////////////////
