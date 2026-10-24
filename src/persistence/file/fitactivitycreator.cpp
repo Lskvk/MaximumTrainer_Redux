@@ -1,5 +1,7 @@
 #include "fitactivitycreator.h"
 
+#include <QTimeZone>
+
 
 #include "fit_decode.hpp"
 #include "fit_mesg_broadcaster.hpp"
@@ -87,7 +89,7 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
 
     // TimeCreated - seconds since UTC 00:00 Dec 31 1989
     QDateTime now =  QDateTime::currentDateTime().toUTC();
-    QDateTime ref = QDateTime(QDate(1989,12,31), QTime(0,0), Qt::UTC);
+    QDateTime ref = QDateTime(QDate(1989,12,31), QTime(0,0), QTimeZone::UTC);
     secStartedWorkout = ref.secsTo(now);
 
 

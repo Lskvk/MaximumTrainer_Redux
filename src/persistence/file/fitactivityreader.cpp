@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QTimeZone>
 
 #include "fit_decode.hpp"
 #include "fit_mesg_broadcaster.hpp"
@@ -67,7 +68,7 @@ void FitActivityReader::OnMesg(fit::SessionMesg &mesg)
 
     if (mesg.IsStartTimeValid()) {
         qint64 unixSec = static_cast<qint64>(mesg.GetStartTime()) + FIT_EPOCH_OFFSET;
-        m_summary.startTime = QDateTime::fromSecsSinceEpoch(unixSec, Qt::UTC).toLocalTime();
+        m_summary.startTime = QDateTime::fromSecsSinceEpoch(unixSec, QTimeZone::UTC).toLocalTime();
     }
 
     if (mesg.IsTotalTimerTimeValid())

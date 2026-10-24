@@ -1,6 +1,7 @@
 #include "dataworkout.h"
 
 #include <QTimer>
+#include <QTimeZone>
 #include <QObject>
 
 #include "datacadence.h"
@@ -25,7 +26,7 @@ DataWorkout::DataWorkout(Workout workout, int userftp, QObject *parent) : QObjec
 
     this->workout = workout;
     this->ftp = userftp;
-    startTimeWorkout.setTimeSpec(Qt::UTC);
+    startTimeWorkout.setTimeZone(QTimeZone::UTC);
 
     nbLap = 0;
     normalizedPower = 0;

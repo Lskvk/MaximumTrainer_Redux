@@ -11,8 +11,6 @@ class Trackpoint
 
 public:
     Trackpoint();
-    ~Trackpoint() {}
-    Trackpoint( const Trackpoint& other );
 
     Trackpoint(double lon, double lat, double elevation, double slopePercentage, double distanceAtThisPoint);
 

@@ -1,4 +1,5 @@
 #include <QtTest>
+#include <QTimeZone>
 #include <QTemporaryDir>
 #include <QDateTime>
 
@@ -28,13 +29,13 @@ private:
     // (seconds since the FIT epoch) so callers can assert the decoded date.
     static qint64 writeSampleFit(const QString &path, int nRecords)
     {
-        const QDateTime start = QDateTime(QDate(2024, 1, 15), QTime(10, 0, 0), Qt::UTC);
+        const QDateTime start = QDateTime(QDate(2024, 1, 15), QTime(10, 0, 0), QTimeZone::UTC);
         const qint64 fitStart = start.toSecsSinceEpoch() - FIT_EPOCH_OFFSET;
 
         std::fstream file;
         file.open(path.toStdString(), std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
 
-        fit::Encode encode;
+        fit::Encode encode(fit::ProtocolVersion::V10);
         encode.Open(file);
 
         fit::FileIdMesg fileId;
@@ -105,7 +106,7 @@ private slots:
         QCOMPARE(qRound(s.tss), 85);
         QVERIFY(qAbs(s.totalDistanceKm - 0.6) < 1e-6);  // 600 m
         QCOMPARE(s.startTime.toUTC(),
-                 QDateTime(QDate(2024, 1, 15), QTime(10, 0, 0), Qt::UTC));
+                 QDateTime(QDate(2024, 1, 15), QTime(10, 0, 0), QTimeZone::UTC));
     }
 
     void summaryHandlesMissingFile()
@@ -147,7 +148,7 @@ private slots:
     {
         const QDate day(2024, 3, 10);
         WorkoutHistorySummary s;
-        s.startTime = QDateTime(day, QTime(8, 0), Qt::LocalTime);
+        s.startTime = QDateTime(day, QTime(8, 0), QTimeZone::LocalTime);
         s.tss = 100.0;
         s.valid = true;
 
@@ -167,11 +168,11 @@ private slots:
     {
         const QDate day(2024, 3, 10);
         WorkoutHistorySummary a;
-        a.startTime = QDateTime(day, QTime(8, 0), Qt::LocalTime);
+        a.startTime = QDateTime(day, QTime(8, 0), QTimeZone::LocalTime);
         a.tss = 60.0;
         a.valid = true;
         WorkoutHistorySummary b;
-        b.startTime = QDateTime(day, QTime(18, 0), Qt::LocalTime);
+        b.startTime = QDateTime(day, QTime(18, 0), QTimeZone::LocalTime);
         b.tss = 40.0;
         b.valid = true;
 
@@ -186,7 +187,7 @@ private slots:
     {
         const QDate day(2024, 3, 10);
         WorkoutHistorySummary good;
-        good.startTime = QDateTime(day, QTime(8, 0), Qt::LocalTime);
+        good.startTime = QDateTime(day, QTime(8, 0), QTimeZone::LocalTime);
         good.tss = 100.0;
         good.valid = true;
         WorkoutHistorySummary junk;          // invalid startTime, no data

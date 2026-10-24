@@ -752,7 +752,7 @@ void DialogLogin::slotFinishedIntervalsIcuAthlete()
         LOG_INFO("DialogLogin", QStringLiteral("Intervals.icu athlete profile retrieved successfully"));
     } else {
         LOG_WARN("DialogLogin",
-                 QStringLiteral("Intervals.icu athlete fetch failed: ")
+                 QStringLiteral("Intervals.icu athlete fetch failed (HTTP %1): ").arg(httpStatus)
                  + replyIntervalsIcuAthlete->errorString());
     }
 

@@ -92,7 +92,7 @@ static void saveScreenshot(QWidget &window,
     const QString path = outDir + "/" + baseName;
     // Wait until the window compositor has fully exposed the widget before
     // grabbing — prevents blank screenshots under Xvfb on slow CI runners.
-    QTest::qWaitForWindowExposed(&window);
+    (void)QTest::qWaitForWindowExposed(&window);
     QPixmap shot = window.grab();
     QVERIFY2(!shot.isNull(), "Screenshot grab() returned a null pixmap");
     QVERIFY2(window.width() > 0 && window.height() > 0,
@@ -322,7 +322,7 @@ private slots:
     {
         DialogConnectionMethod dlg;
         dlg.show();
-        QTest::qWaitForWindowExposed(&dlg);
+        (void)QTest::qWaitForWindowExposed(&dlg);
 
         // Find by the stable objectName set in DialogConnectionMethod's ctor.
         QPushButton *btnSim =
@@ -354,7 +354,7 @@ private slots:
     {
         DialogConnectionMethod dlg;
         dlg.show();
-        QTest::qWaitForWindowExposed(&dlg);
+        (void)QTest::qWaitForWindowExposed(&dlg);
 
         // Find by the stable objectName set in DialogConnectionMethod's ctor.
         QPushButton *btnBtle =
@@ -425,7 +425,7 @@ private slots:
         layout->addStretch(1);
 
         container.show();
-        QTest::qWaitForWindowExposed(&container);
+        (void)QTest::qWaitForWindowExposed(&container);
 
         const QString screenshotName =
             QString("ui-screens-connection-dialog-%1-%2.png")
@@ -445,7 +445,7 @@ private slots:
     {
         PostWorkoutSummaryWindow window;
         window.show();
-        QTest::qWaitForWindowExposed(&window);
+        (void)QTest::qWaitForWindowExposed(&window);
 
         // Verify metric labels are present and non-empty
         const QStringList expectedMetrics = {

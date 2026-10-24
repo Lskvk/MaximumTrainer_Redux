@@ -112,8 +112,8 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
     bool firstDataPointInterval = true;
     double timeMinStart;
     double timeMinEnd;
-    double ftpPercStart;
-    double ftpPercEnd;
+    double ftpPercStart = 0.0;
+    double ftpPercEnd = 0.0;
 
 
 

@@ -45,8 +45,6 @@ public:
 
 
     Workout();
-    ~Workout() {}
-    Workout( const Workout& other );
     Workout(QString filePath, WORKOUT_NAME workout_name_enum, QList<Interval> lstIntervalSource, QList<RepeatData> lstRepeat,
             QString name, QString createdBy, QString description, QString plan, Type type);
 
