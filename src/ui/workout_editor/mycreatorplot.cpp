@@ -1,6 +1,5 @@
 #include "mycreatorplot.h"
 
-#include <QDebug>
 #include <QPen>
 
 #include "qwt_date_scale_draw.h"
@@ -220,7 +219,6 @@ QwtPlotShapeItem* myCreatorPlot::itemAt(const QPointF pos) {
 
 void myCreatorPlot::updateBackgroundHighlight(QSet<QString> setIntervalToHightlight) {
 
-    qDebug() << "updateBackgroundHighlight  start";
 
     this->setSelectedInterval = setIntervalToHightlight;
 
@@ -241,7 +239,6 @@ void myCreatorPlot::updateBackgroundHighlight(QSet<QString> setIntervalToHightli
 
 void myCreatorPlot::removeHightlight() {
 
-    qDebug() << "remove highlithing here";
     setSelectedInterval.clear();
 
     foreach(QwtPlotShapeItem *item, lstBackgroundShape) {
@@ -249,7 +246,6 @@ void myCreatorPlot::removeHightlight() {
     }
     replot();
 
-    qDebug() << "remove highlithing here end";
 }
 
 

@@ -1,6 +1,5 @@
 #include "workout.h"
 
-#include <QDebug>
 #include <QApplication>
 #include <QtCore/qmath.h>
 
@@ -263,18 +262,13 @@ void Workout::initializeArrayFTP() {
     }
 
 
-    //    qDebug() << "CHECKING VALUES 1sec";
-    //    qDebug() << "Workout:" << this->name << " length is:" << this->getDurationMinutes();
     //    for (int i=0; i<vecFtp1sec.size(); i++)
     //    {
-    //        qDebug() << "Workout:" << this->name << "1secFTP at" << i << " is" << vecFtp1sec[i];
     //    }
 
 
-    //    qDebug() << "CHECKING VALUES 30 sec";
     //    for (int i=0; i<vecFtp30sec.size(); i++)
     //    {
-    //        qDebug() << "Workout:" << this->name << "30sec ftp at" << i << " is" << vecFtp30sec[i];
     //    }
 
 
@@ -316,9 +310,7 @@ void Workout::calculateWorkoutMetrics() {
     avgStep = avgStep/vecAvgPowerEvery30sec.size();
 
 
-    //    qDebug() << "Workout:" << this->name;
     this->normalizedPower = qPow(avgStep, 1/4.);
-    //    qDebug() << "FINAL NP:" << QString::number(this->normalizedPower);
     ///--------------------------------------------
 
 

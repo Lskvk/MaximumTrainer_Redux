@@ -1,7 +1,6 @@
 #include "dialogconfig.h"
 #include "ui_dialogconfig.h"
 
-#include <QDebug>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
@@ -32,8 +31,6 @@ DialogConfig::~DialogConfig() {
 
 DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialog *ptrParent) : QDialog(parent), ui(new Ui::DialogConfig) {
 
-
-    qDebug() << "DialogConfig constructor";
 
     ui->setupUi(this);
 
@@ -182,7 +179,6 @@ int DialogConfig::radioVolume() const
 
 void DialogConfig::playNextOrPreviousRadio(bool next) {
 
-    qDebug() << "playNextOrPreviousRadio" << next;
 
     QModelIndex indexToSelect;
 
@@ -214,17 +210,12 @@ void DialogConfig::playNextOrPreviousRadio(bool next) {
 
 void DialogConfig::RadioDoubleClicked(QModelIndex index) {
 
-    qDebug() << "RadioDoubleClicked" << index << "currentNow:" << currentRadioIndex;
 
     currentRadioIndex = index;
-    qDebug() << "RadioDoubleClicked1" << index << "currentNow:" << currentRadioIndex;
 
 
-    qDebug() << "Getting radio from model...";
     Radio radio = tableModel->getRadioAtRow(index);
-    qDebug() << "Done getting radio from model...";
     currentRadioName = radio.getName();
-    qDebug() << "Radio url is" << radio.getUrl();
 
     // Remember the station so the next workout session starts on the same one.
     {
@@ -290,7 +281,6 @@ void DialogConfig::playPauseRadio() {
         emit signal_stopPlayingRadio();
     }
     else {
-        qDebug() << "ok play this one.." << currentRadioIndex;
         RadioDoubleClicked(currentRadioIndex);
     }
 
@@ -564,7 +554,6 @@ void DialogConfig::on_checkBox_showCurrentTarget_clicked(bool checked)
 
 void DialogConfig::on_checkBox_enableHR_clicked(bool checked) {
 
-    qDebug() << "on_checkBox_enableHR_clicked" << checked;
     account->show_hr_widget = checked;
     ui->comboBox_displayHR->setEnabled(checked);
 
@@ -740,8 +729,6 @@ void DialogConfig::reject() {
 
 void DialogConfig::saveSettings() {
 
-    qDebug() << "saveSettings";
-
 
     /// Save last openned tab
     account->last_index_selected_config_workout = ui->listWidget_settings->currentRow();
@@ -816,8 +803,6 @@ void DialogConfig::saveSettings() {
     account->sound_alert_cadence_under_target = ui->checkBox_underTargetCadence->isChecked();
     account->sound_alert_cadence_above_target = ui->checkBox_aboveTargetCadence->isChecked();
 
-
-    qDebug() << "OK SAVED SETTINGS DONE";
 
     // WebBrowser settings, save Url
     QSettings settings;

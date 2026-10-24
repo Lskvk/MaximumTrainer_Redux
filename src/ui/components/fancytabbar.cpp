@@ -74,9 +74,6 @@ FancyTabBar::FancyTabBar(const TabBarPosition position, QWidget *parent)
     connect(&mTimerTriggerChangedSignal, &QTimer::timeout, this, &FancyTabBar::emitCurrentIndex);
 
 
-//    qDebug() << "FANCY**W" << this->height();
-//    qDebug() << "PARENTSIZ" << parent->height();
-
     //    this->setMinimumHeight(500);
 }
 
@@ -209,7 +206,6 @@ void FancyTabBar::mouseMoveEvent(QMouseEvent *e)
         }
     }
 
-//    qDebug() << "Moving mouse at position" << e->pos() << "hover is:" << newHover << "index curr is:" << mHoverIndex;
     if (newHover == mHoverIndex)
         return;
 

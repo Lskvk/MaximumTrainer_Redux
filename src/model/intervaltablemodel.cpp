@@ -1,5 +1,4 @@
 #include "intervaltablemodel.h"
-#include <QDebug>
 #include <QFont>
 #include <QBrush>
 #include <QCursor>
@@ -63,7 +62,6 @@ QList<Interval> IntervalTableModel::getLstInterval() {
 
 Interval IntervalTableModel::getIntervalAtRow(const QModelIndex &index) {
 
-    qDebug() <<  "IntervalTableModel::getIntervalAtRow";
     return (lstInterval.at(index.row()));
 }
 
@@ -292,9 +290,6 @@ QVariant IntervalTableModel::data(const QModelIndex &index, int role) const {
 bool IntervalTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
 
 
-    qDebug() <<  "setData IntervalTableModel";
-
-
     if (role == Qt::EditRole) {
 
         Interval interval = lstInterval.at(index.row());
@@ -397,7 +392,6 @@ QVariant IntervalTableModel::headerData(int section, Qt::Orientation  orientatio
 
 bool IntervalTableModel::copyRows(int row) {
 
-    qDebug() << "copyRows ";
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
     Interval interval = lstInterval.at(row);
@@ -412,7 +406,6 @@ bool IntervalTableModel::copyRows(int row) {
 
 bool IntervalTableModel::insertRows(int position, int rows, const QModelIndex &index)
 {
-    qDebug() << "insertRows ";
     Q_UNUSED(index);
     beginInsertRows(QModelIndex(), position, position+rows-1);
 
@@ -422,7 +415,6 @@ bool IntervalTableModel::insertRows(int position, int rows, const QModelIndex &i
                           Interval::NONE,  90, 90, 5,
                           Interval::NONE, 0.5, 0.5, 15,
                           false, 0, 0, 0);
-        qDebug() << "OK INSERTING PUTING SORUCE POSITION HERE" << position;
         lstInterval.insert(position, interval);
     }
     updateRowSourceInterval();
@@ -435,26 +427,21 @@ bool IntervalTableModel::insertRows(int position, int rows, const QModelIndex &i
 
 bool IntervalTableModel::removeRows(int position, int rows, const QModelIndex &index)
 {
-    qDebug() << "REMOVE ROW" << position << "numberRows" << rows;
     Q_UNUSED(index);
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
 
-    qDebug() << "position delete " << position;
     for (int row=0; row < rows; ++row) {
         lstInterval.removeAt(position);
     }
 
 
-    qDebug() << "updateRowSourceInterval1";
     updateRowSourceInterval();
-    qDebug() << "updateRowSourceInterval2";
 
 
     endRemoveRows();
     emit dataChanged();
 
-    qDebug() << "removeRows done";
     return true;
 }
 
@@ -498,7 +485,6 @@ QStringList IntervalTableModel::mimeTypes() const
 
 QMimeData* IntervalTableModel::mimeData(const QModelIndexList &indexes) const
 {
-    qDebug() << "mimeData Size is" << indexes.size();
     QMimeData *mimeData = new QMimeData();
     QByteArray encodedData;
 
@@ -515,7 +501,6 @@ QMimeData* IntervalTableModel::mimeData(const QModelIndexList &indexes) const
         }
     }
     mimeData->setData("mt/interval", encodedData);
-    qDebug() << "endmimeData";
     return mimeData;
 
 }
@@ -525,7 +510,6 @@ bool IntervalTableModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
 {
 
     Q_UNUSED(column);
-    qDebug() << "dropMimeData";
 
     if (action == Qt::IgnoreAction)
         return true;
@@ -566,6 +550,5 @@ bool IntervalTableModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
     }
 
 
-    qDebug() << "end dropMimeData";
     return true;
 }

@@ -26,7 +26,6 @@ bool ImporterWorkout::batchImportWorkoutFromFolder(QString folderName, int userF
                 lstWorkoutPaths << dirIt.filePath();
     }
 
-    qDebug() << "SHOULD IMPORT " << lstWorkoutPaths.size() << " WORKOUT" ;
     if (lstWorkoutPaths.size() == 0)
         return false;
 
@@ -40,7 +39,6 @@ bool ImporterWorkout::batchImportWorkoutFromFolder(QString folderName, int userF
     {
         Workout workout = ImporterWorkout::importWorkoutFromFile(file, userFTP);
         XmlUtil::createWorkoutXml(workout, outputPath + workout.getName() + ".workout");
-        qDebug() << "ok workout has been parsed!" << workout.getName();
 
     }
 
@@ -53,7 +51,6 @@ bool ImporterWorkout::batchImportWorkoutFromFolder(QString folderName, int userF
 Workout ImporterWorkout::importWorkoutFromFile(QString filename, int userFTP) {
 
     //Support .erg and .mrc workout extension for now
-    qDebug() << "Parse and import this workout" << filename;
 
 
     Workout workout;
@@ -63,7 +60,7 @@ Workout ImporterWorkout::importWorkoutFromFile(QString filename, int userFTP) {
     if  (ext.contains("mrc", Qt::CaseInsensitive) || ext.contains("erg", Qt::CaseInsensitive))
         workout = parseMrcErgFile(filename, userFTP);
     else
-        qDebug() << "format not yet supported";
+        qWarning() << "Workout import: unsupported format" << filename;
 
 
     return workout;
@@ -116,7 +113,6 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
         while ( !in.atEnd() && !parsingOver )
         {
             QString line = in.readLine();
-            qDebug() << line;
 
             // FTP
             if (!foundFTP && line.contains("FTP", Qt::CaseInsensitive) && line.contains("=", Qt::CaseInsensitive)) {
@@ -125,44 +121,35 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
                 if (value > 0) {
                     ftp = pieces.at(pieces.length()-1).toDouble();
                     foundFTP = true;
-                    qDebug() << "found FTP!";
                 }
             }
             // Description
             else if (!foundDescription && line.contains("DESCRIPTION", Qt::CaseInsensitive)) {
                 QStringList pieces = line.split( "=" );
-                //                qDebug() << "Description is:" << pieces.at(pieces.length()-1);
                 description = pieces.at(pieces.length()-1);
                 foundDescription = true;
-                qDebug() << "found description!";
             }
             // foundDescriptorMinutes_X
             else if (!foundDescriptorMinutes_X && line.contains("MINUTES", Qt::CaseInsensitive)) {
                 if (line.contains("WATTS", Qt::CaseInsensitive)) {
                     targetInPerc = false;
-                    qDebug() << "foundDescriptorMinutes_X";
                 }
                 else if (line.contains("PERCENTAGE", Qt::CaseInsensitive) || line.contains("PERCENT", Qt::CaseInsensitive)) {
                     targetInPerc = true;
-                    qDebug() << "foundDescriptorMinutes_X";
                 }
                 foundDescriptorMinutes_X = true;
             }
             else if (parsingCourseDataNow) {
-                qDebug() << "Parsing Course Data Now...";
                 if (line.contains("END COURSE DATA", Qt::CaseInsensitive)) {
                     parsingOver = true;
-                    qDebug() << "Parsing over!";
                     break;
                 }
                 else {
                     QStringList dataLine = line.split(whitespaceRegex);
-                    qDebug() << "dataLineSize:" << dataLine.size();
                     if (dataLine.size() >= 2) { //last line is empty, do not try to parse
 
                         //double timeMinute = dataLine[0].toDouble();
                         //double percentFTP = dataLine[2].toDouble();
-                        //qDebug() << "TimeMin:" << timeMinute << "percentFTP:" << percentFTP;
 
                         if (firstDataPointInterval) {
                             if (dataLine.size() == 2) {
@@ -193,8 +180,6 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
                                 ftpPercEnd == ftpPercStart ?  powerStep=Interval::FLAT : powerStep=Interval::PROGRESSIVE;
                                 //convert to Percentage if using watts
                                 if (!targetInPerc) {
-                                    qDebug() << "ftpPercStart:" << ftpPercStart << "ftp:" << ftp;
-                                    qDebug() << "ftpPercStart" << ftpPercStart << "ftpPercEnd" << ftpPercEnd;
                                     ftpPercStart = ftpPercStart/ftp *100;
                                     ftpPercEnd = ftpPercEnd/ftp *100;
                                 }
@@ -203,7 +188,6 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
                                                   Interval::NONE,0, 0, 5,
                                                   Interval::NONE,0, 0, 15,
                                                   false, 0, 0, 0);
-                                qDebug() << "adding interval! " << interval.getDurationQTime();
                                 lstInterval.append(interval);
                             }
                             firstDataPointInterval = true;

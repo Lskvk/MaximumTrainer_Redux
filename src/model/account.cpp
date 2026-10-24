@@ -1,10 +1,8 @@
 #include "account.h"
 #include "credential_store.h"
-#include <QDebug>
 
 
 Account::~Account() {
-    qDebug() << "Destructor account";
 }
 
 

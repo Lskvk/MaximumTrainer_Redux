@@ -28,7 +28,6 @@ QList<Radio> Util::parseJsonRadioList(QString data) {
     QJsonDocument jsonResponse = QJsonDocument::fromJson(data.toUtf8());
 
     QJsonArray jsonArray = jsonResponse.array();
-    qDebug() << "SIZE OF THE ARRAY IS" << jsonArray.size();
 
 
     QList<Radio> lstRadio;
@@ -54,8 +53,6 @@ QList<Radio> Util::parseJsonRadioList(QString data) {
         bitrate = jsonObj["bitrate"].toString().toInt();
         lang = jsonObj["lang"].toString();
         url = jsonObj["url"].toString();
-
-        qDebug() << "Radio is - name:" << name << "genre:" << genre << "gotAds:" << gotAds << "bitrate:" << bitrate << "lang:" << lang << "url:" << url;
 
 
         Radio radio(name, genre, gotAds, bitrate, lang, url);
@@ -145,8 +142,6 @@ qint64 Util::parseIdJsonStravaUploadObject(QString data) {
 int Util::parseStravaUploadStatus(QString data) {
 
 
-    qDebug() << "PARSE STRAVA DATA" << data;
-
     QJsonDocument jsonResponse = QJsonDocument::fromJson(data.toUtf8());
     QJsonObject jsonObj = jsonResponse.object();
 
@@ -204,7 +199,6 @@ QTime Util::convertMinutesToQTime(double minutes) {
     myTime = myTime.addMSecs(minutes * 60 * 1000);
 
 
-    //    qDebug() << "MINute IS: " <<minutes << "Qtimeis:" << myTime;
     return myTime;
 
 }
@@ -236,7 +230,6 @@ QStringList Util::getListFiles(QString fileType) {
 
 void Util::openWorkoutFolder(QString workoutPath) {
 
-    qDebug() << "openWorkoutFolder";
     if (workoutPath == "null")
     {
         QString path = getSystemPathWorkout() + QDir::separator();
@@ -244,7 +237,6 @@ void Util::openWorkoutFolder(QString workoutPath) {
     }
     else {
         QFileInfo fileInfo(workoutPath);
-        //        qDebug() << "ABSOULTE DIR IS:" << fileInfo.absolutePath();
         QDesktopServices::openUrl(QUrl("file:///" + fileInfo.absolutePath()));
     }
 
@@ -269,12 +261,8 @@ bool Util::checkFolderPathIsValidForWrite(QString path) {
     }
 
     QFileInfo fi(path);
-    if (fi.isDir() && fi.isWritable()) {
-        qDebug() << "folder is writable";
-    }
-    else {
+    if (!fi.isDir() || !fi.isWritable())
         status = false;
-    }
 
     return status;
 }
@@ -343,20 +331,12 @@ bool Util::checkFileNameAlreadyExist(QString pathFile) {
 void Util::deleteLocalFile(QString filePath) {
 
 
-    /*
-    QString writableLocation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    QString fileToDelete = writableLocation + QDir::separator() + "MaximumTrainer" + QDir::separator() + "Workouts" + QDir::separator() + fileName + ".workout";
-    qDebug() << "file to delete is:" << fileToDelete;
-    */
-
-
-    qDebug() << "should delete this:" << filePath;
+    qInfo() << "Deleting" << filePath;
 
 
     QFile file(filePath);
     file.remove();
 
-    qDebug() << "delete done";
 }
 
 

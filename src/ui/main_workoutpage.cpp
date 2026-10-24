@@ -240,7 +240,6 @@ void Main_WorkoutPage::tableViewSelectionChanged(QItemSelection, QItemSelection)
     indexSourceSelected = proxyModel->mapToSource(index);
     Workout workout = tableModel->getWorkoutAtRow(indexSourceSelected);
 
-    qDebug() << "name:" << workout.getName() << "workout creator:" << workout.getCreatedBy() << " NP" << workout.getNormalizedPower();
 
     if (account->hashWorkoutDone.contains(workout.getName())) {
         actionSetAsDone->setText(tr("Unset Done"));
@@ -271,7 +270,6 @@ void Main_WorkoutPage::tableViewSelectionChanged(QItemSelection, QItemSelection)
 
 void Main_WorkoutPage::customMenuRequested(const QPoint& pos) {
 
-    qDebug() << "customMenuRequested2";
 
     QModelIndex index = ui->tableView_workout->indexAt(pos);
     if (!index.isValid() )
@@ -279,12 +277,9 @@ void Main_WorkoutPage::customMenuRequested(const QPoint& pos) {
 
     contextMenu->popup(ui->tableView_workout->viewport()->mapToGlobal(pos));
 
-    qDebug() << "customMenuRequested End";
 }
 
 void Main_WorkoutPage::addWorkout(const Workout& workout) {
-
-    qDebug() << "Main_WorkoutPage::addWorkout";
 
 
     setFilterPlanName(""); //reset filter
@@ -303,19 +298,17 @@ void Main_WorkoutPage::addWorkout(const Workout& workout) {
         ui->tableView_workout->selectionModel()->setCurrentIndex(proxyIndex, QItemSelectionModel::Select);
     }
 
-    qDebug() << "End Main_WorkoutPage::addWorkout";
 
 }
 
 void Main_WorkoutPage::overwriteWorkout(const Workout& workout) {
 
-    qDebug() << "Main_WorkoutPage::overwriteWorkout";
 
     setFilterPlanName(""); //reset filter
 
     ui->tableView_workout->clearSelection();
 
-    qDebug() << "DELETE WORKOUT WITH THIS NAME: " << workout.getName();
+    qInfo() << "Replacing workout:" << workout.getName();
     tableModel->deleteWorkoutWithName(workout.getName());
     tableModel->addWorkout(workout);
 
@@ -332,7 +325,6 @@ void Main_WorkoutPage::openFolderWorkout() {
 
     Workout workout = tableModel->getWorkoutAtRow(indexSourceSelected);
 
-    qDebug() << "openFolder" << workout.getFilePath();
     Util::openWorkoutFolder(workout.getFilePath());
 }
 
@@ -347,12 +339,7 @@ void Main_WorkoutPage::addToQueue() {
 
 void Main_WorkoutPage::editWorkout() {
 
-    qDebug() << "editWorkout";
     Workout workout = tableModel->getWorkoutAtRow(indexSourceSelected);
-
-
-    qDebug() << "workout repeat size here Before signal" << workout.getLstRepeat().size();
-    qDebug() << "workout name is" << workout.getName();
 
 
     emit editWorkout(workout);
@@ -389,7 +376,6 @@ void Main_WorkoutPage::setAsDone() {
 
     Workout workout = tableModel->getWorkoutAtRow(indexSourceSelected);
 
-    qDebug() << "Set AS DONE!" << workout.getName();
 
     if (account->hashWorkoutDone.contains(workout.getName())) {
         account->hashWorkoutDone.remove(workout.getName());
@@ -426,7 +412,6 @@ void Main_WorkoutPage::updateTableViewMetrics() {
 
 void Main_WorkoutPage::setFilterPlanName(const QString& plan) {
 
-    qDebug() << "setFilterPlanName";
 
     /// Replace any active filters with a plan-only filter. Setting the
     /// inputs fires textChanged/currentIndexChanged which propagate the
@@ -446,7 +431,6 @@ void Main_WorkoutPage::setFilterPlanName(const QString& plan) {
 
 void Main_WorkoutPage::setFilterWorkoutName(const QString& workoutName) {
 
-    qDebug() << "setFilterWorkoutName";
 
     /// Replace any active filters with a name-only filter.
     ui->lineEdit_filter_plan->clear();
@@ -484,7 +468,6 @@ void Main_WorkoutPage::loadFilterFields() {
     settings.endGroup();
 
 
-    qDebug() << "Setings to load filter should be" << nameFilter << planFilter << creatorFilter << typeFilter;
 }
 
 
@@ -492,8 +475,6 @@ void Main_WorkoutPage::filterChanged(const QString& field, const QString& value)
 
     proxyModel->setSortCaseSensitivity(Qt::CaseSensitive);
 
-    qDebug() << "filterChanged inside Workout Page!";
-    qDebug() << field << "value" << value;
 
     if (field == "name") {
         proxyModel->addFilterFixedString(0, value);
@@ -527,8 +508,6 @@ void Main_WorkoutPage::filterChanged(const QString& field, const QString& value)
 
 void Main_WorkoutPage::filterChangedWorkoutType(bool includedWorkout) {
 
-    qDebug() << "included workout should be used" << includedWorkout;
-
 
     //    USER_MADE, 0
     //    FTP_TEST,1
@@ -549,7 +528,6 @@ void Main_WorkoutPage::filterChangedWorkoutType(bool includedWorkout) {
 
 void Main_WorkoutPage::on_checkBox_clicked(bool checked)
 {
-    qDebug() << "OK NOW INCLUDED WORKOUT SHOULD BE INCLUDED?" << checked;
 
     filterChangedWorkoutType(checked);
 }

@@ -167,20 +167,17 @@ void DialogMainWindowConfig::initUI() {
 
 void DialogMainWindowConfig::stravaLinked(bool linked) {
 
-    qDebug() << "strava linked!";
 
     if (linked) {
         ui->label_connectStrava->setCursor(Qt::ArrowCursor);
         ui->label_connectStrava->setVisible(false);
 
-        qDebug() << "before disc linked end!";
         disconnect(ui->label_connectStrava, &FaderLabel::clicked, this, &DialogMainWindowConfig::stravaLabelClicked);
 
         ui->label_stravaUnlink->setVisible(true);
         ui->label_stravaUnlink->setCursor(Qt::PointingHandCursor);
         ui->label_stravaUnlink->fadeIn(1000);
 
-        qDebug() << "after disc linked end!";
     }
     else {
         ui->label_connectStrava->setStyleSheet("image: url(:/image/icon/strava);");
@@ -192,7 +189,6 @@ void DialogMainWindowConfig::stravaLinked(bool linked) {
     }
     ui->label_connectStrava->fadeIn(1000);
 
-    qDebug() << "strava linked end!";
 }
 
 
@@ -223,8 +219,6 @@ void DialogMainWindowConfig::stravaLabelClicked() {
 void DialogMainWindowConfig::unlinkStravaClicked() {
 
 
-    qDebug() << "unlinkStravaClicked";
-
     replyStravaDeauthorization = ExtRequest::stravaDeauthorization(account->strava_access_token);
     connect(replyStravaDeauthorization, &QNetworkReply::finished, this, &DialogMainWindowConfig::stravaUnlinkFinished);
 }
@@ -232,16 +226,13 @@ void DialogMainWindowConfig::unlinkStravaClicked() {
 
 void DialogMainWindowConfig::stravaUnlinkFinished() {
 
-    qDebug() << "stravaUnlinkFinished";
 
     //success, process data
     if (replyStravaDeauthorization->error() == QNetworkReply::NoError) {
-        qDebug() << "UNlink done success with Strava!";
         account->strava_access_token = "";
         stravaLinked(false);
     }
     else {
-        qDebug() << "Error with stravaUnlink" << replyStravaDeauthorization->errorString();
         account->strava_access_token = "";
         stravaLinked(false);
     }
@@ -297,7 +288,6 @@ void DialogMainWindowConfig::updateProfileSyncLabel() {
 
 void DialogMainWindowConfig::reject() {
 
-    qDebug() << "rejected, put back settings value!";
 
     initUI();
 
@@ -306,7 +296,6 @@ void DialogMainWindowConfig::reject() {
 
 
 void DialogMainWindowConfig::accept() {
-    qDebug() << "ACCEPT, save settings";
 
     account->strava_auto_upload = ui->checkBox_stravaAutoUpload->isChecked();
     account->force_workout_window_on_top = ui->checkBox_forceOnTop->isChecked();

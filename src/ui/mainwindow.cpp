@@ -149,8 +149,6 @@ MainWindow::~MainWindow() {
     }
     delete ui;
 
-    qDebug() << "Desctructor MainWindow";
-    qDebug() << "Desctructor Over MainWindow";
 }
 
 
@@ -362,7 +360,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->setEnabled(true);
     ui->widget_bottomMenu->removeGeneralMessage();
 
-    qDebug() << "Test1";
 
     connect(planObject, &PlanObject::signal_goToWorkout, this, &MainWindow::goToWorkoutPlanFilter);
 
@@ -432,7 +429,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 void MainWindow::goToWorkoutPlanFilter(const QString& workoutId) {
 
-    qDebug() << "mainWindow Plan workout ID" << workoutId;
 
     if (account->intervals_icu_athlete_id.isEmpty() || account->intervals_icu_api_key.isEmpty()) {
         ui->widget_bottomMenu->setGeneralMessage(
@@ -561,7 +557,7 @@ void MainWindow::showPlanContextMenu(const QPoint &pos) {
 // trigger after a .zwo file downloaded from Intervals.icu is saved
 void MainWindow::goToWorkoutNameFilterFromIntervals(const QString &workoutName) {
 
-    qDebug() << "Intervals.icu workout downloaded:" << workoutName;
+    qInfo() << "Intervals.icu workout downloaded:" << workoutName;
 
     // Parse the raw .zwo file saved by TabIntervalsIcu and convert it to .workout format
     const QString zwoDir  = Util::getSystemPathWorkout() + QDir::separator() + QStringLiteral("intervals_icu");
@@ -805,7 +801,7 @@ void MainWindow::workoutExecuting() {
 
     this->setDisabled(true);
     isInsideWorkout = true;
-    qDebug() << "Workout executing";
+    qInfo() << "Workout started";
 
 
     for (int i=0; i<ftb->getNumberOfTabs(); i++)
@@ -816,7 +812,7 @@ void MainWindow::workoutOver() {
 
     this->setDisabled(false);
     isInsideWorkout = false;
-    qDebug() << "Workout done";
+    qInfo() << "Workout closed";
 
     for (int i=0; i<ftb->getNumberOfTabs(); i++)
         ftb->setTabEnabled(i, true);
@@ -858,14 +854,12 @@ void MainWindow::leftMenuChanged(int tabSelected) {
 
 void MainWindow::createWebChannelPlan() {
 
-    qDebug() << "createWebChannelPlan";
 
     QFile webChannelJsFile(":/qtwebchannel/qwebchannel.js");
     if(  !webChannelJsFile.open(QIODevice::ReadOnly) ) {
         LOG_WARN("MainWindow", QStringLiteral("Could not open qwebchannel.js: ") + webChannelJsFile.errorString());
     }
     else {
-        qDebug() << "OK webEngineProfile";
         QByteArray webChannelJs = webChannelJsFile.readAll();
         webChannelJs.append(
                     "\n"
@@ -965,7 +959,6 @@ QVector<UserStudio> MainWindow::prepareStudioRiders(bool simulator) {
 //int wheelCircMM;      = 8
 void MainWindow::updateFieldForUser(int riderID, int fieldNumber, QVariant value) {
 
-    qDebug() << "updateDisplayNameForUser" << riderID << "fieldNumber" << fieldNumber << "value" << value;
 
     if (riderID >= vecUserStudio.size())
         return;
@@ -1008,7 +1001,7 @@ void MainWindow::enableStudioMode(bool enable) {
 
     //    nb_user_studio
 
-    qDebug() << "Enable Studio Mode!" << enable;
+    qInfo() << "Studio mode:" << enable;
 
 
     if (enable) {
@@ -1029,7 +1022,6 @@ void MainWindow::enableStudioMode(bool enable) {
 
 void MainWindow::setNumberUserStudio(int nbUser) {
 
-    qDebug() << "setNumberUserStudio" << nbUser;
     account->nb_user_studio = nbUser;
 
     // Persist so the selected rider count survives a restart.
@@ -1043,7 +1035,6 @@ void MainWindow::showWorkoutCreator() {
 
 void MainWindow::showWorkoutList() {
 
-    qDebug() << "showWorkoutList!*";
     ui->tabWidget_workout->setCurrentIndex(0);
 }
 
@@ -1094,8 +1085,6 @@ void MainWindow::saveSettings() {
 
 void MainWindow::closeEvent(QCloseEvent *event) {
 
-
-    qDebug() << "closeEvent";
 
     //    Qt::WindowFlags flags = Qt::Window;
     //    if (settings->forceWorkoutWindowOnTop)
@@ -1295,7 +1284,7 @@ void MainWindow::on_actionCreate_New_triggered()
 void MainWindow::on_actionOpen_Ride_triggered()
 {
 
-    qDebug() << "Doing free ride!";
+    qInfo() << "Free ride started";
 
 
     QList<Interval> lstInterval;
@@ -1846,7 +1835,6 @@ void MainWindow::on_actionSingle_Workout_triggered()
 
 void MainWindow::on_actionMultiple_Workouts_triggered()
 {
-    qDebug() << "Multiple Workouts importer";
 
 
     QString folder =  QFileDialog::getExistingDirectory(this, tr("Select Folder Containing Workout Files To Import (.erg and .mrc)"),
@@ -1868,7 +1856,6 @@ void MainWindow::on_actionMultiple_Workouts_triggered()
 void MainWindow::checkToUploadFile(const QString& filename, const QString& nameOnly, const QString& description) {
 
     Q_UNUSED(description);
-    qDebug() << "check to upload Fit file";
 
     // ── Plan adherence: auto-mark this workout as completed ──────────────────
     if (m_adherenceStore && !nameOnly.isEmpty()) {
@@ -1910,12 +1897,10 @@ void MainWindow::slotSystemThemeChanged()
 
 void MainWindow::setPmForCadence(bool usedFor) {
 
-    qDebug() << "setPmForCadence" << usedFor;
     account->use_pm_for_cadence = usedFor;
 }
 void MainWindow::setPmForSpeed(bool usedFor) {
 
-    qDebug() << "setPmForSpeed" << usedFor;
     account->use_pm_for_speed = usedFor;
 }
 
@@ -2160,7 +2145,7 @@ void MainWindow::showDemoRaceView()
 
 void MainWindow::startScreenshotMode(const QString &outputDir)
 {
-    qDebug() << "Screenshot mode: output dir =" << outputDir;
+    qInfo() << "Screenshot mode: output dir =" << outputDir;
     QDir().mkpath(outputDir);
     m_ssOutputDir = outputDir;
     m_ssStep      = 0;
@@ -2218,7 +2203,7 @@ void MainWindow::screenshotNextStep()
         ui->tabWidget_workout->setCurrentIndex(0);
         QCoreApplication::processEvents();
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_main_window.png"), "PNG");
-        qDebug() << "Screenshot: main_window";
+        qInfo() << "Screenshot: main_window";
         // Capture the Preferences dialog as the "settings" screenshot. The
         // former server-hosted Settings tab was removed; the native Preferences
         // dialog (DialogMainWindowConfig) is now the settings surface.
@@ -2228,14 +2213,14 @@ void MainWindow::screenshotNextStep()
             QCoreApplication::processEvents();
             dconfig->grab().save(m_ssOutputDir + QLatin1String("/screenshot_settings.png"), "PNG");
             dconfig->hide();
-            qDebug() << "Screenshot: settings (Preferences dialog)";
+            qInfo() << "Screenshot: settings (Preferences dialog)";
         }
         // Capture the Bluetooth Sensors page (FancyTabBar index 3), which hosts
         // sensor pairing plus the trainer/sensor settings.
         ftb->setCurrentIndex(3);
         QCoreApplication::processEvents();
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_sensors.png"), "PNG");
-        qDebug() << "Screenshot: sensors";
+        qInfo() << "Screenshot: sensors";
         ftb->setCurrentIndex(0);
         QCoreApplication::processEvents();
         break;
@@ -2251,7 +2236,7 @@ void MainWindow::screenshotNextStep()
     // ── Step 2: capture WorkoutCreator ───────────────────────────────────
     case 2:
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_workout_editor.png"), "PNG");
-        qDebug() << "Screenshot: workout_editor";
+        qInfo() << "Screenshot: workout_editor";
         break;
 
     // ── Step 3: launch WorkoutDialog with SimulatorHub (non-modal) ───────
@@ -2266,7 +2251,7 @@ void MainWindow::screenshotNextStep()
             QCoreApplication::processEvents();
             m_ssWorkoutDlg->grab().save(
                 m_ssOutputDir + QLatin1String("/screenshot_workout_running.png"), "PNG");
-            qDebug() << "Screenshot: workout_running";
+            qInfo() << "Screenshot: workout_running";
         }
         break;
 
@@ -2298,7 +2283,7 @@ void MainWindow::screenshotNextStep()
         if (sw) sw->reload();
         QCoreApplication::processEvents();
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_studio_off.png"), "PNG");
-        qDebug() << "Screenshot: studio_off";
+        qInfo() << "Screenshot: studio_off";
 
         // On: reveal the full configuration UI for the studio_mode capture.
         setNumberUserStudio(6);
@@ -2313,7 +2298,7 @@ void MainWindow::screenshotNextStep()
     // ── Step 7: capture studio mode ───────────────────────────────────────
     case 7:
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_studio_mode.png"), "PNG");
-        qDebug() << "Screenshot: studio_mode";
+        qInfo() << "Screenshot: studio_mode";
         enableStudioMode(false);
         break;
 
@@ -2328,7 +2313,7 @@ void MainWindow::screenshotNextStep()
     // ── Step 9: capture Intervals.icu ────────────────────────────────────
     case 9:
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_activity_history.png"), "PNG");
-        qDebug() << "Screenshot: activity_history (Intervals.icu tab)";
+        qInfo() << "Screenshot: activity_history (Intervals.icu tab)";
         break;
 
     // ── Step 10: show the Plan page. Its left tab is hidden (see #299), so
@@ -2344,7 +2329,7 @@ void MainWindow::screenshotNextStep()
     // ── Step 11: capture Plan ─────────────────────────────────────────────
     case 11:
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_plan.png"), "PNG");
-        qDebug() << "Screenshot: plan";
+        qInfo() << "Screenshot: plan";
         break;
 
     // ── Step 12: switch to History tab (tab 4) ────────────────────────────
@@ -2358,7 +2343,7 @@ void MainWindow::screenshotNextStep()
     // ── Step 13: capture History ─────────────────────────────────────────
     case 13:
         grab().save(m_ssOutputDir + QLatin1String("/screenshot_history.png"), "PNG");
-        qDebug() << "Screenshot: history";
+        qInfo() << "Screenshot: history";
         break;
 
     // ── Step 14: launch a Studio-mode workout with N simulated riders ─────
@@ -2399,7 +2384,7 @@ void MainWindow::screenshotNextStep()
             QCoreApplication::processEvents();
             m_ssWorkoutDlg->grab().save(
                 m_ssOutputDir + QLatin1String("/screenshot_studio_workout.png"), "PNG");
-            qDebug() << "Screenshot: studio_workout";
+            qInfo() << "Screenshot: studio_workout";
             m_ssWorkoutDlg->hide();
             delete m_ssWorkoutDlg;
             m_ssWorkoutDlg = nullptr;

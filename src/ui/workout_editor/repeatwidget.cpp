@@ -2,7 +2,6 @@
 #include "ui_repeatwidget.h"
 #include "themedicon.h"
 #include <QLabel>
-#include <QDebug>
 #include <QStyle>
 
 RepeatWidget::~RepeatWidget() {
@@ -59,7 +58,6 @@ bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 
 
     if (event->type() == QEvent::MouseButtonPress) {
-        qDebug() << "Button Press got here EventFilter!...";
         emit clickedRightPartWidget();
     }
 

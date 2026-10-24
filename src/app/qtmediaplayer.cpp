@@ -161,7 +161,7 @@ void QtMediaPlayer::openUrl()
 
 void QtMediaPlayer::openUrlRadio(QString url)
 {
-    qDebug() << "QtMultimedia radio open:" << url;
+    qInfo() << "QtMultimedia radio open:" << url;
     m_player->setSource(QUrl::fromUserInput(url));
     m_player->play();
 }
@@ -221,7 +221,7 @@ void QtMediaPlayer::updateAudioDevice()
     if (defaultDevice.isNull() || m_audio->device() == defaultDevice)
         return;
 
-    qDebug() << "QtMediaPlayer: switching audio output to" << defaultDevice.description();
+    qInfo() << "QtMediaPlayer: switching audio output to" << defaultDevice.description();
     m_audio->setDevice(defaultDevice);
 }
 

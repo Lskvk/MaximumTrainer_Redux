@@ -1,7 +1,6 @@
 #include "cadenceeditor.h"
 #include "ui_cadenceeditor.h"
 #include "metriceditorvisibility.h"
-#include <QDebug>
 
 CadenceEditor::~CadenceEditor()
 {
@@ -39,7 +38,6 @@ CadenceEditor::CadenceEditor(QWidget *parent) :
 void CadenceEditor::setInterval(const Interval &interval) {
     this->myInterval = interval;
 
-    qDebug() << "CadenceStart is now" << myInterval.getCadence_start();
 
     ui->comboBox_cadence->setCurrentIndex(myInterval.getCadenceStepType());
     on_comboBox_cadence_currentIndexChanged(ui->comboBox_cadence->currentIndex());
@@ -79,7 +77,6 @@ void CadenceEditor::on_spinBox_cadenceEnd_valueChanged(int arg1)
 
 void CadenceEditor::on_spinBox_rangeCadence_valueChanged(int arg1)
 {
-    qDebug() << "on_spinBox_rangeCadence_valueChanged" << arg1;
     myInterval.setTargetCadence_range(arg1);
 }
 

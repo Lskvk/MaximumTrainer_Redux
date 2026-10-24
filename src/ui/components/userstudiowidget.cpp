@@ -264,8 +264,6 @@ void UserStudioWidget::setHrValue(int value) {
 
 void UserStudioWidget::setTargetPower(double percentageFTP, int range) {
 
-//    qDebug() << "setTargetPower" << percentageFTP << "myFTP is:" << FTP;
-
 
     if (percentageFTP < 0 || FTP < 1) { //no target
         ui->label_targetPowerValue->setVisible(false);

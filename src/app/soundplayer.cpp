@@ -3,7 +3,6 @@
 
 
 SoundPlayer::~SoundPlayer() {
-    qDebug() << "Destructor SoundPlayer";
 }
 
 
@@ -28,7 +27,6 @@ SoundPlayer::SoundPlayer(QObject *parent) : QObject(parent)
 
 void SoundPlayer::setVolume(double volume) {
 
-    qDebug() << "setVolume soundPlayer";
 
     if (!m_initialized) return;
     // Callers pass 0–100; QSoundEffect expects a linear 0.0–1.0.

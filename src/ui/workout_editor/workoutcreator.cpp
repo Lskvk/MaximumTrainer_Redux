@@ -183,7 +183,6 @@ void WorkoutCreator::hightlightSelectedSourceRow(QString sourceRowIdentifier) {
 
 void WorkoutCreator::resetWorkout() {
 
-    qDebug() << "WORKOUT CREATOR SETTING WORKOUT!";
 
     ///Sure you want to reset?
     workout.setFilePath("");
@@ -210,8 +209,6 @@ void WorkoutCreator::resetWorkout() {
 void WorkoutCreator::computeWorkout() {
 
 
-    qDebug() << "WorkoutCreator::computeWorkout start";
-
     /// Get list RepeatData
     QList<RepeatData> lstRepData;
     foreach (RepeatWidget *wid, lstRepeatWidget) {
@@ -219,7 +216,6 @@ void WorkoutCreator::computeWorkout() {
         lstRepData.append(*rep);
     }
 
-    qDebug() << "WorkoutCreator::computeWorkout mid ";
 
     QString nameTmp = workout.getName();
     QString creatorTmp = workout.getCreatedBy();
@@ -233,7 +229,6 @@ void WorkoutCreator::computeWorkout() {
 
     ui->widget_plot->updateWorkout(workout);
 
-    qDebug() << "WorkoutCreator::computeWorkout end ";
 }
 
 
@@ -254,8 +249,6 @@ void WorkoutCreator::editWorkout(Workout workoutToEdit) {
 
     workout = workoutToEdit;
 
-
-    qDebug() << "WORKOUT PATH IS !" << workout.getFilePath();
 
     /// Clear last Repeat widget
     qDeleteAll(lstRepeatWidget);
@@ -283,7 +276,6 @@ void WorkoutCreator::editWorkout(Workout workoutToEdit) {
 
 void WorkoutCreator::checkToEnableButtonSave() {
 
-    qDebug() << "OK WORKOUT CREATOR CHECK BUTTON SAVE";
 
     const bool hasIntervals = intervalModel->rowCount() > 0;
     const bool hasName    = !ui->lineEdit_name_workout->text().isEmpty();
@@ -311,13 +303,10 @@ void WorkoutCreator::restoreRepeatWidgetInterface()
     {
         RepeatData rep = lstRepeatData.at(i);
 
-        qDebug() << "repeat  numberRepeat!" << rep.getNumberRepeat() <<
-                    "firstRow" << rep.getFirstRow() << "last row" << rep.getLastRow();
 
         QModelIndex firstIndex = intervalModel->index(rep.getFirstRow(), 0, QModelIndex());
         QModelIndex lastIndex = intervalModel->index(rep.getLastRow(), 0, QModelIndex());
 
-        qDebug() << "ok first index" << firstIndex.row() << "last" << lastIndex.row();
 
         /// REDRAW
         QRect recFirstSelection(ui->tableView->visualRect(firstIndex));
@@ -350,7 +339,6 @@ void WorkoutCreator::restoreRepeatWidgetInterface()
 
 void WorkoutCreator::unselectSelectionNow() {
 
-    qDebug() << "unselectSelectionNow";
     ui->tableView->selectionModel()->clear();
     ui->widget_plot->removeHightlight();
 
@@ -359,7 +347,6 @@ void WorkoutCreator::unselectSelectionNow() {
 void WorkoutCreator::on_pushButton_repeat_clicked()
 {
 
-    qDebug() << "on_pushButton_repeat_clicked";
     QModelIndexList lstIndex = ui->tableView->selectionModel()->selectedRows();
 
     if (lstIndex.size() < 1) {
@@ -376,8 +363,6 @@ void WorkoutCreator::on_pushButton_repeat_clicked()
         firstIndex = lastIndex;
         lastIndex = tmpIndex;
     }
-
-    qDebug() << "lastIndex" <<lastIndex.row();
 
 
     QRect recFirstSelection(ui->tableView->visualRect(firstIndex));
@@ -412,7 +397,6 @@ void WorkoutCreator::on_pushButton_repeat_clicked()
 
 void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
 
-    qDebug() << "TABLE VIEW SELECTION CHANGED, HIGHLIGHT GRAPH INTERVALS";
 
     /// default behavior = disabled
     ui->pushButton_repeat->setEnabled(false);
@@ -424,7 +408,6 @@ void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
 
 
     QModelIndexList lstIndex = ui->tableView->selectionModel()->selectedRows();
-    qDebug() << "selecte size is--" << lstIndex.size();
 
     if (lstIndex.size() < 1) {
         ui->widget_plot->removeHightlight();
@@ -439,8 +422,6 @@ void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
     ui->widget_plot->updateBackgroundHighlight(setIntervalToHightlight);
     //    ///////////////
 
-
-    qDebug() << "updateBackgroundHighlight ok";
 
     ui->pushButton_copy->setEnabled(true);
     ui->pushButton_delete->setEnabled(true);
@@ -470,7 +451,6 @@ void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
     ui->pushButton_repeat->setEnabled(true);
     actionRepeat->setEnabled(true);
 
-    qDebug() << "tableViewSelectionChanged finished";
 
 }
 
@@ -506,7 +486,6 @@ void WorkoutCreator::on_pushButton_delete_clicked()
     ////////////////////--------------------------------------------------------------
     QModelIndexList lstIndex = ui->tableView->selectionModel()->selectedRows();
 
-    qDebug() << "lstINdex delete Size is" << lstIndex.size();
 
     ///Deselect if we are editing a line, because cause crash edition+delete
     unselectSelectionNow();
@@ -541,13 +520,11 @@ void WorkoutCreator::on_pushButton_delete_clicked()
 
         /// if deleted all interval, delete repeat
         if (numberRowDeletedInRepeat == numberRowInRepeat) {
-            qDebug() << "DELETE IT HERE";
             lstRepeatWidget.removeOne(wid);
             delete wid;
         }
         /// Some interval deleted, update frame repeat
         else if (numberRowDeletedInRepeat != 0 || numberRowBeforeRepeat != 0 ) {
-            qDebug() << "update frame here!";
             int newFirstRow = wid->getRepeatData()->getFirstRow() - numberRowBeforeRepeat;
             int newLastRow = wid->getRepeatData()->getLastRow() - numberRowDeletedInRepeat - numberRowBeforeRepeat;
             wid->getRepeatData()->setFirstRow(newFirstRow);
@@ -558,7 +535,6 @@ void WorkoutCreator::on_pushButton_delete_clicked()
 
     ///Start to remove from the end
     for (int i=lstIndex.count() - 1; i >= 0; --i) {
-        qDebug() << "Deleting row no:" << lstIndex.at(i).row();
         intervalModel->removeRow(lstIndex.at(i).row());
     }
 
@@ -631,12 +607,10 @@ bool WorkoutCreator::eventFilter(QObject *watched, QEvent *event) {
 
 void WorkoutCreator::ajustRepeatWidgetPosition() {
 
-    qDebug() << "ajustRepeatWidgetPosition!";
 
     foreach (RepeatWidget *wid, lstRepeatWidget)
     {
 
-        qDebug() << "ajustRepeat firstRow" << wid->getRepeatData()->getFirstRow() << "last row" << wid->getRepeatData()->getLastRow();
 
         QModelIndex firstIndex = ui->tableView->model()->index(wid->getRepeatData()->getFirstRow(), 0);
         QModelIndex lastIndex = ui->tableView->model()->index(wid->getRepeatData()->getLastRow(), 0);
@@ -658,8 +632,6 @@ void WorkoutCreator::ajustRepeatWidgetPosition() {
 
 void WorkoutCreator::deletedRepeatWidget(int id) {
 
-
-    qDebug() << "deletedRepeatWidget" << id;
 
     QItemSelection selection = ui->tableView->selectionModel()->selection();
 
@@ -690,18 +662,14 @@ void WorkoutCreator::deletedRepeatWidget(int id) {
 }
 
 void WorkoutCreator::updatedRepeatWidget(int id) {
+    Q_UNUSED(id);
 
-    qDebug() << "updatedRepeatWidget" << id;
     computeWorkout();
     ajustRepeatWidgetPosition();
 }
 
 
 void WorkoutCreator::createWorkout(const QString& name, const QString& plan, const QString& creator, const QString& description, int type_workout) {
-
-
-    qDebug() << "name11:" << name << "creator:" << creator << "desc:" << description << "typeInt:" << type_workout;
-    qDebug() << "WORKOUT PATH:" << workout.getFilePath();
 
 
     //// ---- Set workout attributes -----
@@ -733,7 +701,7 @@ void WorkoutCreator::createWorkout(const QString& name, const QString& plan, con
     bool fileCreated = false;
 
 
-    qDebug() << "SHOULD SAVE AS ***" << pathWorkout;
+    qInfo() << "Saving workout to" << pathWorkout;
     bool exist = Util::checkFileNameAlreadyExist(workout.getFilePath());
 
 
@@ -747,7 +715,6 @@ void WorkoutCreator::createWorkout(const QString& name, const QString& plan, con
             Util::deleteLocalFile(workoutToSave.getFilePath());
 
             const bool overwritten = XmlUtil::createWorkoutXml(workoutToSave, "");
-            qDebug() << "Emit workoutOverwrited";
             emit workoutOverwrited(workoutToSave);
             if (overwritten)
                 emit showStatusBarMessage(tr("Workout  \"%1\" overwrited").arg(workoutToSave.getFilePath()), 7000);
@@ -755,7 +722,6 @@ void WorkoutCreator::createWorkout(const QString& name, const QString& plan, con
     }
     else {
         fileCreated = XmlUtil::createWorkoutXml(workout, "");
-        qDebug() << "Emit workoutCreated";
         emit workoutCreated(workout);
 
         if (fileCreated)

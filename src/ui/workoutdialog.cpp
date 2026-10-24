@@ -54,7 +54,6 @@
 
 WorkoutDialog::~WorkoutDialog() {
 
-    qDebug() << "WorkoutDialog destructor!----------";
 
     emit stopDecodingMsgHub();
 
@@ -85,7 +84,6 @@ WorkoutDialog::~WorkoutDialog() {
     DataHeartRate::instance().clearData();
     DataSpeed::instance().clearData();
 
-    qDebug() << "----Destructor over WorkoutDialog";
 }
 
 
@@ -665,12 +663,10 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
 void WorkoutDialog::toggleTransparent() {
 
     if (isTransparent) {
-        qDebug() << "SHOW NORMAL!";
         //revert back to normal QDialog, use saved stylesheet
         this->setStyleSheet(bakStylesheet);
     }
     else {
-        qDebug() << "SHOW TRANSPARENT!!";
 
         //save current stylesheet
         bakStylesheet = this->styleSheet();
@@ -686,22 +682,19 @@ void WorkoutDialog::toggleTransparent() {
 
 void WorkoutDialog::addToControlList(int deviceId, int fromHubNumber) {
 
-    qDebug() << "Asking Workout Dialog for control" << "deviceId" << deviceId << "fromHubNumber" << fromHubNumber;
 
     if (!hashControlList.contains(deviceId)) {
-        qDebug() << "Ok deviceId" << deviceId << "not in my List, you can control it!" << fromHubNumber;
         hashControlList.insert(deviceId, fromHubNumber);
         //emit signal back to Hub to let him add this ID
         emit permissionGrantedControl(deviceId, fromHubNumber);
     }
     /// DO NOT USE, because sending duplicate cause transfer to fail
     //    else if (hashControlList.size() >= nbTotalFecTrainer) {
-    //        qDebug() << "OK we already control all trainer, we can control more for better reception!";
     //        hashControlList.insert(deviceId, fromHubNumber);
     //        emit permissionGrantedControl(deviceId, fromHubNumber);
     //    }
     else {
-        qDebug() << "Sorry this trainer is already being controlled" <<  deviceId;
+        qInfo() << "Trainer already controlled by another hub:" << deviceId;
     }
 
 }
@@ -709,7 +702,6 @@ void WorkoutDialog::addToControlList(int deviceId, int fromHubNumber) {
 
 void WorkoutDialog::batteryStatusReceived(QString sensorType, int percentage) {
 
-    qDebug() << "batteryStatusReceived" << sensorType << "level:" << percentage << "%";
 
     // Check against configurable threshold
     if (percentage > account->battery_warning_threshold)
@@ -733,7 +725,6 @@ void WorkoutDialog::batteryStatusReceived(QString sensorType, int percentage) {
 
 void WorkoutDialog::slotFinishedGetPixmap() {
 
-    qDebug() << "slow pixmap finished, show image!";
 
     QByteArray m_DownloadedData = replyGetBixmap->readAll();
     QPixmap pixmap; //48,48 icon
@@ -756,7 +747,6 @@ void WorkoutDialog::animateAchievement() {
     if (account->enable_sound && account->sound_achievement)
         soundPlayer->playSoundAchievement();
 
-    qDebug() << "QUEUE SIZE IS" << queueAchievement.size();
 
     ///Take achievement from top of queue
     Achievement achievement = queueAchievement.head();
@@ -782,12 +772,8 @@ void WorkoutDialog::lastAchievementAnimationDone() {
 
     ///Remove queue item, check if queue is empty, if empty, put flag to not playing;
     queueAchievement.dequeue();
-    if (queueAchievement.isEmpty()) {
-        qDebug() << "NO MORE ACHIEVEMENT";
-    }
-    else {
+    if (!queueAchievement.isEmpty())
         animateAchievement();
-    }
 }
 
 void WorkoutDialog::initUI() {
@@ -976,8 +962,6 @@ void WorkoutDialog::updateRealTimeGraph(double totalTimeElapsed_msec) {
 
 // For MAP Test, check last second average, if it's under the target for more than 20secs total or 10 sec consecutive, MAP test over
 void WorkoutDialog::checkMAPTestOver() {
-
-    qDebug() << "checkMAPTestOver!";
 
 
     bool fadeIn = false;
@@ -1210,10 +1194,9 @@ void WorkoutDialog::update1sec(double totalTimeElapsed_sec) {
 
 void WorkoutDialog::lapButtonPressed() {
 
-    qDebug() << "LAP BUTTON PRESSED" << timeElapsed_sec;
+    qInfo() << "Lap at" << timeElapsed_sec << "s";
 
     if (isTestWorkout) {
-        qDebug() << "Test workout, cant do laps!";
         return;
     }
 
@@ -1295,7 +1278,6 @@ void WorkoutDialog::adjustWorkoutDifficulty(int percentageIncrease) {
 
 void WorkoutDialog::insertInterval() {
 
-    qDebug() << "INSERT INTERVAL!";
 
     //add parameter function
     int whereToInsert = currentInterval+2;
@@ -1336,6 +1318,7 @@ void WorkoutDialog::insertInterval() {
 
 
 void WorkoutDialog::moveToInterval(int nbInterval, double secWorkout, double startIntervalSec, bool showConfirmation) {
+    Q_UNUSED(secWorkout);
 
     //clear focus on QwtPlot for hotkeys needs focus on this QDialog
     this->setFocus();
@@ -1344,7 +1327,6 @@ void WorkoutDialog::moveToInterval(int nbInterval, double secWorkout, double sta
     if (showConfirmation && (bignoreClickPlot || isTestWorkout  || workout.getWorkoutNameEnum() == Workout::OPEN_RIDE) )
         return;
 
-    qDebug() << "Workout Dialog, move to interval" << nbInterval << "sec:" << secWorkout << "startIntervalSec" << startIntervalSec;
 
     int nbIntervalToDelete = 0;
     if (currentInterval >= nbInterval)
@@ -1352,7 +1334,6 @@ void WorkoutDialog::moveToInterval(int nbInterval, double secWorkout, double sta
     else {
         nbIntervalToDelete = nbInterval - currentInterval -1;
     }
-    qDebug() << "we have to delete " << nbIntervalToDelete << "interval";
 
     // pause workout if not paused and manually clicked
     if (!isWorkoutPaused && showConfirmation) {
@@ -1387,9 +1368,7 @@ void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
 
     //Calculate timeDone in currentInterval
     double currentIntervalTimeDone =  timeElapsed_sec - lastIntervalEndTime_sec;
-    double timeSkippedInInterval = Util::convertQTimeToSecD(currentIntervalObj.getDurationQTime()) - currentIntervalTimeDone;
     lastIntervalEndTime_sec += currentIntervalTimeDone;
-    qDebug() << "We did:" << currentIntervalTimeDone << " of the current interval, we skipped:" << timeSkippedInInterval;
 
     // Compute new workout and new interval
     QList<Interval> copyLstInterval = workout.getLstInterval();
@@ -1399,7 +1378,6 @@ void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
     QTime timeActuallyDone(0,0,0,0);
     timeActuallyDone = timeActuallyDone.addMSecs(currentIntervalTimeDone*1000);
     intervalToModify.setTime(timeActuallyDone);
-    qDebug() << "OLD INTERVAL TIME WAS:" << currentIntervalObj.getDurationQTime() << " NOW IT'S:" << intervalToModify.getDurationQTime();
 
     // Adjust interval target (for drawing purpose only)
     if (intervalToModify.getPowerStepType() == Interval::PROGRESSIVE) {
@@ -1479,7 +1457,6 @@ void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
 
     //-- Update Timers
     timeInterval = currentIntervalObj.getDurationQTime();
-    qDebug() << "NEXT INTERVAL IS LONG :" << timeInterval;
     ui->widget_time->setIntervalTime(timeInterval);
     ui->widget_topMenu->setIntervalTime(timeInterval);
 
@@ -1499,11 +1476,9 @@ void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
 
 void WorkoutDialog::moveToNextInterval() {
 
-    qDebug() << "moveToNextInterval";
 
     int timeToAdd = Util::convertQTimeToSecD(currentIntervalObj.getDurationQTime());
     lastIntervalEndTime_sec += timeToAdd;
-    qDebug() << "ok adding " << timeToAdd << "to lastIntervalEndTime is now:" << lastIntervalEndTime_sec;
 
     changeIntervalDisplayNextSecond = false;
     ignoreCondition = true;
@@ -1563,7 +1538,7 @@ void WorkoutDialog::workoutOver() {
 
     if (raceController) raceController->finishRace();   // finish line + celebration
 
-    qDebug() << "STOPPING WORKOUT";
+    qInfo() << "Workout completed";
     if (account->enable_sound && account->sound_end_workout)
         soundPlayer->playSoundEndWorkout();
 
@@ -1577,7 +1552,6 @@ void WorkoutDialog::workoutOver() {
 
     setWidgetsStopped(true);
 
-    qDebug() << "OK CHECKING IF WORKOUT ACHIEVEMENT WITH LENGTH:" << QString::number(Util::convertQTimeToSecD(workout.getDurationQTime()) );
     achievementManager->workoutCompleted(workout);
 
 
@@ -1663,9 +1637,6 @@ void WorkoutDialog::checkSensorDropout()
 void WorkoutDialog::start_or_pause_workout() {
 
 
-    qDebug() << "start_or_pause_workout!";
-
-
     if (isWorkoutOver) {
         return;
     }
@@ -1688,7 +1659,7 @@ void WorkoutDialog::start_or_pause_workout() {
     }
     // If workout paused, we resume it
     else if (isWorkoutStarted && isWorkoutPaused) {
-        qDebug() << "RESUME WORKOUT!!!";
+        qInfo() << "Workout resumed";
         if (account->enable_sound  && account->sound_pause_resume_workout)
             soundPlayer->playSoundStartWorkout();
         ui->widget_topMenu->setButtonStartPaused(true);
@@ -1711,7 +1682,7 @@ void WorkoutDialog::start_or_pause_workout() {
     }
     // If not paused, we pause it
     else if (isWorkoutStarted && !isWorkoutPaused) {
-        qDebug() << "PAUSE WORKOUT!!!";
+        qInfo() << "Workout paused";
         if (account->enable_sound  && account->sound_pause_resume_workout)
             soundPlayer->playSoundPauseWorkout();
         ui->widget_topMenu->setButtonStartPaused(false);
@@ -2350,7 +2321,6 @@ void WorkoutDialog::sendLoads(double percentageFTP) {
             UserStudio myUserStudio = vecUserStudio.at(i);
             if (myUserStudio.getFecID() > 0 && myUserStudio.getFTP() > 0) {
                 int userTarget = qRound(percentageFTP * myUserStudio.getFTP());
-                qDebug() << "SeindgLOAD!." << userTarget;
                 emit setLoad(myUserStudio.getFecID(), userTarget);
             }
         }
@@ -2621,7 +2591,6 @@ int WorkoutDialog::calculateNewTargetCadence() {
 
 void WorkoutDialog::showTimerOnTop(bool showOnTop) {
 
-    qDebug() << "SHOW TIMER ON TOP?!" << showOnTop;
 
     m_timerOnTop = showOnTop;
     ui->widget_topMenu->setTimersVisible(showOnTop);
@@ -3025,7 +2994,6 @@ void WorkoutDialog::setMessagePlot() {
 
 void WorkoutDialog::setWidgetsStopped(bool b) {
 
-    qDebug() << "SetWidgetStopped!";
 
     if (account->enable_studio_mode) {
         for (int i=0; i<account->nb_user_studio; i++) {
@@ -3049,18 +3017,14 @@ void WorkoutDialog::setWidgetsStopped(bool b) {
 
 void WorkoutDialog::achievementReceived(Achievement achievement) {
 
-    qDebug() << "\n\n\n-----------------WORKOUT DIALOG, RECVEIVED NEW ACHIEVEMENT  -------------!!!";
-    qDebug() << "achievement name:" << achievement.getName();
 
     //// Add achievement to Queue (for in-workout animated overlay)
     queueAchievement.enqueue(achievement);
-    qDebug() << "Queue size is at" << queueAchievement.size();
 
     // Also collect for the post-workout summary panel
     earnedAchievements.append(achievement);
 
     if (!achievementCurrentlyPlaying) {
-        qDebug() << "SHOULD SHOW ACHIEVEMENT NOW!";
         animateAchievement();
     }
 }
@@ -3092,11 +3056,9 @@ void WorkoutDialog::expandWindow() {
 
 
     if (this->isFullScreen()) {
-        qDebug() << "going call showNormalWin ";
         showNormalWin();
     }
     else {
-        qDebug() << "going call showFullScreenWin ";
         showFullScreenWin();
     }
 }
@@ -3238,9 +3200,6 @@ void WorkoutDialog::sureYouWantToQuit() {
                 closeAndDeleteFitFile();
                 QDialog::accept();
             }
-            else {
-                qDebug() << "Cancel was clicked";
-            }
         });
         msgBox->open();
     }
@@ -3339,9 +3298,8 @@ void WorkoutDialog::activateSoundCadenceTooHigh() {
 
 void WorkoutDialog::checkFitFileCreated() {
 
-    qDebug() << "****checkFitFileCreated";
     QString fitFilename = arrDataWorkout[0]->getFitFilename();
-    qDebug() << "FIT File name is" << fitFilename << "name:"<< workout.getName() << "desc" << workout.getDescription();
+    qInfo() << "FIT file:" << fitFilename;
     if (fitFilename != "") {
         fitFilePath        = fitFilename;
         fitFileName        = workout.getName();
@@ -3748,12 +3706,10 @@ void WorkoutDialog::changeIntervalsDataWorkout(double timeStarted, double timeNo
 
     if (account->enable_studio_mode) {
         for (int i=0; i<account->nb_user_studio; i++) {
-            //            qDebug() << "change interval for this user" << i;
             arrDataWorkout[i]->changeInterval(timeStarted, timeNow, timePaused_msec, workoutOver, testInterval);
         }
     }
     else {
-        qDebug() << "OK change interval, timePaused_msec: " << timePaused_msec;
         arrDataWorkout[0]->changeInterval(timeStarted, timeNow, timePaused_msec, workoutOver, testInterval);
     }
 
@@ -3770,7 +3726,6 @@ void WorkoutDialog::initDataWorkout() {
 
     if (account->enable_studio_mode) {
         for (int i=0; i<account->nb_user_studio; i++) {
-            qDebug() << "Create DataWorkout for this user" << i;
             arrDataWorkout[i] = new DataWorkout(this->workout, account->FTP, this);
         }
     }
@@ -3962,7 +3917,6 @@ void WorkoutDialog::sendUserInfoToClock() {
 
 void WorkoutDialog::connectDataWorkout() {
 
-    qDebug() <<  "connectDataWorkout";
 
     if (account->enable_studio_mode) {
         for (int i=0; i<account->nb_user_studio; i++) {
@@ -4035,7 +3989,6 @@ bool WorkoutDialog::eventFilter(QObject *watched, QEvent *event) {
     if(event->type() == QEvent::KeyPress && isActiveWindow()) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return ) {
-            qDebug() << "ENTER PRESSED- STOP/START WORKOUT!" << watched;
             start_or_pause_workout();
             return true; // mark the event as handled
         }
@@ -4086,7 +4039,6 @@ bool WorkoutDialog::eventFilter(QObject *watched, QEvent *event) {
 
 void WorkoutDialog::showFullScreenWin() {
 
-    qDebug() << "showFullScreenWin";
     this->setSizeGripEnabled(false);
     ui->widget_topMenu->setMinExpandExitVisible(true);
     // Re-apply the expand-button icon: when the dialog opens directly in
@@ -4105,8 +4057,6 @@ void WorkoutDialog::showFullScreenWin() {
 }
 
 void WorkoutDialog::showNormalWin() {
-
-    qDebug() << "showNormalWin";
 
 
 #ifdef Q_OS_MAC

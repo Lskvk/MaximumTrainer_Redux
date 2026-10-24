@@ -104,7 +104,7 @@ void BtleHubWasm::onDisconnectedFromBridge()
     if (m_userDisconnect)
         return;
 
-    qDebug() << "[BtleHubWasm] Unexpected disconnect – auto-reconnect exhausted";
+    qWarning() << "[BtleHubWasm] Unexpected disconnect – auto-reconnect exhausted";
     m_connected = false;
     emit deviceDisconnected();
     emit connectionError(tr("Bluetooth trainer disconnected. "
