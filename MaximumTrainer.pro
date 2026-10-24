@@ -234,6 +234,11 @@ win32-msvc* {
     # Crypt32 is required for DPAPI (CryptProtectData) in CredentialStore.
     LIBS += -lGdi32 -lUser32 -lCrypt32
     CONFIG += force_debug_info
+    # /Z7 keeps debug info inside each .obj rather than a PDB shared by all
+    # compiles, so a compiler cache (sccache in CI) can store every object.
+    # The linker still writes MaximumTrainer.pdb.
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO ~= s/-Zi/-Z7/
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO ~= s/-Zi/-Z7/
 
     # Embed the application icon into the Windows executable.
     RC_ICONS = $$PWD/resources/myappico.ico
