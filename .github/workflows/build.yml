@@ -165,7 +165,7 @@ jobs:
     - name: Install Qt (Wasm singlethread)
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.11.1'
+        version: '6.11.3'
         # Released aqt 3.1.x can't resolve Qt 6.11's reorganised repo; 3.3.0 does.
         aqtversion: '==3.3.0'
         # Qt 6.11 moved WASM out of linux/desktop into the all_os/wasm repo path.
@@ -183,7 +183,7 @@ jobs:
       uses: actions/cache@v6
       with:
         path: ~/qwt-wasm
-        key: qwt-6.3.0-qt-6.11.1-wasm-em4.0.7
+        key: qwt-6.3.0-qt-6.11.3-wasm-em4.0.7
 
     - name: Build QWT (Wasm)
       if: steps.qwt-wasm-cache.outputs.cache-hit != 'true'
