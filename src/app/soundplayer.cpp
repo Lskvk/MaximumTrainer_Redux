@@ -26,7 +26,6 @@ SoundPlayer::SoundPlayer(QObject *parent) : QObject(parent)
 }
 
 
-//------------------------------------------------------------------------------------------------------------------------
 void SoundPlayer::setVolume(double volume) {
 
     qDebug() << "setVolume soundPlayer";

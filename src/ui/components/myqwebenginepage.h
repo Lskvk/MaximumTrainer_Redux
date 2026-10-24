@@ -32,7 +32,6 @@ public:
         return true;
     }
 
-//---------------------------------------------------
     void setExternalList(QStringList lst) {
         this->listExternalLink = lst;
     }

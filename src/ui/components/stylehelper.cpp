@@ -49,7 +49,6 @@ qreal StyleHelper::sidebarFontSize()
 
 QColor StyleHelper::panelTextColor(bool lightColored)
 {
-    //qApp->palette().highlightedText().color();
     if (!lightColored)
         return Qt::white;
     else

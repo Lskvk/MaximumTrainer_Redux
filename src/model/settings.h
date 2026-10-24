@@ -5,8 +5,6 @@
 #include <QtCore>
 
 
-
-
 class Settings : public QObject
 {
     Q_OBJECT
@@ -17,18 +15,11 @@ public:
     void saveGeneralSettings();
 
 
-
-
-
     /// --------------- Program Settings saved locally
     bool rememberMyPassword;
     QStringList lstUsername;
     QString lastLoggedUsername;
     QString lastLoggedKey;
-
-
-
-
 
 
     /// --------------- Program Settings Saved in XML
@@ -63,17 +54,6 @@ public:
 //    ///1 = Detailed
 //    ///2 = Graph
 
-//    bool showHrWidget;
-//    bool showPowerWidget;
-//    bool showPowerBalanceWidget;
-//    bool showCadenceWidget;
-//    bool showSpeedWidget;
-//    bool showCaloriesWidget;
-//    bool showOxygenWidget;
-//    int displayHr;
-//    int displayPower;
-//    int displayPowerBalance; // 0 = Always, 1 = Has Target
-//    int displayCadence;
 
 //    /// Timers
 //    bool showIntervalRemaining;
@@ -90,16 +70,6 @@ public:
 //    bool showSeperatorInterval;
 //    bool showGrid;
 
-//    bool showHrTarget;
-//    bool showPowerTarget;
-//    bool showCadenceTarget;
-//    bool showSpeedTarget;
-//    bool showHrCurve;
-//    bool showPowerCurve;
-//    bool showCadenceCurve;
-//    bool showSpeedCurve;
-
-
 
 //    //// -------------------------------- Sounds
 //    int soundPlayerVol;  ///0 TO 100
@@ -108,15 +78,6 @@ public:
 //    bool soundPauseResumeWorkout;
 //    bool soundAchievement;
 //    bool soundEndWorkout;
-
-//    bool soundAlert_PowerUnderTarget;
-//    bool soundAlert_PowerAboveTarget;
-//    bool soundAlert_CadenceUnderTarget;
-//    bool soundAlert_CadenceAboveTarget;
-
-
-
-
 
 
 };

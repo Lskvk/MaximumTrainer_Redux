@@ -5,7 +5,6 @@
 #include <QCursor>
 
 
-
 IntervalTableModel::IntervalTableModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
@@ -14,8 +13,6 @@ IntervalTableModel::IntervalTableModel(QObject *parent) :
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////
 void IntervalTableModel::updateRowSourceInterval() {
 
 
@@ -25,7 +22,6 @@ void IntervalTableModel::updateRowSourceInterval() {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////
 void IntervalTableModel::setListInterval(QList<Interval> lstInterval) {
 
     beginResetModel();
@@ -33,11 +29,9 @@ void IntervalTableModel::setListInterval(QList<Interval> lstInterval) {
 
     updateRowSourceInterval();
     endResetModel();
-    //    emit dataChanged();
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
 void IntervalTableModel::resetLstInterval() {
 
     beginResetModel();
@@ -46,7 +40,6 @@ void IntervalTableModel::resetLstInterval() {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
 void  IntervalTableModel::removeIntervalRepeatData(int firstRow, int lastRow) {
 
     if (lstInterval.size() < 1)
@@ -59,20 +52,15 @@ void  IntervalTableModel::removeIntervalRepeatData(int firstRow, int lastRow) {
             interval.setRepeatIncreaseCadence(0);
             interval.setRepeatIncreaseLTHR(0);
             lstInterval.replace(i, interval);
-            //            qDebug() << "after" << i << "setRepeatIncreaseLTHR" << interval.getRepeatIncreaseLTHR() <<
-            //                        "setRepeatIncreaseCadence" << interval.getRepeatIncreaseCadence() << "setRepeatIncreaseLTHR" << interval.getRepeatIncreaseLTHR();
         }
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////
 QList<Interval> IntervalTableModel::getLstInterval() {
     return this->lstInterval;
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////
 Interval IntervalTableModel::getIntervalAtRow(const QModelIndex &index) {
 
     qDebug() <<  "IntervalTableModel::getIntervalAtRow";
@@ -80,7 +68,6 @@ Interval IntervalTableModel::getIntervalAtRow(const QModelIndex &index) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
 int IntervalTableModel::rowCount(const QModelIndex &parent) const {
 
     Q_UNUSED(parent);
@@ -89,7 +76,6 @@ int IntervalTableModel::rowCount(const QModelIndex &parent) const {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
 int IntervalTableModel::columnCount(const QModelIndex &parent) const {
 
     Q_UNUSED(parent);
@@ -100,7 +86,6 @@ int IntervalTableModel::columnCount(const QModelIndex &parent) const {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
 QVariant IntervalTableModel::data(const QModelIndex &index, int role) const {
 
 
@@ -304,10 +289,6 @@ QVariant IntervalTableModel::data(const QModelIndex &index, int role) const {
 }
 
 
-
-
-
-//--------------------------------------------------------------------------------------------------------
 bool IntervalTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
 
 
@@ -349,9 +330,6 @@ bool IntervalTableModel::setData(const QModelIndex &index, const QVariant &value
 }
 
 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QVariant IntervalTableModel::headerData(int section, Qt::Orientation  orientation, int role) const {
 
 
@@ -417,7 +395,6 @@ QVariant IntervalTableModel::headerData(int section, Qt::Orientation  orientatio
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool IntervalTableModel::copyRows(int row) {
 
     qDebug() << "copyRows ";
@@ -433,8 +410,6 @@ bool IntervalTableModel::copyRows(int row) {
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool IntervalTableModel::insertRows(int position, int rows, const QModelIndex &index)
 {
     qDebug() << "insertRows ";
@@ -458,7 +433,6 @@ bool IntervalTableModel::insertRows(int position, int rows, const QModelIndex &i
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool IntervalTableModel::removeRows(int position, int rows, const QModelIndex &index)
 {
     qDebug() << "REMOVE ROW" << position << "numberRows" << rows;
@@ -485,13 +459,10 @@ bool IntervalTableModel::removeRows(int position, int rows, const QModelIndex &i
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Qt::DropActions IntervalTableModel::supportedDropActions() const {
     return Qt::MoveAction;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Qt::ItemFlags IntervalTableModel::flags(const QModelIndex &index) const
 {
 
@@ -518,7 +489,6 @@ Qt::ItemFlags IntervalTableModel::flags(const QModelIndex &index) const
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QStringList IntervalTableModel::mimeTypes() const
 {
     QStringList types;
@@ -526,7 +496,6 @@ QStringList IntervalTableModel::mimeTypes() const
     return types;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QMimeData* IntervalTableModel::mimeData(const QModelIndexList &indexes) const
 {
     qDebug() << "mimeData Size is" << indexes.size();
@@ -552,7 +521,6 @@ QMimeData* IntervalTableModel::mimeData(const QModelIndexList &indexes) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool IntervalTableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
 

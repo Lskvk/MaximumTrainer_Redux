@@ -17,7 +17,6 @@
 #include "util.h"
 
 
-
 FitActivityCreator::FitActivityCreator() {
 
 
@@ -33,8 +32,6 @@ FitActivityCreator::FitActivityCreator() {
 }
 
 
-
-//---------------------------------------------------------------------------------------------------------------------------------
 QString FitActivityCreator::generateFileName(bool createDir, QString username, QString nameWorkout, QDateTime startTimeWorkout) {
 
     qDebug() << "generateFileName";
@@ -56,9 +53,6 @@ QString FitActivityCreator::generateFileName(bool createDir, QString username, Q
 }
 
 
-
-
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, QString nameWorkout, QDateTime startTimeWorkout, bool rowing) {
     m_rowing = rowing;
 
@@ -67,15 +61,12 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
     fileName = generateFileName(createDir, username, nameWorkout, startTimeWorkout);
 
 
-
 #ifdef Q_OS_WIN32
     file.open(fileName.toStdWString(), std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
 #else
     // macOS, Linux, and WebAssembly all use a UTF-8 std::string path.
     file.open(fileName.toStdString(), std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
 #endif
-
-
 
 
     if (!file.is_open()) {
@@ -91,7 +82,6 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
     QDateTime now =  QDateTime::currentDateTime().toUTC();
     QDateTime ref = QDateTime(QDate(1989,12,31), QTime(0,0), QTimeZone::UTC);
     secStartedWorkout = ref.secsTo(now);
-
 
 
     // --------------- FileIdMesg ------------------
@@ -116,9 +106,6 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
 }
 
 
-
-
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::close_FIT_File() {
 
 
@@ -142,7 +129,6 @@ void FitActivityCreator::close_FIT_File() {
 }
 
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::closeAndDeleteFile() {
 
     if (!fileIsOpen)
@@ -160,12 +146,8 @@ void FitActivityCreator::closeAndDeleteFile() {
     }
 
 
-
-
-
 }
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::writeEndFile(double timeNow,
                                       double avgSpeedKph, double avgCadence, double avgPower, double avgHr,
                                       double maxSpeedKph, double maxCadence, double maxPower, double maxHr,
@@ -182,14 +164,12 @@ void FitActivityCreator::writeEndFile(double timeNow,
     qDebug() << "SEC SARTED WORKOUT:" << secStartedWorkout;
 
 
-
     // --------------- SessionMesg ------------------
     fit::SessionMesg sessionMesg;
     sessionMesg.SetTimestamp(secStartedWorkout+timeNow);
     sessionMesg.SetStartTime(secStartedWorkout);
     sessionMesg.SetTotalElapsedTime(timeNow + totalTimePaused); //Total number of msec since timer started (includes pauses)
     sessionMesg.SetTotalTimerTime(timeNow); //Timer Time (excludes pauses)
-    //    sessionMesg.SetTotalMovingTime(timeNow);
     sessionMesg.SetSport(m_rowing ? FIT_SPORT_ROWING : FIT_SPORT_CYCLING);
     sessionMesg.SetSubSport(FIT_SUB_SPORT_INDOOR_CYCLING);
     sessionMesg.SetMessageIndex(0);
@@ -229,10 +209,6 @@ void FitActivityCreator::writeEndFile(double timeNow,
     encode.Write(sessionMesg);
 
 
-
-
-
-
     // --------------- ActivityMesg ------------------
     fit::ActivityMesg activityMesg;
     activityMesg.SetTimestamp(secStartedWorkout+timeNow);
@@ -244,13 +220,9 @@ void FitActivityCreator::writeEndFile(double timeNow,
     encode.Write(activityMesg);
 
 
-
-
-
 }
 
 
-//------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::writeLapMesg(double timeStarted, double timeNow, int timePaused_msec,
                                       double avgSpeedKph, double avgCadence, double avgPower, double avgHr,
                                       double maxSpeedKph, double maxCadence, double maxPower, double maxHr,
@@ -276,8 +248,6 @@ void FitActivityCreator::writeLapMesg(double timeStarted, double timeNow, int ti
     lapMesg.SetStartTime(secStartedWorkout + timeStarted + 1);
     lapMesg.SetTotalElapsedTime(durationInterval + durationPause ); //includes pauses
     lapMesg.SetTotalTimerTime(durationInterval);  //excludes pauses
-    //    lapMesg.SetTotalMovingTime(durationInterval);
-
 
 
     if (avgSpeedKph > 0) {
@@ -314,8 +284,6 @@ void FitActivityCreator::writeLapMesg(double timeStarted, double timeNow, int ti
     encode.Write(lapMesg);
 
 
-
-
     //#define FIT_INTENSITY_ACTIVE                                                     ((FIT_INTENSITY)0)
     //#define FIT_INTENSITY_REST                                                       ((FIT_INTENSITY)1)
     //#define FIT_INTENSITY_WARMUP                                                     ((FIT_INTENSITY)2)
@@ -325,8 +293,6 @@ void FitActivityCreator::writeLapMesg(double timeStarted, double timeNow, int ti
 }
 
 
-
-//----------------------------------------------------------------------------------------------------------------------
 void FitActivityCreator::writeRecord(int timeNow,
                                      double averageHr1sec, double averageCadence1sec, double averageSpeed1sec, double averagePower1sec,
                                      double rightPedal, double avgLeftTorqueEff, double avgRightTorqueEff, double avgLeftPedalSmooth, double avgRightPedalSmooth, double avgCombinedPedalSmooth,

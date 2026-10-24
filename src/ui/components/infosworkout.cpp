@@ -26,17 +26,12 @@ infosWorkout::~infosWorkout()
     delete ui;
 }
 
-//ui->label_image->setStyleSheet("image: url(:/image/icon/burn)");
-//ui->label_image->setToolTip(tr("Calories - kilocalorie"));
-//ui->label_image->setMaximumWidth(32);
 
 //else if(this->type == InfoWidget::CALORIES) {
 //    ui->label_currentValue->setText(QString::number((int)v)); //do not show decimals
 //}
 
 
-
-//------------------------------------------------------
 void infosWorkout::setStopped(bool b) {
 
     isStopped = b;
@@ -50,7 +45,6 @@ void infosWorkout::setDistanceInMile(bool b) {
 }
 
 
-//------------------------------------------------------
 void infosWorkout::setDistanceVisible(bool b) {
 
     ui->label_distance->setVisible(b);
@@ -58,7 +52,6 @@ void infosWorkout::setDistanceVisible(bool b) {
 
 }
 
-//--------------------------------------------------
 void infosWorkout::NP_Changed(double val) {
 
 
@@ -67,14 +60,12 @@ void infosWorkout::NP_Changed(double val) {
 }
 
 
-//--------------------------------------------------
 void infosWorkout::IF_Changed(double val) {
 
     ui->label_if->setText(locale.toString(val, 'f', 2));
 
 }
 
-//--------------------------------------------------
 void infosWorkout::distanceChanged(double meters) {
 
     if (inMile) {
@@ -87,8 +78,6 @@ void infosWorkout::distanceChanged(double meters) {
 }
 
 
-
-//--------------------------------------------------
 void infosWorkout::TSS_Changed(double val) {
 
 
@@ -96,7 +85,6 @@ void infosWorkout::TSS_Changed(double val) {
 }
 
 
-//--------------------------------------------------
 void infosWorkout::calories_Changed(double val) {
 
     ui->label_kcal->setText(QString::number((int)val)); //do not show decimals

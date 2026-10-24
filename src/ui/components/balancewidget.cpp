@@ -19,8 +19,6 @@ BalanceWidget::BalanceWidget(QWidget *parent) :
 
     zoneTarget = 50;
     zoneRange = 3;
-    //    ui->label_unit_right->setText(tr("Right Balance:  "));
-    //    ui->label_unit_left->setText(tr("Left Balance:  "));
     setStopped(true);
     showMode = 1;
     ui->horizontalSlider->setMinimum(0);
@@ -30,27 +28,22 @@ BalanceWidget::BalanceWidget(QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setShowMode(int display) {
     this->showMode = display;
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setStopped(bool b) {
     this->isStopped = b;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setValue(int value) {
 
     ui->horizontalSlider->setValue(value);
 
     ui->label_powerRight->setText(QString::number(value));
     ui->label_powerLeft->setText(QString::number(100-value));
-
 
 
     //    /// Check Value is outside of zone, change color of QLabel
@@ -64,24 +57,20 @@ void BalanceWidget::setValue(int value) {
 
     if (isStopped || zoneTarget == -1 || diffAbs <= zoneRange)
     {
-        //        qDebug() << "GOT HERE NORMAL LABEL**";
         ui->label_unit_right->setStyleSheet("QLabel#label_unit_right { background-color :"+ Util::getColor(Util::DONE).name() + "; }");
         ui->label_unit_left->setStyleSheet("QLabel#label_unit_left { background-color :"+ Util::getColor(Util::DONE).name() + "; }");
     }
 
     else
     {
-        qDebug() << "GOT HERE SHOULD COLOR LABEL!";
         /// Left is too strong is too strong (right too soft) inverse..
         if (diff > zoneRange) {
-            qDebug() << "LEFT TOO SOFT**************";
             ui->label_unit_right->setStyleSheet("QLabel#label_unit_right { background-color :"+ Util::getColor(Util::TOO_HIGH).name() + "; }");
             ui->label_unit_left->setStyleSheet("QLabel#label_unit_left { background-color :"+ Util::getColor(Util::TOO_LOW).name() + "; }");
 
         }
         /// Left is too soft   (diff < zoneRange*-1)
         else {
-            qDebug() << "LEFT TOO STRONG**************";
             ui->label_unit_right->setStyleSheet("QLabel#label_unit_right { background-color :"+ Util::getColor(Util::TOO_LOW).name() + "; }");
             ui->label_unit_left->setStyleSheet("QLabel#label_unit_left { background-color :"+ Util::getColor(Util::TOO_HIGH).name() + "; }");
         }
@@ -89,9 +78,6 @@ void BalanceWidget::setValue(int value) {
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::removeZone() {
 
     zoneRange = -1;
@@ -101,9 +87,7 @@ void BalanceWidget::removeZone() {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::setZone(int target, int range) {
-
 
 
     if (target < range)
@@ -119,8 +103,6 @@ void BalanceWidget::setZone(int target, int range) {
 
     double zoneLow = low / 100.0;
     double zoneHigh = high / 100.0;
-    //    double target_d = target / 100.0;
-
 
 
     ui->horizontalSlider->setStyleSheet("QSlider::groove:horizontal { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
@@ -134,9 +116,6 @@ void BalanceWidget::setZone(int target, int range) {
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 void BalanceWidget::pedalMetricChanged(double leftTorqueEff, double rightTorqueEff,
                                        double leftPedalSmooth, double rightPedalSmooth, double combinedPedalSmooth) {
 
@@ -169,7 +148,6 @@ void BalanceWidget::pedalMetricChanged(double leftTorqueEff, double rightTorqueE
             ui->label_unitCombinedSmooth->setVisible(false);
         }
     }
-
 
 
 }

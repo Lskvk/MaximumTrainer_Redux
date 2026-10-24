@@ -4,17 +4,6 @@
 #include "util.h"
 
 
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////
-//bool Interval::operator==(const Interval &other) const {
-//    return false;
-//}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QDataStream& operator<<(QDataStream& stream, const Interval& obj) {
 
 
@@ -45,13 +34,10 @@ QDataStream& operator<<(QDataStream& stream, const Interval& obj) {
     stream << obj.repeatIncreaseLTHR;
 
 
-
-
     return stream;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QDataStream& operator>>(QDataStream& stream, Interval& obj) {
 
 
@@ -91,13 +77,10 @@ QDataStream& operator>>(QDataStream& stream, Interval& obj) {
     stream >> obj.repeatIncreaseLTHR;
 
 
-
     return stream;
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Interval::Interval() {
 
 
@@ -126,17 +109,11 @@ Interval::Interval() {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Interval::Interval(QTime duration, QString displayMessage,
                    StepType powerStepType, double targetFTP_start, double targetFTP_end, int FTP_range, double rightPowerTarget,
                    StepType cadenceStepType, int targetCadence_start, int targetCadence_end, int cadence_range,
                    StepType hrStepType, double targetHR_start, double targetHR_end, int HR_range,
                    bool testInterval, double repeatIncreaseFTP, int repeatIncreaseCadence, double repeatIncreaseLTHR) {
-
-    //    qDebug() << "Creating interval with value" << id << duration << displayMessage;
-    //    qDebug() <<  powerStepType << targetFTP_start << targetFTP_end << FTP_range << rightPowerTarget;
-    //    qDebug() <<  cadenceStepType << targetCadence_start << targetCadence_end << cadence_range;
-    //    qDebug() <<  hrStepType << targetHR_start << targetHR_end << HR_range;
 
 
     this->duration = duration;
@@ -170,15 +147,6 @@ Interval::Interval(QTime duration, QString displayMessage,
 }
 
 
-
-
-
-
-
-
-
-
-//-----------------------------------------------------
 QTime Interval::getDurationQTime() const {
     return this->duration;
 }
@@ -188,8 +156,6 @@ QString Interval::getDisplayMessage() const {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QString Interval::getStepTypeToString(StepType type) {
     if (type == Interval::NONE) {
         return QApplication::translate("Interval", "None", 0);
@@ -204,8 +170,6 @@ QString Interval::getStepTypeToString(StepType type) {
         return QApplication::translate("Interval", "Interval type not defined", 0);
     }
 }
-
-
 
 
 /// POWER
@@ -287,9 +251,4 @@ int Interval::getRepeatIncreaseCadence() const {
 double Interval::getRepeatIncreaseLTHR() const {
     return this->repeatIncreaseLTHR;
 }
-
-
-
-
-
 

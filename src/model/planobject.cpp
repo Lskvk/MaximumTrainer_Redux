@@ -9,10 +9,6 @@ PlanObject::PlanObject(QObject *parent) :
 }
 
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////
 void PlanObject::goToWorkout(QString name) {
 
     qDebug() << "Go ToWorkout!" << name;

@@ -8,9 +8,6 @@
 #include "apptheme.h"
 
 
-
-
-
 WorkoutTableModel::WorkoutTableModel(QObject *parent) : QAbstractTableModel(parent) {
 
     qDebug() << "WorkoutTableModel";
@@ -25,8 +22,6 @@ void WorkoutTableModel::changeRowHovered(int row) {
 }
 
 
-
-
 void WorkoutTableModel::addListWorkout(QList<Workout> lstWorkout) {
 
     beginResetModel();
@@ -37,7 +32,6 @@ void WorkoutTableModel::addListWorkout(QList<Workout> lstWorkout) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutTableModel::updateWorkoutsMetrics() {
 
 
@@ -55,15 +49,12 @@ void WorkoutTableModel::updateWorkoutsMetrics() {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Workout WorkoutTableModel::getWorkoutAtRow(const QModelIndex &index) {
 
     return (lstWorkout.at(index.row()));
 }
 
 
-// ------------------------------------------------------------------------------------------
 int WorkoutTableModel::rowCount(const QModelIndex &parent) const {
 
     Q_UNUSED(parent);
@@ -71,7 +62,6 @@ int WorkoutTableModel::rowCount(const QModelIndex &parent) const {
 }
 
 
-// ------------------------------------------------------------------------------------------
 int WorkoutTableModel::columnCount(const QModelIndex &parent) const {
 
     Q_UNUSED(parent);
@@ -79,8 +69,6 @@ int WorkoutTableModel::columnCount(const QModelIndex &parent) const {
 }
 
 
-
-//--------------------------------------------------------------------------------------------------------
 bool WorkoutTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
 
 
@@ -89,12 +77,10 @@ bool WorkoutTableModel::setData(const QModelIndex &index, const QVariant &value,
         lstWorkout.replace(index.row(), workout);
     }
 
-    //    emit dataChanged();
     return true;
 }
 
 
-// ------------------------------------------------------------------------------------------
 QVariant WorkoutTableModel::data(const QModelIndex &index, int role) const {
 
 
@@ -157,7 +143,6 @@ QVariant WorkoutTableModel::data(const QModelIndex &index, int role) const {
             return checkFont;
         }
     }
-
 
 
     if (role == Qt::DisplayRole) {
@@ -235,14 +220,8 @@ QVariant WorkoutTableModel::data(const QModelIndex &index, int role) const {
 }
 
 
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutTableModel::deleteWorkoutWithName(QString name) {
 
-    //TOFIX; Use hashtable instead QList, faster access
     for (int i=0; i<lstWorkout.size(); i++)
     {
         Workout workout = lstWorkout.at(i);
@@ -254,7 +233,6 @@ void WorkoutTableModel::deleteWorkoutWithName(QString name) {
     emit dataChanged();
 }
 
-//---------------------------------------------------------------------
 void WorkoutTableModel::deleteAllUserMadeWorkouts() {
 
     beginResetModel();
@@ -266,7 +244,6 @@ void WorkoutTableModel::deleteAllUserMadeWorkouts() {
     }
     endResetModel();
 }
-//---------------------------------------------------------------------
 void WorkoutTableModel::deleleteMapWorkout() {
 
 
@@ -281,8 +258,6 @@ void WorkoutTableModel::deleleteMapWorkout() {
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutTableModel::addWorkout(Workout w) {
 
     beginResetModel();
@@ -293,7 +268,6 @@ void WorkoutTableModel::addWorkout(Workout w) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool WorkoutTableModel::removeRows(int position, int rows, const QModelIndex &index)
 {
     qDebug() << "REMOVE ROW";
@@ -310,9 +284,6 @@ bool WorkoutTableModel::removeRows(int position, int rows, const QModelIndex &in
 }
 
 
-
-
-// --------------------------------------------------------------------------------------------
 QVariant WorkoutTableModel::headerData(int section, Qt::Orientation  orientation, int role) const {
 
 

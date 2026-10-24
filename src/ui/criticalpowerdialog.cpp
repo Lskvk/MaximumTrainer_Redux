@@ -17,9 +17,7 @@
 #include "qwt_text.h"
 #include "qwt_symbol.h"
 
-// ---------------------------------------------------------------------------
 // Custom scale draw for human-readable duration labels
-// ---------------------------------------------------------------------------
 class DurationScaleDraw : public QwtScaleDraw
 {
 public:
@@ -41,9 +39,7 @@ public:
     }
 };
 
-// ---------------------------------------------------------------------------
 // CriticalPowerDialog
-// ---------------------------------------------------------------------------
 
 CriticalPowerDialog::CriticalPowerDialog(const QList<WorkoutHistorySummary> &history,
                                          QWidget *parent)

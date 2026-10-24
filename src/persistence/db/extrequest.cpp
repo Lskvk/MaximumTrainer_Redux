@@ -4,9 +4,6 @@
 #include <QHttpMultiPart>
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QNetworkReply* ExtRequest::checkGoogleConnection() {
 
     QNetworkAccessManager *managerWS = qApp->property("NetworkManagerWS").value<QNetworkAccessManager*>();
@@ -27,7 +24,6 @@ QNetworkReply* ExtRequest::checkGoogleConnection() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QNetworkReply* ExtRequest::checkIpAddress() {
 
     QNetworkAccessManager *managerWS = qApp->property("NetworkManagerWS").value<QNetworkAccessManager*>();
@@ -44,7 +40,6 @@ QNetworkReply* ExtRequest::checkIpAddress() {
     return replyMyIp;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QNetworkReply* ExtRequest::stravaDeauthorization(QString access_token) {
 
     QNetworkAccessManager *managerWS = qApp->property("NetworkManagerWS").value<QNetworkAccessManager*>();
@@ -67,7 +62,6 @@ QNetworkReply* ExtRequest::stravaDeauthorization(QString access_token) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// POST URL_TOKEN_ICV  (grant_type=authorization_code)
 /// Exchanges an authorization code for an OAuth2 access + refresh token pair.
 /// All platforms go through the Cloudflare Worker, which looks up the

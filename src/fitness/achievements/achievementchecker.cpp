@@ -14,8 +14,6 @@ AchievementChecker::~AchievementChecker()
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 bool AchievementChecker::checkTargetManiac(Workout workout) {
 
     qDebug() << "AchievementTargetManiac, check completed";

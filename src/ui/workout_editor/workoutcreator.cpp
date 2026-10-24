@@ -11,7 +11,6 @@
 #include <algorithm>
 
 
-
 #include "intervaldelegate.h"
 #include "themedicon.h"
 #include "util.h"
@@ -20,14 +19,12 @@
 #include "environnement.h"
 
 
-
 WorkoutCreator::~WorkoutCreator()
 {
     delete ui;
     qDeleteAll(lstRepeatWidget);
     lstRepeatWidget.clear();
 }
-
 
 
 WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::WorkoutCreator)
@@ -61,11 +58,8 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     connect(ui->lineEdit_creator_workout, SIGNAL(textChanged(QString)), this, SLOT(checkToEnableButtonSave()));
 
 
-
     workout = Workout();
     workout.setCreator(account->display_name);
-    //    workout.setWorkout_name_enum(Workout::USER_MADE);
-
 
 
     QList<Interval> lstInterval;
@@ -75,8 +69,6 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
                        Interval::NONE, 0.5, 0.5, 15,
                        false, 0, 0, 0);
     lstInterval.append(interval1);
-
-
 
 
     idRepeatWidget = 0;
@@ -91,15 +83,12 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     ui->tableView->setModel(intervalModel);
 
 
-
-    //Connect Edit trigger (fix bug that sometimes select Cell instead of edit, TOFIX: edit: editing failed on columns not editable..)
+    // Open the editor on click; otherwise a click sometimes only selected the cell.
     connect(ui->tableView, SIGNAL(clicked(QModelIndex)), ui->tableView, SLOT(edit(QModelIndex)));
 
     // Column widths are distributed responsively to fill the table — see
     // distributeColumnWidths(), driven by the viewport resize below.
     ui->tableView->viewport()->installEventFilter(this);
-
-
 
 
     ui->tableView->verticalHeader()->setDefaultSectionSize(70); //55
@@ -152,19 +141,12 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     connect(ui->widget_plot, SIGNAL(shapeClicked(QString)), this, SLOT(hightlightSelectedSourceRow(QString)) );
 
 
-
     computeWorkout();
-
-
-
-
 
 
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::populateInputsFromWorkout() {
 
     /// Sync the native input widgets with the current `workout` state.
@@ -182,9 +164,6 @@ void WorkoutCreator::populateInputsFromWorkout() {
 }
 
 
-
-
-//------------------------------------------------------------------------------------------------
 void WorkoutCreator::rightClickedGraph(QPointF pos) {
 
     Q_UNUSED(pos);
@@ -194,7 +173,6 @@ void WorkoutCreator::rightClickedGraph(QPointF pos) {
 
 }
 
-//------------------------------------------------------------------------------------------------
 void WorkoutCreator::hightlightSelectedSourceRow(QString sourceRowIdentifier) {
 
     int rowToSelect = sourceRowIdentifier.toInt();
@@ -203,9 +181,6 @@ void WorkoutCreator::hightlightSelectedSourceRow(QString sourceRowIdentifier) {
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::resetWorkout() {
 
     qDebug() << "WORKOUT CREATOR SETTING WORKOUT!";
@@ -229,15 +204,12 @@ void WorkoutCreator::resetWorkout() {
     computeWorkout();
 
 
-
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::computeWorkout() {
 
 
-    //    qDebug() << "****ROW COUNT INTERVAL MODEL!***" << intervalModel->rowCount();
     qDebug() << "WorkoutCreator::computeWorkout start";
 
     /// Get list RepeatData
@@ -265,10 +237,8 @@ void WorkoutCreator::computeWorkout() {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::customMenuRequested(QPoint pos) {
 
-    //    qDebug() << "WC:customMenuRequested";
     QModelIndex index = ui->tableView->indexAt(pos);
     if (!index.isValid() )
         return;
@@ -279,10 +249,6 @@ void WorkoutCreator::customMenuRequested(QPoint pos) {
 }
 
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::editWorkout(Workout workoutToEdit) {
 
 
@@ -315,8 +281,6 @@ void WorkoutCreator::editWorkout(Workout workoutToEdit) {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::checkToEnableButtonSave() {
 
     qDebug() << "OK WORKOUT CREATOR CHECK BUTTON SAVE";
@@ -330,7 +294,6 @@ void WorkoutCreator::checkToEnableButtonSave() {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::on_pushButton_save_workout_clicked() {
 
     createWorkout(ui->lineEdit_name_workout->text(),
@@ -341,8 +304,6 @@ void WorkoutCreator::on_pushButton_save_workout_clicked() {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::restoreRepeatWidgetInterface()
 {
 
@@ -387,7 +348,6 @@ void WorkoutCreator::restoreRepeatWidgetInterface()
     computeWorkout();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::unselectSelectionNow() {
 
     qDebug() << "unselectSelectionNow";
@@ -396,7 +356,6 @@ void WorkoutCreator::unselectSelectionNow() {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::on_pushButton_repeat_clicked()
 {
 
@@ -411,7 +370,6 @@ void WorkoutCreator::on_pushButton_repeat_clicked()
     QModelIndex lastIndex = lstIndex.at(lstIndex.size()-1);
 
 
-
     /// Appen when you press control and select 2 sepearate rows
     if (firstIndex.row() > lastIndex.row()) {
         QModelIndex tmpIndex = firstIndex;
@@ -419,9 +377,7 @@ void WorkoutCreator::on_pushButton_repeat_clicked()
         lastIndex = tmpIndex;
     }
 
-    qDebug() << "Repeat:***************firstINdex" <<firstIndex.row();
     qDebug() << "lastIndex" <<lastIndex.row();
-    qDebug() << "***************";
 
 
     QRect recFirstSelection(ui->tableView->visualRect(firstIndex));
@@ -436,7 +392,6 @@ void WorkoutCreator::on_pushButton_repeat_clicked()
     repeatWidget->resize(rectCompleteSelection.size().width(), rectCompleteSelection.size().height());
     repeatWidget->setRightWidth(widthLast2Column);
     repeatWidget->show();
-
 
 
     connect(repeatWidget, SIGNAL(deleteSignal(int)), this, SLOT(deletedRepeatWidget(int)) );
@@ -455,10 +410,6 @@ void WorkoutCreator::on_pushButton_repeat_clicked()
 }
 
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
 
     qDebug() << "TABLE VIEW SELECTION CHANGED, HIGHLIGHT GRAPH INTERVALS";
@@ -470,7 +421,6 @@ void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
     actionRepeat->setEnabled(false);
     actionCopy->setEnabled(false);
     actionDelete->setEnabled(false);
-
 
 
     QModelIndexList lstIndex = ui->tableView->selectionModel()->selectedRows();
@@ -506,19 +456,15 @@ void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
     foreach (RepeatWidget *wid, lstRepeatWidget) {
 
         if (firstIndex.row() >= wid->getRepeatData()->getFirstRow() && firstIndex.row() <= wid->getRepeatData()->getLastRow() )  {
-            //            qDebug() << "1 REFUSE";
             return;
         }
         else if (lastIndex.row() <= wid->getRepeatData()->getLastRow() && lastIndex.row() >= wid->getRepeatData()->getFirstRow())  {
-            //            qDebug() << "2 REFUSE";
             return;
         }
         else if (firstIndex.row() < wid->getRepeatData()->getFirstRow() && lastIndex.row() > wid->getRepeatData()->getLastRow())  {
-            //            qDebug() << "3 REFUSE";
             return;
         }
     }
-
 
 
     ui->pushButton_repeat->setEnabled(true);
@@ -529,7 +475,6 @@ void WorkoutCreator::tableViewSelectionChanged(QItemSelection, QItemSelection) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::on_pushButton_add_clicked()
 {
     intervalModel->insertRow(intervalModel->rowCount());
@@ -538,8 +483,6 @@ void WorkoutCreator::on_pushButton_add_clicked()
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::on_pushButton_copy_clicked()
 {
 
@@ -557,8 +500,6 @@ void WorkoutCreator::on_pushButton_copy_clicked()
 }
 
 
-
-//--------------------------------------------------------------------------------------------------------
 void WorkoutCreator::on_pushButton_delete_clicked()
 {
 
@@ -578,7 +519,6 @@ void WorkoutCreator::on_pushButton_delete_clicked()
     std::sort(lstIndex.begin(), lstIndex.end(), std::less<QModelIndex>());
 
     ////////////////////---------------------------------------------------------------
-
 
 
     foreach (RepeatWidget *wid, lstRepeatWidget)
@@ -616,7 +556,6 @@ void WorkoutCreator::on_pushButton_delete_clicked()
     }
 
 
-
     ///Start to remove from the end
     for (int i=lstIndex.count() - 1; i >= 0; --i) {
         qDebug() << "Deleting row no:" << lstIndex.at(i).row();
@@ -629,7 +568,6 @@ void WorkoutCreator::on_pushButton_delete_clicked()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
 // Spread the table's width across the columns so it always fills the viewport:
 // it stays usable on small screens and takes advantage of large ones. Column 0
 // (the drag handle) keeps a fixed narrow width; the rest share the remaining
@@ -682,7 +620,6 @@ void WorkoutCreator::distributeColumnWidths() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
 bool WorkoutCreator::eventFilter(QObject *watched, QEvent *event) {
 
     if (watched == ui->tableView->viewport() && event->type() == QEvent::Resize)
@@ -692,7 +629,6 @@ bool WorkoutCreator::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::ajustRepeatWidgetPosition() {
 
     qDebug() << "ajustRepeatWidgetPosition!";
@@ -717,13 +653,10 @@ void WorkoutCreator::ajustRepeatWidgetPosition() {
     }
 
 
-
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::deletedRepeatWidget(int id) {
-
 
 
     qDebug() << "deletedRepeatWidget" << id;
@@ -756,7 +689,6 @@ void WorkoutCreator::deletedRepeatWidget(int id) {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::updatedRepeatWidget(int id) {
 
     qDebug() << "updatedRepeatWidget" << id;
@@ -765,16 +697,11 @@ void WorkoutCreator::updatedRepeatWidget(int id) {
 }
 
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::createWorkout(const QString& name, const QString& plan, const QString& creator, const QString& description, int type_workout) {
 
 
     qDebug() << "name11:" << name << "creator:" << creator << "desc:" << description << "typeInt:" << type_workout;
     qDebug() << "WORKOUT PATH:" << workout.getFilePath();
-
 
 
     //// ---- Set workout attributes -----
@@ -837,13 +764,6 @@ void WorkoutCreator::createWorkout(const QString& name, const QString& plan, con
 }
 
 
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutCreator::paintEvent(QPaintEvent *) {
     QStyleOption opt;
     opt.initFrom(this);

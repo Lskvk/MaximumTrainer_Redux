@@ -5,7 +5,6 @@
 #include "util.h"
 
 
-
 UserStudioWidget::~UserStudioWidget()
 {
     delete ui;
@@ -80,12 +79,10 @@ UserStudioWidget::UserStudioWidget(int userID, QString displayName, double FTP, 
 }
 
 
-//------------------------------------------------
 void UserStudioWidget::setStopped(bool b) {
     this->isStopped = b;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setPowerSectionHidden() {
 
     ui->frame_power->setVisible(false);
@@ -101,7 +98,6 @@ void UserStudioWidget::setHrSectionHidden() {
     ui->frame_hr->setVisible(false);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setPowerValue(int value) {
 
     if(value < 0) {
@@ -159,7 +155,6 @@ void UserStudioWidget::setPowerValue(int value) {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setCadenceValue(int value) {
 
     if(value < 0) {
@@ -212,7 +207,6 @@ void UserStudioWidget::setCadenceValue(int value) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setHrValue(int value) {
 
     if(value < 0) {
@@ -268,7 +262,6 @@ void UserStudioWidget::setHrValue(int value) {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setTargetPower(double percentageFTP, int range) {
 
 //    qDebug() << "setTargetPower" << percentageFTP << "myFTP is:" << FTP;
@@ -296,7 +289,6 @@ void UserStudioWidget::setTargetPower(double percentageFTP, int range) {
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setTargetCadence(int value, int range) {
 
 
@@ -320,7 +312,6 @@ void UserStudioWidget::setTargetCadence(int value, int range) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setTargetHr(double percentageLTHR, int range) {
 
 
@@ -347,99 +338,72 @@ void UserStudioWidget::setTargetHr(double percentageLTHR, int range) {
 
 
 //POWER
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setMaxIntervalPower(double val) {
 
     ui->label_maxIntervalPower->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setMaxWorkoutPower(double val) {
 
     ui->label_maxWorkoutPower->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgIntervalPower(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgIntervalPower->setText(text);
 
     ui->label_avgIntervalPower->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgWorkoutPower(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgWorkoutPower->setText(text);
 
     ui->label_avgWorkoutPower->setText(QString::number(qRound(val)));
 }
 
 //CAD
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setMaxIntervalCad(double val) {
 
     ui->label_maxIntervalCadence->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setMaxWorkoutCad(double val) {
 
     ui->label_maxWorkoutCadence->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgIntervalCad(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgIntervalCadence->setText(text);
 
     ui->label_avgIntervalCadence->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgWorkoutCad(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgWorkoutCadence->setText(text);
 
     ui->label_avgWorkoutCadence->setText(QString::number(qRound(val)));
 }
 
 //HR
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setMaxIntervalHr(double val) {
 
     ui->label_maxIntervalHr->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setMaxWorkoutHr(double val) {
 
     ui->label_maxWorkoutHr->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgIntervalHr(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgIntervalHr->setText(text);
 
     ui->label_avgIntervalHr->setText(QString::number(qRound(val)));
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgWorkoutHr(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgWorkoutHr->setText(text);
 
     ui->label_avgWorkoutHr->setText(QString::number(qRound(val)));
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setNormalizedPower(double val) {
 
     ui->label_np->setText(QString::number((int)val)); //do not show decimals
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setIntensityFactor(double val) {
 
     QString text =  locale.toString(val, 'f', 2);
@@ -447,20 +411,17 @@ void UserStudioWidget::setIntensityFactor(double val) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setTrainingStressScore(double val) {
 
     ui->label_tss->setText(QString::number((int)val)); //do not show decimals
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setCalories(double val) {
 
     ui->label_kcal->setText(QString::number((int)val)); //do not show decimals
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setResultTest(QString text) {
 
     ui->label_resultTest->setText(text);

@@ -17,10 +17,6 @@
 #include <QWebEngineProfile>
 
 
-
-
-
-
 GlobalVars::GlobalVars(QObject *parent) :
     QObject(parent)
 {
@@ -64,8 +60,6 @@ GlobalVars::GlobalVars(QObject *parent) :
     qRegisterMetaType<QList<Trackpoint> >( "QList<Trackpoint>" );
 
 
-
-
     ///-------- INIT GLOBAL VAR ---------------------------
     Account *account = new Account(this);
     Settings *settings = new Settings(this);
@@ -101,7 +95,6 @@ GlobalVars::GlobalVars(QObject *parent) :
     NetworkMonitor::instance();
 }
 
-//----------------------------------------------------------------------------------
 #ifndef GC_WASM_BUILD
 void GlobalVars::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
 

@@ -13,25 +13,10 @@
 #include "tableviewinterval.h"
 
 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //void IntervalDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 //{
 
-//    QStyleOptionViewItemV4 opt = option;
-//    initStyleOption(&opt, index);
-//    opt.showDecorationSelected = true;
 
-
-
-//    else {
-//        QStyledItemDelegate::paint(painter, option, index);
-//    }
-//}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::setParentWidget(QWidget *parent) {
 
     this->parent = parent;
@@ -39,13 +24,11 @@ void IntervalDelegate::setParentWidget(QWidget *parent) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 
 {
 
 
-    /// Duration;
     if (index.column() == 1 ) {
         QTimeEdit *editor = new QTimeEdit(parent);
         editor->setDisplayFormat("hh:mm:ss");
@@ -91,7 +74,6 @@ QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::closeWidgetEditor() {
 
     qDebug() << "CLOSE EDITOR NOW!";
@@ -103,7 +85,6 @@ void IntervalDelegate::closeWidgetEditor() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::cancelWidgetEditor() {
 
     // Close without committing — discards the edit (Cancel button).
@@ -113,11 +94,9 @@ void IntervalDelegate::cancelWidgetEditor() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 
-    /// Duration;
     if (index.column() == 1 ) {
         QTime time1 = index.model()->data(index, Qt::EditRole).toTime();
         QTimeEdit *timeEdit = static_cast<QTimeEdit*>(editor);
@@ -160,7 +139,6 @@ void IntervalDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                     const QModelIndex &index) const
 {
@@ -213,7 +191,6 @@ void IntervalDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void IntervalDelegate::updateEditorGeometry(QWidget *editor,  const QStyleOptionViewItem &option, const QModelIndex &index ) const {
 
     editor->setGeometry(option.rect);
@@ -244,23 +221,13 @@ void IntervalDelegate::updateEditorGeometry(QWidget *editor,  const QStyleOption
     }
 
 
-
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QSize IntervalDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 
-    //    return QSize(500,200);
 
     return QStyledItemDelegate::sizeHint(option, index);
 
-    //    if (index.data().canConvert<StarRating>()) {
-    //        StarRating starRating = qvariant_cast<StarRating>(index.data());
-    //        return starRating.sizeHint();
-    //    } else {
-    //        return QStyledItemDelegate::sizeHint(option, index);
-    //    }
 }

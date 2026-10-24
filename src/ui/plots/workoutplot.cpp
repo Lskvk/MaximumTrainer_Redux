@@ -21,13 +21,7 @@
 #include "curvedataspeed.h"
 
 
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////
 /// TimeScaleDraw
-////////////////////////////////////////////////////////////////////////////////
 class TimeScaleDraw: public QwtScaleDraw {
 public:
     TimeScaleDraw( const QTime &base ):
@@ -43,7 +37,6 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 WorkoutPlot::~WorkoutPlot() {
 
     qDeleteAll(lstPlotMarket);
@@ -62,7 +55,6 @@ WorkoutPlot::~WorkoutPlot() {
 
 WorkoutPlot::WorkoutPlot(QWidget *parent) : QwtPlot(parent) {
 
-    //     setMouseTracking(true);
 
     isStopped = true;
     lastXClicked = 0;
@@ -88,12 +80,9 @@ WorkoutPlot::WorkoutPlot(QWidget *parent) : QwtPlot(parent) {
     canvas()->setCursor(Qt::CrossCursor);
 
 
-
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::clearPlot() {
 
     //Delete old target
@@ -115,15 +104,12 @@ void WorkoutPlot::clearPlot() {
 
 }
 
-//////////////////////////////////////////////////////////////
 void WorkoutPlot::setUserData(double FTP, double LTHR) {
     this->FTP = FTP;
     this->LTHR = LTHR;
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::setWorkoutData(Workout workout, bool firstInit) {
 
     this->workout = workout;
@@ -137,10 +123,6 @@ void WorkoutPlot::setWorkoutData(Workout workout, bool firstInit) {
 }
 
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::updateAxisHelper() {
 
 
@@ -264,7 +246,6 @@ void WorkoutPlot::updateAxisHelper() {
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool WorkoutPlot::eventFilter(QObject *watched, QEvent *event) {
 
 
@@ -281,13 +262,11 @@ bool WorkoutPlot::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::init(bool firstInit) {
 
     setAutoReplot(false);
 
     updateAxisHelper();
-
 
 
     if (firstInit) {
@@ -311,7 +290,6 @@ void WorkoutPlot::init(bool firstInit) {
         labelAlertMessage->hide();
 
 
-
         labelMsgInterval = new FaderLabel(this);
         labelMsgInterval->setStyleSheet("background-color : rgba(1,1,1,220);"
                                         "border-radius: 15px;"
@@ -322,7 +300,6 @@ void WorkoutPlot::init(bool firstInit) {
         labelMsgInterval->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         labelMsgInterval->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         labelMsgInterval->hide();
-
 
 
         // Difficulty nudge: explicit -/+ buttons around a read-only label. A
@@ -384,7 +361,6 @@ void WorkoutPlot::init(bool firstInit) {
         labelAlertMessage->setFont(fontAlert);
 
 
-        //------------------------------
         widgetCanvas = this->canvas();
         QGridLayout *gridLayout = new QGridLayout();
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -407,9 +383,6 @@ void WorkoutPlot::init(bool firstInit) {
         labelMsg->setAttribute(Qt::WA_TransparentForMouseEvents, true);
         labelAlertMessage->setAttribute(Qt::WA_TransparentForMouseEvents, true);
         labelMsgInterval->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-        //---------------------------------------
-
-
 
 
         QColor colorCadence = Util::getColor(Util::LINE_CADENCE);
@@ -469,13 +442,11 @@ void WorkoutPlot::init(bool firstInit) {
     }
 
 
-
     zoneDone = new ZoneItem( "Zone Done");
     zoneDone->setColor( Util::getColor(Util::DONE) );
     zoneDone->setInterval( 0, 0 );
     zoneDone->setVisible( true );
     zoneDone->attach( this );
-
 
 
     if (workout.getWorkoutNameEnum() != Workout::OPEN_RIDE) {
@@ -498,14 +469,11 @@ void WorkoutPlot::init(bool firstInit) {
     }
 
 
-
-
     qDebug() << "workoutPlot init done";
 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::setStopped(bool stopped) {
 
 
@@ -515,7 +483,6 @@ void WorkoutPlot::setStopped(bool stopped) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::setMessage(QString msg) {
 
     labelMsg->setText(msg);
@@ -527,22 +494,18 @@ void WorkoutPlot::setMessage(QString msg) {
 
 
 }
-//---------------------------------------
 void WorkoutPlot::removeMainMessage() {
     labelMsg->fadeOut(300);
     showingMessage = false;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::setMessageEndWorkout() {
-
 
 
     QString msgEndWorkout = tr("Workout completed!");
     labelMsg->setText(msgEndWorkout);
     labelMsg->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    //    labelMsg->setStyleSheet("background-color : rgba(35,35,35,0);");
 
 
     //    labelMsg->setMaximumHeight(60);
@@ -556,14 +519,7 @@ void WorkoutPlot::setMessageEndWorkout() {
 }
 
 
-
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// setDisplayMessage
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::setDisplayIntervalMessage(bool fadeIn, QString text, int timeToDisplayInSec) {
 
     labelMsgInterval->setText(text);
@@ -578,7 +534,6 @@ void WorkoutPlot::setDisplayIntervalMessage(bool fadeIn, QString text, int timeT
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::setAlertMessage(bool fadeIn, bool fadeOut, QString text, int timeToDisplay) {
 
     labelAlertMessage->setText(text);
@@ -604,12 +559,7 @@ void WorkoutPlot::removeAlertMessage() {
 }
 
 
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// drawGraphIntervals
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::drawGraphIntervals() {
 
 
@@ -638,11 +588,8 @@ void WorkoutPlot::drawGraphIntervals() {
     int i=0;
     Interval lastVal;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     foreach (Interval val, workout.getLstInterval()) {
 
-
-        //        int secInterval = Util::convertQTimeToSec(val.getDurationQTime());
 
         double secInterval = Util::convertQTimeToSecD(val.getDurationQTime());
 
@@ -770,17 +717,12 @@ void WorkoutPlot::drawGraphIntervals() {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::setSpinBoxDisabled() {
 
     widgetDifficulty->hide();
 }
 
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::addMarkerInterval(double time) {
 
     QwtPlotMarker *d_marker1 = new QwtPlotMarker();
@@ -791,7 +733,6 @@ void WorkoutPlot::addMarkerInterval(double time) {
     d_marker1->attach( this );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::increaseDifficulty() {
     adjustDifficultyBy(1);
 }
@@ -830,10 +771,7 @@ void WorkoutPlot::setDifficulty(int percentageIncrease) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::pointClicked(QPointF pt) {
-
-    qDebug() << "point clicked**********************" << pt.x() << "lastXClicked:" << lastXClicked;
 
 
     if (lastXClicked == pt.x())
@@ -861,12 +799,10 @@ void WorkoutPlot::pointClicked(QPointF pt) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::updateMarkerTimeNow(double timeNow_sec) {
 
 
     bool updateAxisBottom = false;
-
 
 
     if (showingMessage) {
@@ -986,58 +922,47 @@ void WorkoutPlot::updateMarkerTimeNow(double timeNow_sec) {
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideTargetPower(bool show) {
     foreach(QwtPlotShapeItem *item, lstTargetPower) {
         item->setVisible(show);
     }
     replot();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideTargetCadence(bool show) {
     foreach(QwtPlotShapeItem *item, lstTargetCadence) {
         item->setVisible(show);
     }
     replot();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideTargetHr(bool show) {
     foreach(QwtPlotShapeItem *item, lstTargetHr) {
         item->setVisible(show);
     }
     replot();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideCurvePower(bool show) {
     powerCurve->setVisible(show);
     replot();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideCurveCadence(bool show) {
     cadenceCurve->setVisible(show);
     replot();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideCurveHeartRate(bool show) {
     hrCurve->setVisible(show);
     replot();
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideCurveSpeed(bool show) {
     speedCurve->setVisible(show);
     replot();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideGrid(bool show) {
     grid->setVisible(show);
     replot();
     qDebug() << "showHideGrid" << show;
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::showHideSeperator(bool show) {
     for (int i=0; i<lstPlotMarkerSeperatorInterval.size(); i++) {
         lstPlotMarkerSeperatorInterval.at(i)->setVisible(show);
@@ -1047,11 +972,6 @@ void WorkoutPlot::showHideSeperator(bool show) {
 }
 
 
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::addShapeFromPoints(const QString &title, const QColor &color, QList<QPointF> lstPoints, int positionZ, bool antiliasing) {
 
     QwtPlotShapeItem  *item = new QwtPlotShapeItem(title);

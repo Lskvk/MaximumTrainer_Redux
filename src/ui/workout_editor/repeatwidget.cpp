@@ -10,14 +10,7 @@ RepeatWidget::~RepeatWidget() {
     delete data;
 }
 
-//void RepeatWidget::moveEvent (QMoveEvent * event) {
 
-//    qDebug() << "MOVE EVENT repeat Widget";
-//}
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 RepeatWidget::RepeatWidget(RepeatData *data, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RepeatWidget)
@@ -44,8 +37,6 @@ RepeatWidget::RepeatWidget(RepeatData *data, QWidget *parent) :
     ui->widget_right->setAttribute(Qt::WA_NoMousePropagation);
 
 
-
-
     this->data = data;
 
     ui->comboBox_repeat->setCurrentText(QString::number(data->getNumberRepeat()));
@@ -59,7 +50,6 @@ RepeatWidget::RepeatWidget(RepeatData *data, QWidget *parent) :
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 
     Q_UNUSED(watched);
@@ -67,9 +57,6 @@ bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 //    ///Check if mouse is on the scroll bar, remove hover effect on the rows
 //    QComboBox *ptrCombo = qobject_cast<QComboBox*>(watched);
 
-//    if (ptrCombo != NULL && event->type() == QEvent::MouseButtonPress) {
-//        qDebug() << "Button Press got here EventFilter!...";
-//    }
 
     if (event->type() == QEvent::MouseButtonPress) {
         qDebug() << "Button Press got here EventFilter!...";
@@ -81,22 +68,16 @@ bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-
-//---------------------------------------------------------
 void RepeatWidget::setRightWidth(int width) {
     ui->widget_right->setFixedWidth(width);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool RepeatWidget::myLessThan(RepeatWidget* left, RepeatWidget* right) {
 
     return (left->getRepeatData()->getFirstRow() < right->getRepeatData()->getFirstRow());
 }
 
 
-
-
-//////////////////////////////////////////////////////////////////////////////
 void RepeatWidget::on_pushButton_delete_clicked()
 {
     emit deleteSignal(data->getId());
@@ -107,5 +88,4 @@ void RepeatWidget::onRepeatCountChanged(const QString &arg1)
     this->data->setNumberRepeat(arg1.toInt());
     emit updateSignal(this->data->getId());
 }
-
 

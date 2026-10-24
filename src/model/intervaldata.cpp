@@ -7,7 +7,6 @@ IntervalData::~IntervalData() {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 IntervalData::IntervalData() {
 
     startTimeInterval.setTimeZone(QTimeZone::UTC);
@@ -39,7 +38,6 @@ IntervalData::IntervalData() {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 IntervalData::IntervalData( const IntervalData& other ) {
 
     this->isFreeRideInterval = other.isFreeRideInterval;
@@ -68,7 +66,6 @@ IntervalData::IntervalData( const IntervalData& other ) {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //bool IntervalData::operator==(const IntervalData &other) const {
 //    if (this->timeSecInterval == other.timeSecInterval && this->startTimeInterval == other.startTimeInterval)
 //        return true;

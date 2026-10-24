@@ -52,10 +52,6 @@
 #include "intervalsummaryutil.h"
 
 
-
-
-
-
 WorkoutDialog::~WorkoutDialog() {
 
     qDebug() << "WorkoutDialog destructor!----------";
@@ -93,9 +89,6 @@ WorkoutDialog::~WorkoutDialog() {
 }
 
 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<UserStudio> vecUserStudio,
                              QWidget *parent) : QDialog(parent), ui(new Ui::WorkoutDialog) {
 
@@ -169,7 +162,6 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     avgCombinedPedalSmooth = QVector<double>(constants::nbMaxUserStudio, -1);
     avgSaturatedHemoglobinPercent1sec = QVector<double>(constants::nbMaxUserStudio, -1);
     avgTotalHemoglobinConc1sec = QVector<double>(constants::nbMaxUserStudio, -1);
-
 
 
     //// ------------- Clock thread -------------------------
@@ -248,7 +240,6 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     soundPowerTooHighActive = true;
     soundCadenceTooLowActive = true;
     soundCadenceTooHighActive = true;
-
 
 
     ///-------------------------- Widget Sensor Loading  ----------------------
@@ -425,7 +416,6 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     ///----------------------------- End Battery widgets ------------------------
 
 
-
     ////  ----------------------  Achievement Window --------------------------
     widgetAchievement = new FaderFrame(ui->widget_allSpeedo);
     widgetAchievement->setAttribute(Qt::WA_TransparentForMouseEvents,true);
@@ -522,14 +512,12 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     connect(this, SIGNAL(pausePlayer()), ui->widgetVideo, SLOT(pause()) );
 
 
-
     // Initialise DataWorkout
     initDataWorkout();
     //createUserStudio Widget
     createUserStudioWidget();
     // Connect DataWorkout
     connectDataWorkout();
-
 
 
     // The embedded media player is now the only video option (the web player
@@ -566,8 +554,6 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
 
     mainPlot = ui->widget_workoutPlot;
 
-    qDebug() << "GOT HERE WORKOTUDI1";
-
 
     currentWorkoutDifficultyPercentage = 0;
 
@@ -588,8 +574,6 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     }
 
 
-
-
     timeElapsedTotal = QTime(0,0,0,0);
 
     trainerControlUserId = -1;
@@ -600,7 +584,6 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     currMAPInterval = 1;
     totalSecOffTargetInInterval = 0;
     totalConsecutiveOffTarget = 0;
-
 
 
     //Dialog config — shown non-modally so the workout session continues uninterrupted (#137)
@@ -655,9 +638,6 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
     connect(this, &WorkoutDialog::F7playPause, ui->widget_topMenu, &TopMenuWorkout::flashRadioPlayPause);
 
 
-
-
-
     //Disable button in Test mode
     if (workout.getWorkoutNameEnum() == Workout::FTP_TEST || workout.getWorkoutNameEnum() == Workout::FTP8min_TEST ||
             workout.getWorkoutNameEnum() == Workout::MAP_TEST ) {
@@ -682,15 +662,12 @@ WorkoutDialog::WorkoutDialog(Workout workout,  QList<Radio> lstRadio, QVector<Us
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::toggleTransparent() {
 
     if (isTransparent) {
         qDebug() << "SHOW NORMAL!";
         //revert back to normal QDialog, use saved stylesheet
         this->setStyleSheet(bakStylesheet);
-        //        Qt::WindowFlags flags = Qt::Window;
-        //        setWindowFlags(flags);
     }
     else {
         qDebug() << "SHOW TRANSPARENT!!";
@@ -702,17 +679,11 @@ void WorkoutDialog::toggleTransparent() {
         setAttribute(Qt::WA_TranslucentBackground);
         setWindowFlags(Qt::FramelessWindowHint); //this close the QDialog if not called in Constructor, why?.
 
-        //        setWindowOpacity(0.5);
-        //        ui->widget_time->setStyleSheet("background:transparent;");
-        //        ui->widget_time->setAttribute(Qt::WA_TranslucentBackground);
-        //        ui->widget_allSpeedo->setWindowOpacity(0.5);
     }
     isTransparent = !isTransparent;
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::addToControlList(int deviceId, int fromHubNumber) {
 
     qDebug() << "Asking Workout Dialog for control" << "deviceId" << deviceId << "fromHubNumber" << fromHubNumber;
@@ -736,10 +707,6 @@ void WorkoutDialog::addToControlList(int deviceId, int fromHubNumber) {
 }
 
 
-
-
-
-//------------------------------------------------------------------------------------------------------------
 void WorkoutDialog::batteryStatusReceived(QString sensorType, int percentage) {
 
     qDebug() << "batteryStatusReceived" << sensorType << "level:" << percentage << "%";
@@ -764,8 +731,6 @@ void WorkoutDialog::batteryStatusReceived(QString sensorType, int percentage) {
 }
 
 
-
-//------------------------------------------------------------------------------------------------------------
 void WorkoutDialog::slotFinishedGetPixmap() {
 
     qDebug() << "slow pixmap finished, show image!";
@@ -780,7 +745,6 @@ void WorkoutDialog::slotFinishedGetPixmap() {
 }
 
 
-//------------------------------------------------------------------------------------------------------------
 void WorkoutDialog::animateAchievement() {
 
 
@@ -806,13 +770,11 @@ void WorkoutDialog::animateAchievement() {
     request.setRawHeader("User-Agent", "MyOwnBrowser 1.0");
     replyGetBixmap = managerWS->get(request);
     connect(replyGetBixmap, SIGNAL(finished()), this, SLOT(slotFinishedGetPixmap()) );
-    //-----------------
     widgetAchievement->setVisible(true);
     widgetAchievement->fadeInAndFadeOutAfterPause(600, 2000, 6500);
     timerLastAnimationAchievementComplete->start(9000); ///Check other achievement to play in the queue
 }
 
-//------------------------------------------------------------------------------------------------------------
 void WorkoutDialog::lastAchievementAnimationDone() {
 
     timerLastAnimationAchievementComplete->stop();
@@ -828,7 +790,6 @@ void WorkoutDialog::lastAchievementAnimationDone() {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::initUI() {
 
     if (!account->enable_studio_mode) {
@@ -931,8 +892,6 @@ void WorkoutDialog::initUI() {
 }
 
 
-
-//-----------------------------------------------------------------------------------------------------------
 void WorkoutDialog::moveWidgetsPosition() {
 
 
@@ -987,13 +946,11 @@ void WorkoutDialog::moveWidgetsPosition() {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::updatePausedTime(double totalTimePaused_msec) {
 
     this->totalTimePausedWorkout_msec = totalTimePaused_msec;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::updateRealTimeGraph(double totalTimeElapsed_msec) {
 
     timeElapsed_sec = totalTimeElapsed_msec /1000;
@@ -1018,7 +975,6 @@ void WorkoutDialog::updateRealTimeGraph(double totalTimeElapsed_msec) {
 
 
 // For MAP Test, check last second average, if it's under the target for more than 20secs total or 10 sec consecutive, MAP test over
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::checkMAPTestOver() {
 
     qDebug() << "checkMAPTestOver!";
@@ -1072,7 +1028,6 @@ void WorkoutDialog::checkMAPTestOver() {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::update1sec(double totalTimeElapsed_sec) {
 
     // Diagnostic (temporary): the log timestamps on this line reveal whether the
@@ -1083,7 +1038,6 @@ void WorkoutDialog::update1sec(double totalTimeElapsed_sec) {
     qDebug() << "[update1sec] clockElapsed=" << totalTimeElapsed_sec
              << "interval" << currentInterval << "/" << workout.getNbInterval();
 
-    //    qDebug() << "#Update 1sec" << totalTimeElapsed_sec;
     int totalTimeElapsed_sec_i = (int)totalTimeElapsed_sec;
 
     // Send last second data to DataWorkout, at second 2, send data received between [second 1 - second 2]
@@ -1175,7 +1129,6 @@ void WorkoutDialog::update1sec(double totalTimeElapsed_sec) {
     }
 
 
-
     if(timeInterval.minute()==0 && timeInterval.hour()== 0 && (timeInterval.second()==account->nb_sec_show_interval_before || timeInterval.second()==3 || timeInterval.second()==2 || timeInterval.second()==1) )  {
         soundsActive = false;
         if (currentInterval+1 != this->workout.getNbInterval()) {
@@ -1231,7 +1184,6 @@ void WorkoutDialog::update1sec(double totalTimeElapsed_sec) {
         // Workout over?
         if ( currentInterval >= workout.getNbInterval() ) {
             emit pauseClock();
-            qDebug()<< "GOT HERE CHECK #3 WORKOUT OVER!!!**";
             workoutOver();
             ui->wid_1_workoutPlot_HeartrateZoom->setPosition(Util::convertQTimeToSecD(workout.getDurationQTime())*1000);
             ui->wid_2_workoutPlot_PowerZoom->setPosition(Util::convertQTimeToSecD(workout.getDurationQTime())*1000);
@@ -1256,8 +1208,6 @@ void WorkoutDialog::update1sec(double totalTimeElapsed_sec) {
 }
 
 
-
-//--------------------------------------------------------------------------------------------------------------
 void WorkoutDialog::lapButtonPressed() {
 
     qDebug() << "LAP BUTTON PRESSED" << timeElapsed_sec;
@@ -1283,13 +1233,11 @@ void WorkoutDialog::lapButtonPressed() {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::adjustWorkoutDifficulty(int percentageIncrease) {
 
     double diffFromActualDifficulty = percentageIncrease - currentWorkoutDifficultyPercentage;
     diffFromActualDifficulty = diffFromActualDifficulty/100.0;
 
-    //    qDebug() << "ADJUST WORKOUT DIFFICULTY!!" << percentageIncrease << "diff100: " << diffFromActualDifficulty;
 
     // Adjust difficulty live — rebuild the targets/plot without pausing. The
     // old code paused here (and never resumed), so every ±% nudge stopped the
@@ -1345,8 +1293,6 @@ void WorkoutDialog::adjustWorkoutDifficulty(int percentageIncrease) {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::insertInterval() {
 
     qDebug() << "INSERT INTERVAL!";
@@ -1389,8 +1335,6 @@ void WorkoutDialog::insertInterval() {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::moveToInterval(int nbInterval, double secWorkout, double startIntervalSec, bool showConfirmation) {
 
     //clear focus on QwtPlot for hotkeys needs focus on this QDialog
@@ -1439,7 +1383,6 @@ void WorkoutDialog::moveToInterval(int nbInterval, double secWorkout, double sta
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
 
     //Calculate timeDone in currentInterval
@@ -1554,7 +1497,6 @@ void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
 }
 
 
-//--------------------------------------------------------------------------------------------------------------
 void WorkoutDialog::moveToNextInterval() {
 
     qDebug() << "moveToNextInterval";
@@ -1578,7 +1520,6 @@ void WorkoutDialog::moveToNextInterval() {
     adjustTargets(newInterval);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::startWorkout() {
 
     // Open each workout in an easy gear; the rider's shifts then persist across
@@ -1610,9 +1551,6 @@ void WorkoutDialog::startWorkout() {
 }
 
 
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::workoutOver() {
 
     isWorkoutOver = true;
@@ -1629,7 +1567,6 @@ void WorkoutDialog::workoutOver() {
     if (account->enable_sound && account->sound_end_workout)
         soundPlayer->playSoundEndWorkout();
 
-//    ui->widget_workoutPlot->setMessageEndWorkout();
     ui->widget_workoutPlot->setDisplayIntervalMessage(true, tr("Workout Completed!"), 20000);
 
     isWorkoutPaused = true;
@@ -1652,13 +1589,11 @@ void WorkoutDialog::workoutOver() {
     showTestResult();
 
 
-
     // Set workout to done
     account->hashWorkoutDone.insert(workout.getName());
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::onBleConnectionError(const QString &errorString)
 {
     // On WASM the DOM overlay (#ble-reconnect-overlay) already provides the
@@ -1670,7 +1605,6 @@ void WorkoutDialog::onBleConnectionError(const QString &errorString)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::checkSensorDropout()
 {
     if (!account->sensor_dropout_enabled) return;
@@ -1796,9 +1730,6 @@ void WorkoutDialog::start_or_pause_workout() {
 }
 
 
-
-
-//--------------------------------------------------------------------------------------------------
 void WorkoutDialog::sendLastSecondData(int seconds) {
 
     if (raceController) {
@@ -1825,8 +1756,6 @@ void WorkoutDialog::sendLastSecondData(int seconds) {
 
     if (account->enable_studio_mode) {
         for (int i=0; i<account->nb_user_studio; i++) {
-            //            qDebug() << "Update Data Workout, User: " << i <<   "HR:" << averageHr1sec.at(i) << "CAD:" << averageCadence1sec.at(i) << "Speed:" << averageSpeed1sec.at(i) << "Power:" << averagePower1sec.at(i) <<
-            //                        "rightPedal:";
             arrDataWorkout[i]->updateData(account->enable_studio_mode, seconds, averageHr1sec.at(i), averageCadence1sec.at(i), averageSpeed1sec.at(i), averagePower1sec.at(i),
                                           avgRightPedal1sec.at(i), avgLeftTorqueEff.at(i), avgRightTorqueEff.at(i), avgLeftPedalSmooth.at(i), avgRightPedalSmooth.at(i), avgCombinedPedalSmooth.at(i),
                                           avgSaturatedHemoglobinPercent1sec.at(i), avgTotalHemoglobinConc1sec.at(i));
@@ -1846,13 +1775,8 @@ void WorkoutDialog::sendLastSecondData(int seconds) {
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::HrDataReceived(int userID, int value) {
 
-
-    //    qDebug() << "UserID" << userID << "userHR:" << value;
 
     // invalid value, show "-" to the user
     if (value == -1) {
@@ -1912,8 +1836,6 @@ void WorkoutDialog::HrDataReceived(int userID, int value) {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::CadenceDataReceived(int userID, int value) {
 
     // Animate the race player's legs at the rider's real cadence.
@@ -1995,8 +1917,6 @@ void WorkoutDialog::CadenceDataReceived(int userID, int value) {
     if (!account->enable_studio_mode && !isAskingUserQuestion && (account->start_trigger == 0) && isWorkoutPaused && !isWorkoutOver && (value > account->value_cadence_start) ) {
         start_or_pause_workout();
     }
-    //----------------
-
 
 
     // Show raw data to the display
@@ -2009,13 +1929,9 @@ void WorkoutDialog::CadenceDataReceived(int userID, int value) {
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::TrainerSpeedDataReceived(int userID, double value) {
     Q_UNUSED(userID);
 
-    //    qDebug() <<  "TrainerSpeedDataReceived" << "userId" << userID << "value" << value;
 
     // invalid value, show "-" to the user
     if (value == -1) {
@@ -2048,7 +1964,6 @@ void WorkoutDialog::TrainerSpeedDataReceived(int userID, double value) {
 
 /// VIRTUAL SPEED, COMING FROM POWER DATA CALCULATED TO SPEED
 /// VALUE IS M/S
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::VirtualSpeedDataReceived(int userID, double valueMS, double timeAtThisSpeedSec) {
 
 
@@ -2064,7 +1979,6 @@ void WorkoutDialog::VirtualSpeedDataReceived(int userID, double valueMS, double 
     double valueKMH = valueMS * 3.6;
 
 
-
     speedDataChosen(userID, valueKMH);
 
     //Update Distance Counter
@@ -2075,7 +1989,6 @@ void WorkoutDialog::VirtualSpeedDataReceived(int userID, double valueMS, double 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// value = KMH,
 void WorkoutDialog::speedDataChosen(int userID, double value) {
 
@@ -2118,9 +2031,6 @@ void WorkoutDialog::speedDataChosen(int userID, double value) {
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::PowerDataReceived(int userID, int value) {
 
     // invalid value, show "-" to the user
@@ -2151,7 +2061,6 @@ void WorkoutDialog::PowerDataReceived(int userID, int value) {
     emit sendPowerData(userID, value);
 
 
-
     // Mark pairing as done
     if (!account->enable_studio_mode && !powerPairingDone) {
         powerPairingDone = true;
@@ -2165,7 +2074,6 @@ void WorkoutDialog::PowerDataReceived(int userID, int value) {
         labelFEC->setStyleSheet("background-color : rgba(1,1,1,220); color : green;");
         checkPairingCompleted();
     }
-
 
 
     const int powerValue = value;
@@ -2228,10 +2136,6 @@ void WorkoutDialog::PowerDataReceived(int userID, int value) {
 }
 
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::PowerBalanceDataReceived(int userID, int rightPedalPercentage) {
 
     ui->wid_2_balancePower->setValue(rightPedalPercentage);
@@ -2242,8 +2146,6 @@ void WorkoutDialog::PowerBalanceDataReceived(int userID, int rightPedalPercentag
 void WorkoutDialog::pedalMetricReceived(int userID, double leftTorqueEff, double rightTorqueEff,
                                         double leftPedalSmooth, double rightPedalSmooth, double combinedPedalSmooth) {
 
-    //    qDebug() << "WorkoutDialog::PEDALMETRIC Received. leftTorqueEff" << leftTorqueEff << "rightTorqueEff" << rightTorqueEff <<
-    //                "leftPedalSmooth" << leftPedalSmooth << "rightPedalSmooth" << rightPedalSmooth << "combinedPedalSmooth" << combinedPedalSmooth;
 
     ui->wid_2_balancePower->pedalMetricChanged(leftTorqueEff, rightTorqueEff, leftPedalSmooth, rightPedalSmooth, combinedPedalSmooth);
 
@@ -2256,7 +2158,6 @@ void WorkoutDialog::pedalMetricReceived(int userID, double leftTorqueEff, double
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::OxygenValueChanged(int userID, double percentageSaturatedHemoglobin, double totalHemoglobinConcentration) { // %, g/d;
 
 
@@ -2274,9 +2175,6 @@ void WorkoutDialog::OxygenValueChanged(int userID, double percentageSaturatedHem
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::sendTargetsPower(double percentageTarget, int range) {
 
 
@@ -2292,7 +2190,6 @@ void WorkoutDialog::sendTargetsPower(double percentageTarget, int range) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::sendTargetsCadence(int target, int range) {
 
     if (account->enable_studio_mode) {
@@ -2307,7 +2204,6 @@ void WorkoutDialog::sendTargetsCadence(int target, int range) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::sendTargetsHr(double percentageTarget, int range) {
 
     if (account->enable_studio_mode) {
@@ -2322,7 +2218,6 @@ void WorkoutDialog::sendTargetsHr(double percentageTarget, int range) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::sendSlopes(double slope) {
 
 
@@ -2342,7 +2237,6 @@ void WorkoutDialog::sendSlopes(double slope) {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Virtual shifting (#293) — drive a single-cog trainer's resistance from a
 // rider-controlled gear instead of sending slope 0 (which spins out).
 void WorkoutDialog::enableTrainerControl() {
@@ -2447,7 +2341,6 @@ void WorkoutDialog::updateGearIndicator() {
         ui->widget_topMenu->updateGear(m_virtualGear, kVirtualGearCount);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::sendLoads(double percentageFTP) {
 
     // Studio mode: no smoothing — each rider has a different FTP, broadcast directly.
@@ -2553,7 +2446,6 @@ void WorkoutDialog::ergSmoothStep()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::targetPowerChanged_f(double percentageTarget, int range) {
 
 
@@ -2592,8 +2484,6 @@ void WorkoutDialog::targetPowerChanged_f(double percentageTarget, int range) {
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::targetCadenceChanged_f(int target, int range) {
 
 
@@ -2606,7 +2496,6 @@ void WorkoutDialog::targetCadenceChanged_f(int target, int range) {
     if (raceController) raceController->setTargetCadence(target, range);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::targetHrChanged_f(double percentageTarget, int range) {
 
     ui->widget_time->setTargetHeartRate(percentageTarget, range);
@@ -2622,8 +2511,6 @@ void WorkoutDialog::targetHrChanged_f(double percentageTarget, int range) {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::adjustTargets(Interval interval) {
 
     if (interval.isTestInterval() || interval.getPowerStepType() == Interval::NONE || workout.getWorkoutNameEnum() == Workout::OPEN_RIDE)
@@ -2672,8 +2559,6 @@ void WorkoutDialog::adjustTargets(Interval interval) {
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double WorkoutDialog::calculateNewTargetPower() {
 
     /// Intervale de base
@@ -2694,7 +2579,6 @@ double WorkoutDialog::calculateNewTargetPower() {
     return y;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 double WorkoutDialog::calculateNewTargetHr() {
 
     /// Intervale de base
@@ -2715,7 +2599,6 @@ double WorkoutDialog::calculateNewTargetHr() {
     return y;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 int WorkoutDialog::calculateNewTargetCadence() {
 
     /// Intervale de base
@@ -2736,7 +2619,6 @@ int WorkoutDialog::calculateNewTargetCadence() {
     return y;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showTimerOnTop(bool showOnTop) {
 
     qDebug() << "SHOW TIMER ON TOP?!" << showOnTop;
@@ -2781,7 +2663,6 @@ void WorkoutDialog::updateTimeWidgetVisibility() {
     ui->widget_time->setVisible(!m_timerOnTop && ui->widget_time->hasVisibleContent());
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 WebBrowserView *WorkoutDialog::ensureWebPlayer() {
     if (!webPlayer) {
         webPlayer = new WebBrowserView(ui->widget_webPlayer);
@@ -2942,7 +2823,6 @@ void WorkoutDialog::showVideoPlayer(int choice) {
 ///1 = Detailed
 ///2 = Graph
 ///3 = Graph & Detailed (power only)
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showHeartRateDisplayWidget(int display) {
     if (account->show_hr_widget) {
         if (display == 1) { /// Detailed
@@ -2959,7 +2839,6 @@ void WorkoutDialog::showHeartRateDisplayWidget(int display) {
         ui->wid_1_infoBoxHr->setVisible(false);
     }
 }
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showPowerDisplayWidget(int display) {
     if (account->show_power_widget) {
         if (display == 1) { /// Detailed
@@ -2980,7 +2859,6 @@ void WorkoutDialog::showPowerDisplayWidget(int display) {
         ui->wid_2_infoBoxPower->setVisible(false);
     }
 }
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showCadenceDisplayWidget(int display) {
     if (account->show_cadence_widget) {
         if (display == 1) { /// Detailed
@@ -2997,7 +2875,6 @@ void WorkoutDialog::showCadenceDisplayWidget(int display) {
         ui->wid_3_infoBoxCadence->setVisible(false);
     }
 }
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showSpeedDisplayWidget() {
     if (account->show_speed_widget) {
         ui->wid_4_infoBoxSpeed->setVisible(true);
@@ -3008,7 +2885,6 @@ void WorkoutDialog::showSpeedDisplayWidget() {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::useVirtualSpeedData(bool useIt){
 
     //Hide Trainer Speed field if we are using this data
@@ -3022,13 +2898,11 @@ void WorkoutDialog::useVirtualSpeedData(bool useIt){
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showTrainerSpeed(bool show) {
 
     ui->wid_4_infoBoxSpeed->setTrainerSpeedVisible(show);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showCaloriesDisplayWidget() {
 
     if (account->show_calories_widget) {
@@ -3039,7 +2913,6 @@ void WorkoutDialog::showCaloriesDisplayWidget() {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showOxygenDisplayWidget() {
 
     if (account->show_oxygen_widget) {
@@ -3051,8 +2924,6 @@ void WorkoutDialog::showOxygenDisplayWidget() {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showPowerBalanceWidget(int display) {
 
     if (account->show_power_balance_widget) {
@@ -3077,7 +2948,6 @@ void WorkoutDialog::showPowerBalanceWidget(int display) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::setMessagePlot() {
 
     if (isWorkoutOver)
@@ -3153,8 +3023,6 @@ void WorkoutDialog::setMessagePlot() {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::setWidgetsStopped(bool b) {
 
     qDebug() << "SetWidgetStopped!";
@@ -3179,8 +3047,6 @@ void WorkoutDialog::setWidgetsStopped(bool b) {
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::achievementReceived(Achievement achievement) {
 
     qDebug() << "\n\n\n-----------------WORKOUT DIALOG, RECVEIVED NEW ACHIEVEMENT  -------------!!!";
@@ -3199,7 +3065,6 @@ void WorkoutDialog::achievementReceived(Achievement achievement) {
     }
 }
 
-//---------------------------------------------------------------------------------
 void WorkoutDialog::checkPairingCompleted() {
 
     if (hrPairingDone && scPairingDone && cadencePairingDone && speedPairingDone && powerPairingDone && oxygenPairingDone && fecPairingDone)
@@ -3218,16 +3083,11 @@ void WorkoutDialog::checkPairingCompleted() {
 }
 
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::closeWindow() {
 
     sureYouWantToQuit();
 }
 
-//////////////////////////////////////////////////////
 void WorkoutDialog::expandWindow() {
 
 
@@ -3242,7 +3102,6 @@ void WorkoutDialog::expandWindow() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
@@ -3296,7 +3155,6 @@ void WorkoutDialog::keyPressEvent(QKeyEvent *event)
     QDialog::keyPressEvent(event);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showEvent(QShowEvent *event) {
 
     QDialog::showEvent(event);
@@ -3327,14 +3185,12 @@ void WorkoutDialog::showEvent(QShowEvent *event) {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::reject() {
 
     sureYouWantToQuit();
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showConfig() {
     emit insideConfig(true);
     dconfig->show();
@@ -3344,7 +3200,6 @@ void WorkoutDialog::showConfig() {
 }
 
 
-//------------------------------------------------------------------------------------------------------
 void WorkoutDialog::sureYouWantToQuit() {
 
     saveInterface();
@@ -3397,8 +3252,6 @@ void WorkoutDialog::sureYouWantToQuit() {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::loadInterface() {
 
     QSettings settings;
@@ -3427,12 +3280,10 @@ void WorkoutDialog::loadInterface() {
         wasFullscreenOnOpen = false;
         isFullScreenFlag = false;
         this->setSizeGripEnabled(true);
-        //        ui->widget_topMenu->setMinExpandExitVisible(false);
         ui->widget_topMenu->updateExpandIcon();
     }
 
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::saveInterface() {
 
     QSettings settings;
@@ -3458,14 +3309,12 @@ void WorkoutDialog::saveInterface() {
 }
 
 
-//------------------------------------------------------------
 void WorkoutDialog::ignoreClickPlot() {
     bignoreClickPlot = false;
     timerIgnoreClickPlot->stop();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::activateSoundBool() {
     soundsActive = true;
     timerCheckToActivateSound->stop();
@@ -3488,7 +3337,6 @@ void WorkoutDialog::activateSoundCadenceTooHigh() {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::checkFitFileCreated() {
 
     qDebug() << "****checkFitFileCreated";
@@ -3514,7 +3362,6 @@ void WorkoutDialog::checkFitFileCreated() {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showPostWorkoutPanel()
 {
     if (widgetPostWorkout) return;  // already shown
@@ -3619,7 +3466,6 @@ void WorkoutDialog::showPostWorkoutPanel()
     widgetPostWorkout->raise();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Updates the post-workout Strava status — the manual button (auto-upload off)
 // or the status label (auto-upload on), whichever is present.
 void WorkoutDialog::setStravaPostStatus(const QString &text, bool retryable)
@@ -3781,7 +3627,6 @@ void WorkoutDialog::slotPostStravaStatusDone()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Updates the post-workout Intervals.icu status — the manual button
 // (auto-upload off) or the status label (auto-upload on), whichever is present.
 void WorkoutDialog::setIntervalsIcuPostStatus(const QString &text, bool retryable)
@@ -3794,7 +3639,6 @@ void WorkoutDialog::setIntervalsIcuPostStatus(const QString &text, bool retryabl
     widgetPostWorkout->adjustSize();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::uploadToIntervalsIcu()
 {
     if (fitFilePath.isEmpty()) return;
@@ -3855,7 +3699,6 @@ void WorkoutDialog::slotPostIntervalsIcuUploadDone()
              QStringLiteral("Intervals.icu upload succeeded (activity ") + activityId + QStringLiteral(")"));
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::closeFitFiles(double timeElapSec) {
 
 
@@ -3872,7 +3715,6 @@ void WorkoutDialog::closeFitFiles(double timeElapSec) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::closeAndDeleteFitFile() {
 
     if (account->enable_studio_mode) {
@@ -3886,7 +3728,6 @@ void WorkoutDialog::closeAndDeleteFitFile() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::changeIntervalsDataWorkout(double timeStarted, double timeNow, int timePaused_msec, bool workoutOver, bool testInterval) {
 
     qDebug () << "changeIntervalsDataWorkout! - timeStarted" << timeStarted << "timeNow" << timeNow << "timePaused_msec" << timePaused_msec << "workoutOver" << workoutOver << "testInterval" << testInterval;
@@ -3925,7 +3766,6 @@ void WorkoutDialog::changeIntervalsDataWorkout(double timeStarted, double timeNo
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::initDataWorkout() {
 
     if (account->enable_studio_mode) {
@@ -3947,7 +3787,6 @@ void WorkoutDialog::initDataWorkout() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showIntervalSummaryOverlay(double avgPower, double avgHr, double avgCad,
                                                int durationSec, double targetPowerFraction)
 {
@@ -3992,10 +3831,6 @@ void WorkoutDialog::showIntervalSummaryOverlay(double avgPower, double avgHr, do
 }
 
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::createUserStudioWidget() {
 
 
@@ -4055,7 +3890,6 @@ void WorkoutDialog::createUserStudioWidget() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showTestResult() {
 
     // May already have been shown when the last test interval finished.
@@ -4109,20 +3943,14 @@ void WorkoutDialog::showTestResult() {
     }
 
 
-
-
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::sendUserInfoToClock() {
 
 
     if (account->enable_studio_mode) {
         for (int i=0; i<account->nb_user_studio; i++) {
-            //            UserStudio myUserStudio = vecUserStudio.at(i);
-            //            double cda = 30;
-            //            double weight = 80;
             emit sendUserInfo(i+1, account->userCda, account->bike_weight_kg + account->weight_kg, account->nb_user_studio);
         }
     }
@@ -4132,9 +3960,6 @@ void WorkoutDialog::sendUserInfoToClock() {
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::connectDataWorkout() {
 
     qDebug() <<  "connectDataWorkout";
@@ -4161,12 +3986,10 @@ void WorkoutDialog::connectDataWorkout() {
             connect(arrDataWorkout[i], SIGNAL(tssChanged(double)), arrUserStudioWidget[i], SLOT(setTrainingStressScore(double)) );
             connect(arrDataWorkout[i], SIGNAL(caloriesWorkoutChanged(double)), arrUserStudioWidget[i], SLOT(setCalories(double)) );
 
-            //             connect(arrDataWorkout[0], SIGNAL(totalDistanceChanged(double)), ui->wid_5_infoWorkout, SLOT(distanceChanged(double)) );
 
         }
     }
 
-    //    else {
     connect(arrDataWorkout[0], SIGNAL(maxHrIntervalChanged(double)), ui->wid_1_infoBoxHr, SLOT(maxIntervalChanged(double)) );
     connect(arrDataWorkout[0], SIGNAL(maxHrWorkoutChanged(double)), ui->wid_1_infoBoxHr, SLOT(maxWorkoutChanged(double)) );
     connect(arrDataWorkout[0], SIGNAL(avgHrIntervalChanged(double)), ui->wid_1_infoBoxHr, SLOT(avgIntervalChanged(double)) );
@@ -4197,17 +4020,14 @@ void WorkoutDialog::connectDataWorkout() {
     // power-model distance only for the player-vs-opponent gap).
     connect(arrDataWorkout[0], &DataWorkout::totalDistanceChanged, this,
             [this](double meters) { if (raceController) raceController->setDisplayDistanceM(meters); });
-    //    }
 
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
 bool WorkoutDialog::eventFilter(QObject *watched, QEvent *event) {
 
     Q_UNUSED(watched);
 
-    //    qDebug() << "EventFilter " << watched << "Event:" << event;
 
     // Only act while this workout window is the active one (an app-level filter
     // otherwise sees every key for every window). isActiveWindow() stays true
@@ -4242,7 +4062,6 @@ bool WorkoutDialog::eventFilter(QObject *watched, QEvent *event) {
         }
 
 
-
         // --- Radio Prev
         else if (keyEvent->key() == Qt::Key_F6) {
             emit F6previous();
@@ -4265,7 +4084,6 @@ bool WorkoutDialog::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::showFullScreenWin() {
 
     qDebug() << "showFullScreenWin";
@@ -4286,7 +4104,6 @@ void WorkoutDialog::showFullScreenWin() {
     isFullScreenFlag = true;
 }
 
-//-----------------------------------------
 void WorkoutDialog::showNormalWin() {
 
     qDebug() << "showNormalWin";
@@ -4299,16 +4116,10 @@ void WorkoutDialog::showNormalWin() {
 #endif
 
     this->setSizeGripEnabled(true);
-    //    ui->widget_topMenu->setMinExpandExitVisible(false);
     ui->widget_topMenu->setMinExpandExitVisible(true);
     ui->widget_topMenu->updateExpandIcon();
 
     isFullScreenFlag = false;
 
 }
-
-
-
-
-
 

@@ -158,9 +158,6 @@ EM_JS(void, js_exposeWasmOAuthBridge, (), {
 #endif // GC_WASM_BUILD
 
 
-
-
-
 void DialogLogin::changeEvent(QEvent *event) {
 
     if (event->type() == QEvent::LanguageChange)
@@ -168,7 +165,6 @@ void DialogLogin::changeEvent(QEvent *event) {
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
 DialogLogin::DialogLogin(QWidget *parent, bool testMode)
     : QDialog(parent), ui(new Ui::DialogLogin)
 {
@@ -313,16 +309,12 @@ DialogLogin::DialogLogin(QWidget *parent, bool testMode)
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onVersionTimeout() {
     if (!replyVersion) return;
     LOG_WARN("DialogLogin", QStringLiteral("Version check timed out after 10 s – aborting"));
     replyVersion->abort();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::slotFinishedGetVersion() {
 
     m_versionTimeout->stop();
@@ -380,11 +372,7 @@ void DialogLogin::slotFinishedGetVersion() {
 }
 
 
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Offline mode
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void DialogLogin::on_checkBox_workOffline_clicked(bool checked)
 {
@@ -396,12 +384,10 @@ void DialogLogin::on_checkBox_workOffline_clicked(bool checked)
 }
 
 
-
 void DialogLogin::on_pushButton_startOffline_clicked()
 {
     loginOffline();
 }
-
 
 
 void DialogLogin::loginOffline()
@@ -426,7 +412,6 @@ void DialogLogin::loginOffline()
 // Silent session restore
 // ─────────────────────────────────────────────────────────────────────────────
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onSilentAuthTimeout()
 {
     LOG_WARN("DialogLogin", QStringLiteral("Silent auth timed out – showing login form"));
@@ -439,7 +424,6 @@ void DialogLogin::onSilentAuthTimeout()
     showLoginForm(false);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onSilentAuthFinished()
 {
     if (!m_silentAuthReply) return;
@@ -490,7 +474,6 @@ void DialogLogin::onSilentAuthFinished()
 // Intervals.icu OAuth2 login
 // ─────────────────────────────────────────────────────────────────────────────
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Opens the Intervals.icu login in the system browser (loopback redirect)
 /// and switches to the browser-wait page (page 1).
 void DialogLogin::onLoginWithIntervalsIcuClicked()
@@ -523,7 +506,6 @@ void DialogLogin::onLoginWithIntervalsIcuClicked()
     emit intervalsIcuOAuthStarted();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onOAuthSucceeded()
 {
     LOG_INFO("DialogLogin", QStringLiteral("Intervals.icu OAuth2 authorization successful"));
@@ -532,7 +514,6 @@ void DialogLogin::onOAuthSucceeded()
     fetchIntervalsIcuDataOAuth(); // switches stacked widget to page 2 (loading)
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onOAuthFailed()
 {
     LOG_WARN("DialogLogin", QStringLiteral("Intervals.icu OAuth2 authorization denied or failed"));
@@ -551,14 +532,12 @@ void DialogLogin::onOAuthFailed()
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onOAuthCancelRequested()
 {
     resetOAuthFlow();
     showLoginForm(false);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::resetOAuthFlow()
 {
     if (!m_oauthFlow)
@@ -568,7 +547,6 @@ void DialogLogin::resetOAuthFlow()
     m_oauthFlow = nullptr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onSwitchAccountClicked()
 {
     m_silentAuthCancelled = true;
@@ -607,13 +585,11 @@ void DialogLogin::onSwitchAccountClicked()
     showLoginForm(false);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::onUseDifferentAccountClicked()
 {
     onSwitchAccountClicked();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Fetch the athlete profile and training zones using the OAuth2 Bearer token.
 /// After success (or timeout), calls loginWithIntervalsIcuIdentity().
 void DialogLogin::fetchIntervalsIcuDataOAuth()
@@ -685,7 +661,6 @@ void DialogLogin::fetchIntervalsIcuDataOAuth()
     m_intervalsIcuTimeout->start(15000);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Provision the account using the Intervals.icu OAuth identity and complete login.
 void DialogLogin::loginWithIntervalsIcuIdentity()
 {
@@ -737,7 +712,6 @@ void DialogLogin::loginWithIntervalsIcuIdentity()
 // Intervals.icu data retrieval slots
 // ─────────────────────────────────────────────────────────────────────────────
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::slotFinishedIntervalsIcuAthlete()
 {
     if (!replyIntervalsIcuAthlete) return;
@@ -767,7 +741,6 @@ void DialogLogin::slotFinishedIntervalsIcuAthlete()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::slotFinishedIntervalsIcuSettings()
 {
     if (!replyIntervalsIcuSettings) return;
@@ -804,14 +777,12 @@ void DialogLogin::slotFinishedIntervalsIcuSettings()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::showLoginForm(bool showExpiredMessage)
 {
     ui->stackedWidget_main->setCurrentIndex(0);
     ui->label_sessionExpired->setVisible(showExpiredMessage);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::clearTokens()
 {
     CredentialStore::remove("intervals_icu", "access_token");
@@ -821,7 +792,6 @@ void DialogLogin::clearTokens()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DialogLogin::completeLogin()
 {
     if (!this->isVisible()) return;
@@ -845,7 +815,6 @@ void DialogLogin::completeLogin()
 // ─────────────────────────────────────────────────────────────────────────────
 #ifdef Q_OS_WASM
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Opens the Intervals.icu OAuth authorization page in a browser popup.
 /// The popup redirects to oauth_callback.html which posts the authorization
 /// code back to this window via window.opener.postMessage, which is then
@@ -870,7 +839,6 @@ void DialogLogin::onWasmOAuthLoginClicked()
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Called (via QMetaObject::invokeMethod) when the OAuth popup posts the
 /// authorization code back to this window.  Validates the CSRF state, then
 /// starts the token exchange.
@@ -906,7 +874,6 @@ void DialogLogin::onWasmOAuthCodeReceived(const QString &code, const QString &st
             this, &DialogLogin::onWasmOAuthTokenExchangeFinished);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Called when the token exchange request finishes.  Parses the Bearer token,
 /// stores credentials, and proceeds to fetch the athlete profile.
 ///

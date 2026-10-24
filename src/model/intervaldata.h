@@ -12,7 +12,6 @@ public:
     IntervalData();
     IntervalData( const IntervalData& other );
     ~IntervalData();
-//    bool operator==(const IntervalData &other) const;
 
 
     bool isFreeRideInterval;
@@ -21,7 +20,6 @@ public:
     int timeSecInterval;
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////
     /// Cadence
     double avgCadence;
     int maxCadence;
@@ -44,10 +42,6 @@ public:
 
     /// Calories
     double calories;
-
-
-
-
 
 
 };

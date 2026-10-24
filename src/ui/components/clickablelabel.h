@@ -4,8 +4,6 @@
 #include <QLabel>
 
 
-
-
 class ClickableLabel : public QLabel
 {
     Q_OBJECT
@@ -19,7 +17,6 @@ public:
         this->isVolumeLabel = isVolumeLabel;
     }
 
-//-------------------------------------------------------
 signals:
     void clicked(bool stateClicked);
 

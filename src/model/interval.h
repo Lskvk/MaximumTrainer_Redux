@@ -29,7 +29,6 @@ public:
              StepType hrStepType, double targetHR_start, double targetHR_end, int HR_range,
              bool testInterval, double repeatInscreaseFTP, int repeatIncreaseCadence, double repeatIncreaseLTHR);
 
-    //    bool operator==(const Interval &other) const;
     friend QDataStream& operator<<(QDataStream& out, const Interval& interval);
     friend QDataStream& operator>>(QDataStream& out, Interval& interval);
 
@@ -104,8 +103,6 @@ public:
     }
 
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////
     QTime getDurationQTime() const;
     static QString getStepTypeToString(StepType type);
     QString getDisplayMessage() const;
@@ -138,7 +135,6 @@ public:
     }
 
 
-
 private:
 
     int sourceRowLstInterval;
@@ -168,15 +164,8 @@ private:
     double repeatIncreaseLTHR;
 
 
-
-
 };
 Q_DECLARE_METATYPE(Interval)
-
-
-
-
-
 
 
 #endif // INTERVAL_H

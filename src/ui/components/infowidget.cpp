@@ -6,11 +6,9 @@
 #include "util.h"
 
 
-
 InfoWidget::~InfoWidget() {
     delete ui;
 }
-
 
 
 InfoWidget::InfoWidget(QWidget *parent) : QWidget(parent), ui(new Ui::InfoWidget) {
@@ -48,26 +46,13 @@ InfoWidget::InfoWidget(QWidget *parent) : QWidget(parent), ui(new Ui::InfoWidget
 }
 
 
-//void InfoWidget::setFreeRideMode() {
-
-//    ui->label_AvgIntervalTxt->setVisible(false);
-//    ui->label_avgInterval->setVisible(false);
-//    ui->label_maxInterval->setVisible(false);
-
-//    ui->label_WorkoutTxt->setVisible(false);
-//    ui->label_range->setVisible(false);
-
-
 //    ///Move Icon and value 1 column to the right
 //    QLabel *labelIcon = ui->label_image;
 //    QLabel *labelValue = ui->label_currentValue;
 //    ui->gridLayout->addWidget(labelIcon,0,3,1,1, Qt::AlignLeft);
 //    ui->gridLayout->addWidget(labelValue,0,4,1,1, Qt::AlignLeft);
 
-//}
 
-
-//////////////////////////////////////////////////////////////
 void InfoWidget::setUserData(double FTP, double LTHR) {
     this->FTP = FTP;
     this->LTHR = LTHR;
@@ -75,7 +60,6 @@ void InfoWidget::setUserData(double FTP, double LTHR) {
 
 
 ///Only for speed widget
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setValue(double v) {
 
     // Rowing (Beta): the speed channel carries the pace-equivalent km/h from
@@ -123,14 +107,11 @@ void InfoWidget::setTrainerSpeed(double v) {
         ui->label_trainerSpeed->setText("" + QString::number(v, 'f', 1));
 
 
-//        ui->label_trainerSpeedTxt->setText(" " + QString::number(v, 'f', 1));
     }
 
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setValue( int value ) {
 
 
@@ -187,10 +168,7 @@ void InfoWidget::setValue( int value ) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::targetChanged(double percentageValue, int range) {
-
-    //    qDebug() << "infoBox: targetChanged" << target << "r:" << range;
 
 
     if (percentageValue < 0) { //no target
@@ -213,7 +191,6 @@ void InfoWidget::targetChanged(double percentageValue, int range) {
         realTarget = qRound(percentageValue * LTHR);
     }
 
-    //    ui->label_targetValue->setText(QString::number(target) + " (±" + QString::number(range)  + ")");
     ui->label_targetValue->setText(QString::number(realTarget));
 
 
@@ -221,7 +198,6 @@ void InfoWidget::targetChanged(double percentageValue, int range) {
     this->targetRange = range;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 
 void InfoWidget::maxIntervalChanged(double avg) {
 
@@ -239,7 +215,6 @@ void InfoWidget::maxIntervalChanged(double avg) {
     }
 
 }
-//----------------------------------------------------
 void InfoWidget::maxWorkoutChanged(double avg) {
 
     if (type == InfoWidget::SPEED) {
@@ -254,7 +229,6 @@ void InfoWidget::maxWorkoutChanged(double avg) {
         ui->label_maxWorkout->setText(QString::number(qRound(avg)));
     }
 }
-//----------------------------------------------------
 void InfoWidget::avgIntervalChanged(double avg) {
 
     if (useMile)
@@ -264,7 +238,6 @@ void InfoWidget::avgIntervalChanged(double avg) {
     ui->label_avgInterval->setText(text);
 
 }
-//----------------------------------------------------
 void InfoWidget::avgWorkoutChanged(double avg) {
 
     if (useMile)
@@ -275,10 +248,6 @@ void InfoWidget::avgWorkoutChanged(double avg) {
 }
 
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setTypeInfoBox(TypeInfoBox type) {
 
 
@@ -334,7 +303,6 @@ void InfoWidget::setTypeInfoBox(TypeInfoBox type) {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setRowingMode(bool rowing) {
     rowingMode = rowing;
     if (!rowing)
@@ -354,7 +322,6 @@ void InfoWidget::setRowingMode(bool rowing) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::setStopped(bool b) {
     isStopped = b;
 }

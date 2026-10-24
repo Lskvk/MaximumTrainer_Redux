@@ -14,9 +14,7 @@ class UpdateDialog : public QDialog
 public:
     explicit UpdateDialog(const QString &latestVersion, QWidget *parent = 0);
     ~UpdateDialog();
-//    void reject();
     void accept();
-
 
 
 private:

@@ -16,10 +16,7 @@ void ZoneItem::setColor( const QColor &color )
 {
     QColor c = color;
 
-//    c.setAlpha( 100 );
-//    setPen( c );
 
-//    c.setAlpha( 10 );
     setBrush( c );
 }
 

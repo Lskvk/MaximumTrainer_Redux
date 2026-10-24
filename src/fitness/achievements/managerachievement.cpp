@@ -19,8 +19,6 @@ ManagerAchievement::ManagerAchievement(QObject *parent) : QObject(parent)
 }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ManagerAchievement::checkMAPAchievement(int lastStepCompleted) {
 
 
@@ -47,15 +45,9 @@ void ManagerAchievement::checkMAPAchievement(int lastStepCompleted) {
         emit achievementCompleted(lstAchievement.at(indexVal));    }
 
 
-
 }
 
 
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void ManagerAchievement::workoutCompleted(Workout workout) {
 
     // list could be empty if fetch achievement from DB failed
@@ -97,9 +89,5 @@ void ManagerAchievement::workoutCompleted(Workout workout) {
         emit achievementCompleted(lstAchievement.at(indexVal));    }
 
 
-
-
-
 }
-
 

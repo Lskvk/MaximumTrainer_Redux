@@ -8,7 +8,6 @@ class ZoneItem : public QwtPlotZoneItem
 public:
     ZoneItem(const QString &title );
     void setColor( const QColor &color );
-//    void setInterval( const QDate &date1, const QDate &date2 );
 
 };
 

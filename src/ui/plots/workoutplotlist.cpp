@@ -10,12 +10,7 @@
 #include <QPen>
 
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////
 /// TimeScaleDraw
-////////////////////////////////////////////////////////////////////////////////
 class TimeScaleDraw: public QwtScaleDraw {
 public:
     TimeScaleDraw( const QTime &base ):
@@ -31,7 +26,6 @@ private:
 };
 
 
-
 WorkoutPlotList::WorkoutPlotList(QWidget *parent) : QwtPlot(parent) {
 
     account = qApp->property("Account").value<Account*>();
@@ -40,9 +34,7 @@ WorkoutPlotList::WorkoutPlotList(QWidget *parent) : QwtPlot(parent) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// setWorkoutData
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotList::setWorkoutData(Workout workout) {
 
     this->workout = workout;
@@ -50,9 +42,7 @@ void WorkoutPlotList::setWorkoutData(Workout workout) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// init
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotList::init() {
 
     setAutoReplot( false );
@@ -65,7 +55,6 @@ void WorkoutPlotList::init() {
     setAxisScale( QwtPlot::yLeft, 0.0, max_power+25, 50);
 
 
-
     QTime timeStartWorkout(0, 0, 0);
     setAxisScaleDraw( QwtPlot::xBottom, new TimeScaleDraw( timeStartWorkout ) );
 
@@ -73,8 +62,6 @@ void WorkoutPlotList::init() {
     QTime durationQTime = workout.getDurationQTime();
     int secTotal = Util::convertQTimeToSecD(durationQTime);
     setAxisScale( QwtPlot::xBottom, 0, secTotal, 1800 );
-
-
 
 
     canvas()->setStyleSheet(" QwtPlotCanvas { background-color: rgb(35, 35, 35); }");
@@ -91,9 +78,7 @@ void WorkoutPlotList::init() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// drawGraphIntervals
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotList::drawGraphIntervals() {
 
 
@@ -124,7 +109,6 @@ void WorkoutPlotList::drawGraphIntervals() {
     int i=0;
     Interval lastVal;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     foreach (Interval val, workout.getLstInterval()) {
 
         int secInterval = Util::convertQTimeToSecD(val.getDurationQTime());
@@ -192,7 +176,6 @@ void WorkoutPlotList::drawGraphIntervals() {
         }
 
 
-
         /// MARKER SEPARATE INTERVALS
         //        if (i!=0 && i < workout.getNbInterval() ) {
         //            QwtPlotMarker *d_marker1 = new QwtPlotMarker();
@@ -213,9 +196,6 @@ void WorkoutPlotList::drawGraphIntervals() {
 }
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotList::addShapeFromPoints(const QString &title, const QColor &color, QList<QPointF> lstPoints, int positionZ, bool antiliasing) {
 
     QwtPlotShapeItem  *item = new QwtPlotShapeItem(title);
@@ -232,5 +212,4 @@ void WorkoutPlotList::addShapeFromPoints(const QString &title, const QColor &col
     item->attach(this);
 
 }
-
 

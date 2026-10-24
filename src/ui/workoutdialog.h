@@ -76,7 +76,6 @@ public:
     void showPowerBalanceWidget(int display);
 
 
-
     void setMessagePlot();
     void moveWidgetsPosition();
 
@@ -89,8 +88,6 @@ public:
     void updateTimeWidgetVisibility();
 
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 signals:
     ///Clock
     void startClock();
@@ -121,14 +118,8 @@ signals:
     void permissionGrantedControl(int deviceId, int hubID);
 
 
-    //    void targetPowerChanged(double percentageTarget, int target, int range);
-    //    void targetCadenceChanged(double notUsed, int target, int range);
-    //    void targetHrChanged(double percentageTarget, int target, int range);
-
-
     /// After data passing thru xDataReceived Slot
     //    void powerChangedAfterTreatment(int power);
-
 
 
     void ftpUserStudioChanged(QVector<UserStudio>);
@@ -150,7 +141,6 @@ signals:
     // Connect to BtleHub::scanForDevice() (WASM) or BtleHub::connectToDevice()
     // (desktop) in MainWindow::executeWorkout().
     void reconnectDevice();
-
 
 
 public slots:
@@ -206,11 +196,6 @@ public slots:
     void lastAchievementAnimationDone();
 
 
-
-
-
-
-
 private slots:
 
     void speedDataChosen(int userID, double value);
@@ -238,7 +223,6 @@ private slots:
     void slotPostStravaStatusDone();
 
 
-
 private:
 
     void keyPressEvent(QKeyEvent *event) override;
@@ -258,7 +242,6 @@ private:
     void sendUserInfoToClock();
 
     void showTestResult();
-
 
 
     void sendTargetsPower(double percentageTarget, int range);
@@ -300,9 +283,6 @@ private:
     void sureYouWantToQuit();
 
 
-
-
-    //-----------------------------------------
 private:
     bool isUsingSlopeMode;
 
@@ -379,7 +359,6 @@ private:
     bool isAskingUserQuestion;
 
 
-
     /// Achievement window
     FaderFrame *widgetAchievement;
     QLabel *labelIcon;
@@ -402,7 +381,6 @@ private:
     QTimer        *timerPostStravaStatus   = nullptr;
     qint64         stravaUploadID_post     = 0;
     QNetworkReply *replyPostIntervalsIcuUpload = nullptr;
-
 
 
     QString msgPairingDone;
@@ -438,7 +416,6 @@ private:
 
 
     void checkPairingCompleted();
-    /////////////////////////
 
 
     QString bakStylesheet;
@@ -450,7 +427,6 @@ private:
 
 
     QHash<int,int> hashControlList; //addId, hubId
-    //    int nbTotalFecTrainer;
 
 
     Workout workout;
@@ -492,8 +468,6 @@ private:
     QVector<double> avgTotalHemoglobinConc1sec;
 
 
-
-
     double lastIntervalEndTime_sec;
 
     //to determine pausedTime
@@ -502,7 +476,6 @@ private:
 
     int lastIntervalEndTime_msec;
     double timeElapsed_sec;
-    //    double skippedTime_sec;
 
     // The clock thread ticks every 25ms (40Hz) so virtual-speed physics stays
     // smooth, but the three scrolling mini-graphs only need a fraction of that
@@ -514,7 +487,6 @@ private:
     QTime timeWorkoutRemaining;
     QTime timeElapsedTotal;
     QTime timeInterval;
-
 
 
     bool isWorkoutStarted;

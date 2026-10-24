@@ -67,7 +67,6 @@ TopMenuWorkout::~TopMenuWorkout()
 }
 
 
-
 TopMenuWorkout::TopMenuWorkout(QWidget *parent) : QWidget(parent), ui(new Ui::TopMenuWorkout)
 {
     ui->setupUi(this);
@@ -155,7 +154,6 @@ TopMenuWorkout::TopMenuWorkout(QWidget *parent) : QWidget(parent), ui(new Ui::To
     ui->pushButton_exit->setFocusPolicy(Qt::NoFocus);
 
 
-
 #ifdef Q_OS_WIN32
     ui->pushButton_expand->installEventFilter(this);
     ui->pushButton_expand->setStyleSheet("QPushButton#pushButton_expand{image: url(:/image/icon/exp1);border-radius: 1px;}");
@@ -170,9 +168,7 @@ TopMenuWorkout::TopMenuWorkout(QWidget *parent) : QWidget(parent), ui(new Ui::To
     ui->pushButton_start->setMinimumWidth(130);
     ui->pushButton_lap->setMinimumWidth(130);
 
-    //ui->pushButton_start->setIcon(QIcon());
 #endif
-
 
 
     timeUpdateTime = new QTimer(this);
@@ -262,7 +258,6 @@ void TopMenuWorkout::flashRadioNext()      { flashWidget(ui->pushButton_nextRadi
 void TopMenuWorkout::flashRadioPlayPause() { flashWidget(ui->pushButton_playPauseRadio); }
 
 
-////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::radioStartedPlaying() {
     ui->pushButton_playPauseRadio->setIcon(
         tintedStandardIcon(style(), QStyle::SP_MediaPause, QSize(20, 20), QColor(230, 230, 230)));
@@ -274,7 +269,6 @@ void TopMenuWorkout::radioStoppedPlaying() {
 }
 
 
-//------------------------------------------------------------
 void TopMenuWorkout::setCurrentTime() {
 
     QTime time = QTime::currentTime();
@@ -282,13 +276,11 @@ void TopMenuWorkout::setCurrentTime() {
     ui->label_currentTime->setText(timeTxt);
 }
 
-//-----------------------------------------------------------------------------------------------------------------------------------
 bool TopMenuWorkout::eventFilter(QObject *watched, QEvent *event) {
 
 
     Q_UNUSED(watched);
 
-    //    qDebug() << "watched object" << watched << "event:" << event << "eventType" << event->type();
 
     if(event->type() == QEvent::HoverEnter)
     {
@@ -303,18 +295,10 @@ bool TopMenuWorkout::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-
-
 ////-----------------------------------------------------------------------------------------------------------------------------------
 //void TopMenuWorkout::setFreeRideMode() {
 
 
-//    ui->label_intervalTime->setVisible(false);
-//    ui->progressBar_interval->setVisible(false);
-
-//}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setMinExpandExitVisible(bool visible) {
 
 
@@ -326,12 +310,10 @@ void TopMenuWorkout::setMinExpandExitVisible(bool visible) {
 }
 
 
-//-----------------------------------------
 void TopMenuWorkout::on_pushButton_expand_clicked()
 {
     emit expand();
 }
-//-----------------------------------------
 void TopMenuWorkout::on_pushButton_config_clicked()
 {
     emit config();
@@ -343,10 +325,6 @@ void TopMenuWorkout::on_pushButton_exit_clicked()
 }
 
 
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::updateRadioStatus(QString status) {
 
     ui->label_radioStatus->setText(status);
@@ -365,7 +343,6 @@ void TopMenuWorkout::updateRadioVolume(int percent) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::updateExpandIcon() {
 
     ui->pushButton_expand->setIcon(
@@ -373,7 +350,6 @@ void TopMenuWorkout::updateExpandIcon() {
     ui->pushButton_expand->setIconSize(QSize(20, 20));
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::changeConfigIcon(bool insideConfig) {
 
     // Tinted gear glyph (see constructor). Brighten when the config dialog is
@@ -384,8 +360,6 @@ void TopMenuWorkout::changeConfigIcon(bool insideConfig) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void TopMenuWorkout::setButtonStartReady(bool ready) {
     ui->pushButton_start->setVisible(ready);
 }
@@ -394,30 +368,8 @@ void TopMenuWorkout::setWorkoutNameLabel(QString label) {
     ui->label_nameWorkout->setText(label);
 }
 
-//void TopMenuWorkout::setWorkoutTime(QString time) {
-//    ui->labelTime->setText(time);
-//}
 
-//void TopMenuWorkout::setIntervalTime(QString time) {
-//    ui->label_intervalTime->setText(time);
-//}
-
-//void TopMenuWorkout::setProgressBarMaximum(int value) {
-//    ui->progressBar_interval->setMaximum(value);
-//}
-
-//void TopMenuWorkout::setProgressBarCurrent(int value) {
-//    ui->progressBar_interval->setValue(value);
-//}
-
-//void TopMenuWorkout::setProgressBarMinus1() {
-//    ui->progressBar_interval->setValue(ui->progressBar_interval->value()-1);
-//}
-
-
-//-------------------------------------------------------------------------
 void TopMenuWorkout::setButtonStartPaused(bool showPause) {
-
 
 
     const QSize startIconSize(16, 16);
@@ -435,31 +387,25 @@ void TopMenuWorkout::setButtonStartPaused(bool showPause) {
 
 }
 
-//-------------------------------------------------------------------------
 void TopMenuWorkout::on_pushButton_start_clicked()
 {
     emit startOrPause();
 
 
-
-
 }
 
 
-//-------------------------------------------------------------------------
 void TopMenuWorkout::setButtonLapVisible(bool visible) {
     ui->pushButton_lap->setHidden(!visible);
 }
 
 
-//-------------------------------------------------------------------------
 void TopMenuWorkout::on_pushButton_lap_clicked()
 {
     emit lap();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setTimersVisible(bool visible) {
 
 
@@ -468,7 +414,6 @@ void TopMenuWorkout::setTimersVisible(bool visible) {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setFreeRideMode() {
 
     ui->label_intervalTime->setToolTip(tr("Elapsed Interval"));
@@ -480,7 +425,6 @@ void TopMenuWorkout::setFreeRideMode() {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setMAPMode() {
 
 
@@ -491,7 +435,6 @@ void TopMenuWorkout::setMAPMode() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setIntervalTime(QTime time) {
 
     ui->label_intervalTime->setText(Util::showQTimeAsString(time));
@@ -508,14 +451,11 @@ void TopMenuWorkout::setWorkoutTime(QTime time) {
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::showIntervalRemaining(bool show) {
 
     ui->label_intervalTime->setVisible(show);
     ui->label_dash3->setVisible(show);
 }
-/////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::showWorkoutRemaining(bool show) {
 
     qDebug() << "TOP MENU, show Workout Remaining" << show;
@@ -530,7 +470,6 @@ void TopMenuWorkout::showWorkoutRemaining(bool show) {
     ui->label_dash2->setVisible(show);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::showWorkoutElapsed(bool show) {
 
     ui->label_timeElapsed->setVisible(show);
@@ -550,7 +489,6 @@ void TopMenuWorkout::showCurrentTarget(bool show) {
     ui->label_rangeHr->setVisible(show && hasTargetHr);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setTargetPower(double percentageFTP, int range) {
 
 
@@ -572,7 +510,6 @@ void TopMenuWorkout::setTargetPower(double percentageFTP, int range) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setTargetCadence(int cadence, int range) {
 
 
@@ -594,7 +531,6 @@ void TopMenuWorkout::setTargetCadence(int cadence, int range) {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setTargetHeartRate(double percentageLTHR, int range) {
 
 
@@ -616,7 +552,6 @@ void TopMenuWorkout::setTargetHeartRate(double percentageLTHR, int range) {
 
 }
 
-////////////////////////////////////////////////////////////
 void TopMenuWorkout::on_pushButton_prevRadio_clicked()
 {
     flashWidget(ui->pushButton_prevRadio);

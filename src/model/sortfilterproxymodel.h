@@ -13,7 +13,6 @@ public:
     void setFilterKeyColumns(const QList<qint32> &filterColumns);
     void addFilterColumn(qint32 column);
     void addFilterFixedString(qint32 column, const QString &pattern);
-//    void addFilterInt(int value);
 
     void addFilterWorkoutType(Workout::WORKOUT_NAME workoutType);
 
@@ -29,7 +28,6 @@ private:
     Workout::WORKOUT_NAME workoutType;
 
 };
-
 
 
 #endif // SORTFILTERPROXYMODEL_H

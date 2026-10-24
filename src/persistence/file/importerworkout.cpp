@@ -13,11 +13,7 @@ ImporterWorkout::ImporterWorkout(QObject *parent) : QObject(parent)
 }
 
 
-
-//-------------------------------------------------------------------------------------------
 bool ImporterWorkout::batchImportWorkoutFromFolder(QString folderName, int userFTP) {
-
-
 
 
     // Find all filename to convert
@@ -49,13 +45,11 @@ bool ImporterWorkout::batchImportWorkoutFromFolder(QString folderName, int userF
     }
 
 
-
     return true;
 
 
 }
 
-//-------------------------------------------------------------------------------------------
 Workout ImporterWorkout::importWorkoutFromFile(QString filename, int userFTP) {
 
     //Support .erg and .mrc workout extension for now
@@ -76,7 +70,6 @@ Workout ImporterWorkout::importWorkoutFromFile(QString filename, int userFTP) {
 }
 
 
-//--------------------------------------------------------------------------
 Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
 
 
@@ -84,7 +77,6 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
     int posLastSlash = filename.lastIndexOf("/");
     int posDot = filename.lastIndexOf(".");
     QString name = filename.mid(posLastSlash+1, posDot-posLastSlash-1);
-
 
 
     QString description = "Imported description";
@@ -114,7 +106,6 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
     double timeMinEnd;
     double ftpPercStart = 0.0;
     double ftpPercEnd = 0.0;
-
 
 
     // Read file, line by line or readAll and parse QString?
@@ -233,11 +224,9 @@ Workout ImporterWorkout::parseMrcErgFile(QString filename, int userFTP) {
     }
 
 
-
     Workout workout("", Workout::USER_MADE, lstInterval,
                     name, author, description, plan, Workout::T_ENDURANCE);
     return workout;
 
 }
-
 

@@ -26,8 +26,6 @@ public:
 public slots:
     void pedalMetricChanged(double leftTorqueEff, double rightTorqueEff,
                             double leftPedalSmooth, double rightPedalSmooth, double combienedPedalSmooth);
-//    void rightPowerChanged(int value);
-
 
 
 private:

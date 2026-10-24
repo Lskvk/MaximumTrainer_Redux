@@ -72,7 +72,6 @@ WebBrowserView::WebBrowserView(QWidget *parent) : QWidget(parent)
 
 WebBrowserView::~WebBrowserView() = default;
 
-//----------------------------------------------------------------------------------------
 void WebBrowserView::loadHomePageIfNeeded()
 {
     if (homePageLoaded)
@@ -96,14 +95,12 @@ void WebBrowserView::loadHomePageIfNeeded()
     homePageLoaded = true;
 }
 
-//----------------------------------------------------------------------------------------
 void WebBrowserView::hideToolbar()
 {
     timerHideToolbar->stop();
     toolBar->setVisible(false);
 }
 
-//------------------------------------------------------------------------------------------------
 bool WebBrowserView::eventFilter(QObject *watched, QEvent *event)
 {
     Q_UNUSED(watched);
@@ -134,25 +131,21 @@ bool WebBrowserView::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-//----------------------------------------------------------------------------------------
 void WebBrowserView::changeLocation()
 {
     webEngineView->load(QUrl::fromUserInput(locationEdit->text()));
 }
 
-//----------------------------------------------------------------------------------------
 void WebBrowserView::adjustLocation()
 {
     locationEdit->setText(webEngineView->url().toString());
 }
 
-//------------------------------------------------------------------------------
 void WebBrowserView::updateUrlOfLineEdit(const QUrl &url)
 {
     locationEdit->setText(url.toString());
 }
 
-//-----------------------------------------------------------------
 // Finds the first <video> element on the page (or inside a same-origin iframe)
 // and plays/pauses it, so the workout's start/pause controls also drive the
 // embedded video.

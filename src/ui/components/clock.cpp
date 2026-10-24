@@ -26,22 +26,15 @@ Clock::Clock(QString objectName, QObject *parent) :
     timerClock = new QTimer(this);
     connect(timerClock, SIGNAL(timeout()), this, SLOT(timerClockTimeout()) );
 
-    //    d_clock.start();
-    //    pauseClock();
 
     // for virtual speed
     timerSpeed = new QTimer(this);
     connect(timerSpeed, SIGNAL(timeout()), this, SLOT(timerSpeedTimeout()) );
 
 
-
-
 }
 
 
-
-
-//////////////////////////////////////////////////////////////////////////
 void Clock::startClock()  {
 
     qDebug() << "starting clock object";
@@ -50,15 +43,12 @@ void Clock::startClock()  {
     timerClock->start(timerClockMs);
 }
 
-//-------------------------------------------------------------------
 void Clock::finishClock() {
 
     emit finished();
 }
 
 
-
-//----------------------------
 void Clock::pauseClock() {
 
     pauseActivatedAt_time_msec = d_clock.elapsed();
@@ -67,7 +57,6 @@ void Clock::pauseClock() {
     timerClock->stop();
 }
 
-//----------------------------
 void Clock::resumeClock() {
 
     resumeActivatedAt_time_msec = d_clock.elapsed();
@@ -81,7 +70,6 @@ void Clock::resumeClock() {
 }
 
 
-//-------------------------------------------------------------------
 void Clock::timerClockTimeout() {
 
 
@@ -102,16 +90,6 @@ void Clock::timerClockTimeout() {
 }
 
 
-
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Clock::startClockSpeed() {
 
     qDebug() << "STarting clock speed!";
@@ -125,7 +103,6 @@ void Clock::startClockSpeed() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Clock::receiveUserInfo(int userID, double cda, double weightKG, int nbUser) {
 
     qDebug() << "OK RECEIVED USER INFO!" << userID << "cda" << cda << "w:" << weightKG << "nbUser" << nbUser;
@@ -146,13 +123,11 @@ void Clock::receiveUserInfo(int userID, double cda, double weightKG, int nbUser)
 
 
 // Speed Related
-/////////////////////////////////////////////////////////////////////////
 void Clock::receivePowerData(int userID, int powerWatts) {
 
     this->currentPowerWatts[userID-1] = powerWatts;
 }
 
-/////////////////////////////////////////////////////////////////////////
 void Clock::receiveSlopeData(int userID, double slope) {
 
 
@@ -160,15 +135,12 @@ void Clock::receiveSlopeData(int userID, double slope) {
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////
 void Clock::timerSpeedTimeout() {
 
     double totalTimeElapsedNow = d_clock_speed.elapsed();
     double diffTime = totalTimeElapsedNow - totalTimeElapsedLast;
     //diffTime , always smaller than 1 second
 
-    //    qDebug() << "totalTimeElapsedNow" << totalTimeElapsedNow << "totalTimeElapsedLast" << totalTimeElapsedLast << "diffTime" << diffTime;
 
     if (!firstSpeedCheck) {
 
@@ -186,15 +158,10 @@ void Clock::timerSpeedTimeout() {
         }
 
 
-
-
     }
 
 
     totalTimeElapsedLast = totalTimeElapsedNow;
     firstSpeedCheck = false;
 }
-
-
-
 

@@ -28,15 +28,12 @@ BottomBar::BottomBar(QWidget *parent) :
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void BottomBar::setGeneralMessage(const QString& text, int timeToDisplay) {
 
     ui->label_generalMsg->setText( text );
     ui->label_generalMsg->show();
     ui->label_generalMsg->fadeInAndFadeOutAfterPause(400, 1000, timeToDisplay);
 }
-//----------------------------------------------
 void BottomBar::setGeneralMessage(const QString& text) {
 
     ui->label_generalMsg->setText( text );
@@ -45,14 +42,8 @@ void BottomBar::setGeneralMessage(const QString& text) {
 
 
 }
-//---------------------------------------
 void BottomBar::removeGeneralMessage() {
 
     ui->label_generalMsg->fadeOut(500);
 }
-
-
-
-
-
 

@@ -3,13 +3,10 @@
 #include <QDebug>
 
 
-
-
 Sensor::Sensor() {
 
     this->device_id = 0;
 }
-
 
 
 Sensor::Sensor(int device_id, Sensor::SENSOR_TYPE device_type, QString name, QString details) {
@@ -21,8 +18,6 @@ Sensor::Sensor(int device_id, Sensor::SENSOR_TYPE device_type, QString name, QSt
 }
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
 QString Sensor::getName(Sensor::SENSOR_TYPE s) {
 
     if (s == SENSOR_HR) {
@@ -47,8 +42,4 @@ QString Sensor::getName(Sensor::SENSOR_TYPE s) {
         return "NOT SUPPORTED_ SensorEnum getName()";
     }
 }
-
-
-
-
 

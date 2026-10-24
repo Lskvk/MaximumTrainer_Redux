@@ -35,18 +35,12 @@ PowerEditor::PowerEditor(QWidget *parent) : QWidget(parent),ui(new Ui::PowerEdit
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
 
-
-
-
-
-
     ui->gridLayout->setRowMinimumHeight(0,45);
     ui->gridLayout->setRowMinimumHeight(1,45);
 
     MetricEditorVisibility::applyNativeOkCancelButtons(ui->pushButton_ok, ui->pushButton_default);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::setInterval(const Interval &interval) {
     this->myInterval = interval;
 
@@ -72,13 +66,9 @@ void PowerEditor::setInterval(const Interval &interval) {
     }
 
 
-
 }
 
 
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_comboBox_power_currentIndexChanged(int index)
 {
     Interval::StepType typeStep = static_cast<Interval::StepType>(index);
@@ -96,7 +86,6 @@ void PowerEditor::on_comboBox_power_currentIndexChanged(int index)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_comboBox_FTPorWatts_currentIndexChanged(int index)
 {
     if (index == 0) { ///% FTP
@@ -121,8 +110,6 @@ void PowerEditor::on_comboBox_FTPorWatts_currentIndexChanged(int index)
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_spinBox_ftpStart_valueChanged(double arg1)
 {
     // Convert to FTP value
@@ -136,7 +123,6 @@ void PowerEditor::on_spinBox_ftpStart_valueChanged(double arg1)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_spinBox_ftpEnd_valueChanged(double arg1)
 {
     // Convert to FTP value
@@ -153,19 +139,16 @@ void PowerEditor::on_spinBox_ftpEnd_valueChanged(double arg1)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_spinBox_rangePower_valueChanged(int arg1)
 {
     myInterval.setTargetFTP_range(arg1);
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_spinBox_leftBalance_valueChanged(int arg1)
 {
     int restValue = 100-arg1;
     ui->spinBox_rightBalance->setValue(restValue);
     myInterval.setRightPowerTarget(restValue);
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_spinBox_rightBalance_valueChanged(int arg1)
 {
     int restValue = 100-arg1;
@@ -173,7 +156,6 @@ void PowerEditor::on_spinBox_rightBalance_valueChanged(int arg1)
     myInterval.setRightPowerTarget(arg1);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_checkBox_balance_clicked(bool checked)
 {
 
@@ -195,7 +177,6 @@ void PowerEditor::on_checkBox_balance_clicked(bool checked)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 void PowerEditor::on_checkBox_testInterval_clicked(bool checked)
 {
     myInterval.setTestInterval(checked);
@@ -208,13 +189,8 @@ void PowerEditor::on_pushButton_ok_clicked()
 }
 
 
-
-
-
 void PowerEditor::on_pushButton_default_clicked()
 {
     emit cancelEdit();
 }
-
-
 

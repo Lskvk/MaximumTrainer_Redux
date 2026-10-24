@@ -11,7 +11,6 @@ Trackpoint::Trackpoint() {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
 Trackpoint::Trackpoint(double lon, double lat, double elevation, double slopePercentage, double distanceAtThisPoint) {
 
     this->lon = lon;
@@ -20,8 +19,4 @@ Trackpoint::Trackpoint(double lon, double lat, double elevation, double slopePer
     this->slopePercentage = slopePercentage;
     this->distanceAtThisPoint = distanceAtThisPoint;
 }
-
-
-
-
 

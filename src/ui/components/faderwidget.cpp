@@ -3,7 +3,6 @@
 #include <QDebug>
 
 
-
 FaderWidget::FaderWidget(QWidget *parent) :
     QWidget(parent)
 {
@@ -24,18 +23,13 @@ FaderWidget::FaderWidget(QWidget *parent) :
 }
 
 
-
-
-//---------------------------------------------------
 void FaderWidget::fadeOutAfterTimer() {
 
     fadeOut(this->tmpDurationFadeOut);
 }
 
-//---------------------------------------------------------------------------------
 void FaderWidget::fadeIn(int durationMs) {
 
-//    qDebug() << "animateFadeIn FaderWidget" << durationMs;
     anim->stop();
     anim->setDuration(durationMs);
     anim->setStartValue(0);
@@ -44,10 +38,8 @@ void FaderWidget::fadeIn(int durationMs) {
     anim->start();
 }
 
-//---------------------------------------------------------------------------------
 void FaderWidget::fadeOut(int durationMs) {
 
-//    qDebug() << "animateFadeout FaderWidget" << durationMs;
     anim->stop();
     anim->setDuration(durationMs);
     anim->setStartValue(1);
@@ -57,7 +49,6 @@ void FaderWidget::fadeOut(int durationMs) {
 }
 
 
-//--------------------------------------------------------------------------------
 void FaderWidget::fadeOutAfterPause(int fadeDuration, int pause) {
 
     this->tmpDurationFadeOut = fadeDuration;
@@ -65,7 +56,6 @@ void FaderWidget::fadeOutAfterPause(int fadeDuration, int pause) {
 
 }
 
-//-------------------------------------------------------------------------------------------------
 void FaderWidget::fadeInAndFadeOutAfterPause(int fadeInDuration, int fadeOutDuration, int pause) {
 
     fadeIn(fadeInDuration);

@@ -16,8 +16,6 @@ CadenceEditor::CadenceEditor(QWidget *parent) :
     ui->setupUi(this);
 
 
-
-
 #ifdef Q_OS_WIN32
     ui->comboBox_cadence->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 #endif
@@ -26,11 +24,9 @@ CadenceEditor::CadenceEditor(QWidget *parent) :
 #endif
 
 
-
     setAutoFillBackground(true);
     setAttribute(Qt::WA_NoMousePropagation);
     setWindowFlags(Qt::WindowStaysOnTopHint);
-
 
 
     ui->gridLayout->setRowMinimumHeight(0,45);
@@ -40,8 +36,6 @@ CadenceEditor::CadenceEditor(QWidget *parent) :
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////////
 void CadenceEditor::setInterval(const Interval &interval) {
     this->myInterval = interval;
 
@@ -56,7 +50,6 @@ void CadenceEditor::setInterval(const Interval &interval) {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////////
 void CadenceEditor::on_comboBox_cadence_currentIndexChanged(int index)
 {
     Interval::StepType typeStep = static_cast<Interval::StepType>(index);
