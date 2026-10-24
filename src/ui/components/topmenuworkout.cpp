@@ -173,7 +173,7 @@ TopMenuWorkout::TopMenuWorkout(QWidget *parent) : QWidget(parent), ui(new Ui::To
 
     timeUpdateTime = new QTimer(this);
     timeUpdateTime->start(60000);
-    connect (timeUpdateTime, SIGNAL(timeout()), this, SLOT(setCurrentTime()) );
+    connect (timeUpdateTime, &QTimer::timeout, this, &TopMenuWorkout::setCurrentTime);
     setCurrentTime();
 
     // ── Virtual-shifting gear indicator (centre of the top bar, #293) ─────────

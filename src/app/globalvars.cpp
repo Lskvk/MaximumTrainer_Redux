@@ -79,8 +79,8 @@ GlobalVars::GlobalVars(QObject *parent) :
     QSslConfiguration::setDefaultConfiguration(sslCfg);
 
 
-    connect(manager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(sslErrorHandler(QNetworkReply*,QList<QSslError>)));
-    connect(managerWS, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(sslErrorHandler(QNetworkReply*,QList<QSslError>)));
+    connect(manager, &QNetworkAccessManager::sslErrors, this, &GlobalVars::sslErrorHandler);
+    connect(managerWS, &QNetworkAccessManager::sslErrors, this, &GlobalVars::sslErrorHandler);
 #endif
 
 

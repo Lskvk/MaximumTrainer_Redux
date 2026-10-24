@@ -53,9 +53,9 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     // slot name — adding an explicit connect() here would fire it twice and
     // make the second call see the just-written file, triggering a spurious
     // "workout already exists" dialog.
-    connect(ui->lineEdit_name_workout,    SIGNAL(textChanged(QString)), this, SLOT(checkToEnableButtonSave()));
-    connect(ui->lineEdit_plan_workout,    SIGNAL(textChanged(QString)), this, SLOT(checkToEnableButtonSave()));
-    connect(ui->lineEdit_creator_workout, SIGNAL(textChanged(QString)), this, SLOT(checkToEnableButtonSave()));
+    connect(ui->lineEdit_name_workout, &QLineEdit::textChanged, this, &WorkoutCreator::checkToEnableButtonSave);
+    connect(ui->lineEdit_plan_workout, &QLineEdit::textChanged, this, &WorkoutCreator::checkToEnableButtonSave);
+    connect(ui->lineEdit_creator_workout, &QLineEdit::textChanged, this, &WorkoutCreator::checkToEnableButtonSave);
 
 
     workout = Workout();
@@ -75,7 +75,7 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
 
     intervalModel = new IntervalTableModel(this);
     intervalModel->setListInterval(lstInterval);
-    connect(intervalModel, SIGNAL(dataChanged()), this, SLOT(computeWorkout()) );
+    connect(intervalModel, &IntervalTableModel::dataChanged, this, &WorkoutCreator::computeWorkout);
 
 
     IntervalDelegate *delegateTableView = new IntervalDelegate(ui->tableView);
@@ -84,7 +84,7 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
 
 
     // Open the editor on click; otherwise a click sometimes only selected the cell.
-    connect(ui->tableView, SIGNAL(clicked(QModelIndex)), ui->tableView, SLOT(edit(QModelIndex)));
+    connect(ui->tableView, &TableViewInterval::clicked, ui->tableView, qOverload<const QModelIndex&>(&TableViewInterval::edit));
 
     // Column widths are distributed responsively to fill the table — see
     // distributeColumnWidths(), driven by the viewport resize below.
@@ -112,10 +112,10 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     ui->tableView->verticalHeader()->installEventFilter(ui->tableView);
 
 
-    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(tableViewSelectionChanged(QItemSelection,QItemSelection)));
-    connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)) );
-    connect(ui->tableView->verticalHeader(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)) );
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &WorkoutCreator::tableViewSelectionChanged);
+    connect(ui->tableView, &TableViewInterval::customContextMenuRequested, this, &WorkoutCreator::customMenuRequested);
+    connect(ui->tableView->verticalHeader(), &QWidget::customContextMenuRequested, this, &WorkoutCreator::customMenuRequested);
 
 
     contextMenu = new QMenu(this);
@@ -124,9 +124,9 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     actionCopy = contextMenu->addAction(QIcon(":/image/icon/copy"), tr("Copy"));
     actionDelete = contextMenu->addAction(QIcon(":/image/icon/delete"), tr("Delete"));
 
-    connect(actionDelete, SIGNAL(triggered()), this, SLOT(on_pushButton_delete_clicked()) );
-    connect(actionCopy, SIGNAL(triggered()), this, SLOT(on_pushButton_copy_clicked()) );
-    connect(actionRepeat, SIGNAL(triggered()), this, SLOT(on_pushButton_repeat_clicked()) );
+    connect(actionDelete, &QAction::triggered, this, &WorkoutCreator::on_pushButton_delete_clicked);
+    connect(actionCopy, &QAction::triggered, this, &WorkoutCreator::on_pushButton_copy_clicked);
+    connect(actionRepeat, &QAction::triggered, this, &WorkoutCreator::on_pushButton_repeat_clicked);
 
 
     ui->pushButton_repeat->setEnabled(false);
@@ -137,8 +137,8 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     actionDelete->setEnabled(false);
 
 
-    connect(ui->widget_plot, SIGNAL(rightClickedGraph(QPointF)), this, SLOT(rightClickedGraph(QPointF)));
-    connect(ui->widget_plot, SIGNAL(shapeClicked(QString)), this, SLOT(hightlightSelectedSourceRow(QString)) );
+    connect(ui->widget_plot, &myCreatorPlot::rightClickedGraph, this, &WorkoutCreator::rightClickedGraph);
+    connect(ui->widget_plot, &myCreatorPlot::shapeClicked, this, &WorkoutCreator::hightlightSelectedSourceRow);
 
 
     computeWorkout();
@@ -338,9 +338,9 @@ void WorkoutCreator::restoreRepeatWidgetInterface()
         repeatWidgetCopy->show();
 
 
-        connect(repeatWidgetCopy, SIGNAL(deleteSignal(int)), this, SLOT(deletedRepeatWidget(int)) );
-        connect(repeatWidgetCopy, SIGNAL(updateSignal(int)), this, SLOT(updatedRepeatWidget(int)) );
-        connect(repeatWidgetCopy, SIGNAL(clickedRightPartWidget()), this, SLOT(unselectSelectionNow()) );
+        connect(repeatWidgetCopy, &RepeatWidget::deleteSignal, this, &WorkoutCreator::deletedRepeatWidget);
+        connect(repeatWidgetCopy, &RepeatWidget::updateSignal, this, &WorkoutCreator::updatedRepeatWidget);
+        connect(repeatWidgetCopy, &RepeatWidget::clickedRightPartWidget, this, &WorkoutCreator::unselectSelectionNow);
 
         lstRepeatWidget.append(repeatWidgetCopy);
     }
@@ -394,9 +394,9 @@ void WorkoutCreator::on_pushButton_repeat_clicked()
     repeatWidget->show();
 
 
-    connect(repeatWidget, SIGNAL(deleteSignal(int)), this, SLOT(deletedRepeatWidget(int)) );
-    connect(repeatWidget, SIGNAL(updateSignal(int)), this, SLOT(updatedRepeatWidget(int)) );
-    connect(repeatWidget, SIGNAL(clickedRightPartWidget()), this, SLOT(unselectSelectionNow()) );
+    connect(repeatWidget, &RepeatWidget::deleteSignal, this, &WorkoutCreator::deletedRepeatWidget);
+    connect(repeatWidget, &RepeatWidget::updateSignal, this, &WorkoutCreator::updatedRepeatWidget);
+    connect(repeatWidget, &RepeatWidget::clickedRightPartWidget, this, &WorkoutCreator::unselectSelectionNow);
 
 
     /// Add widget to QList, order first Repeat = first in QList

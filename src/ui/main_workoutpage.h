@@ -48,6 +48,9 @@ signals :
 
 
 public slots:
+    void addWorkout(const Workout&);
+    void overwriteWorkout(const Workout&);
+    void updateTableViewMetrics();
     void filterChanged(const QString& field, const QString& value);
     void filterChangedWorkoutType(bool includedWorkout);
 
@@ -78,10 +81,7 @@ private slots:
     void setAsDone();
     void openFolderWorkout();
     void addToQueue();
-    void addWorkout(const Workout&);
-    void overwriteWorkout(const Workout&);
 
-    void updateTableViewMetrics();
 
 
     void on_checkBox_clicked(bool checked);

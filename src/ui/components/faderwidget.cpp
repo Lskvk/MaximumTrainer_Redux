@@ -10,7 +10,7 @@ FaderWidget::FaderWidget(QWidget *parent) :
     timerAnimatorFadeOut = new QTimer(this);
     timerAnimatorFadeOut->setSingleShot(true);
 
-    connect(timerAnimatorFadeOut, SIGNAL(timeout()), this, SLOT(fadeOutAfterTimer()) );
+    connect(timerAnimatorFadeOut, &QTimer::timeout, this, &FaderWidget::fadeOutAfterTimer);
 
 
     effect = new QGraphicsOpacityEffect(this);

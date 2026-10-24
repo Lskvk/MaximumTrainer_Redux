@@ -10,7 +10,7 @@ FaderLabel::FaderLabel(QWidget *parent) :
     timerAnimatorFadeOut = new QTimer(this);
     timerAnimatorFadeOut->setSingleShot(true);
 
-    connect(timerAnimatorFadeOut, SIGNAL(timeout()), this, SLOT(fadeOutAfterTimer()) );
+    connect(timerAnimatorFadeOut, &QTimer::timeout, this, &FaderLabel::fadeOutAfterTimer);
 
 
     effect = new QGraphicsOpacityEffect(this);

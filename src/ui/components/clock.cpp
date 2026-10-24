@@ -24,12 +24,12 @@ Clock::Clock(QString objectName, QObject *parent) :
 
 
     timerClock = new QTimer(this);
-    connect(timerClock, SIGNAL(timeout()), this, SLOT(timerClockTimeout()) );
+    connect(timerClock, &QTimer::timeout, this, &Clock::timerClockTimeout);
 
 
     // for virtual speed
     timerSpeed = new QTimer(this);
-    connect(timerSpeed, SIGNAL(timeout()), this, SLOT(timerSpeedTimeout()) );
+    connect(timerSpeed, &QTimer::timeout, this, &Clock::timerSpeedTimeout);
 
 
 }

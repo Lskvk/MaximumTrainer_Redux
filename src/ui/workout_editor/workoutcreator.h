@@ -31,6 +31,7 @@ protected:
 
 
 public slots:
+    void computeWorkout();
 
     void resetWorkout();
     void editWorkout(Workout);
@@ -68,7 +69,6 @@ private slots:
     void deletedRepeatWidget(int id);
     void updatedRepeatWidget(int id);
 
-    void computeWorkout();
 
 
 

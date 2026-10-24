@@ -71,7 +71,7 @@ FancyTabBar::FancyTabBar(const TabBarPosition position, QWidget *parent)
     mTimerTriggerChangedSignal.setSingleShot(true);
 
     // We use a zerotimer to keep the sidebar responsive
-    connect(&mTimerTriggerChangedSignal, SIGNAL(timeout()), this, SLOT(emitCurrentIndex()));
+    connect(&mTimerTriggerChangedSignal, &QTimer::timeout, this, &FancyTabBar::emitCurrentIndex);
 
 
 //    qDebug() << "FANCY**W" << this->height();
