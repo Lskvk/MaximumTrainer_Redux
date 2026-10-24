@@ -140,8 +140,10 @@ public:
     {
     }
 
+    FIT_STRING_CONVERSION_ERROR GetErrorCode() const { return errorCode; }
+
 private:
-    [[maybe_unused]] FIT_STRING_CONVERSION_ERROR errorCode;
+    FIT_STRING_CONVERSION_ERROR errorCode;
 };
 
 ///////////////////////////////////////////////////////////////////////
