@@ -11,7 +11,7 @@ Prebuilt binaries for each release live on the [**Releases**](https://github.com
 | Platform | Asset | Notes |
 |----------|-------|-------|
 | **Linux** | `MaximumTrainer-linux-x86_64.AppImage` | `chmod +x` it and run — self-contained, no install |
-| **Windows** | `MaximumTrainer-windows-x64.msi` (installer) or `-windows-x64.zip` (portable) | Windows 10 1703+ |
+| **Windows** | `MaximumTrainer-windows-x64.msi` (installer) or `-windows-x64.zip` (portable) | Windows 10 1809+ |
 | **macOS** | `MaximumTrainer-macos.dmg` | Open and drag to Applications |
 | **Web (WASM)** | `MaximumTrainer-wasm.zip` | Runs in a WebAssembly-capable browser |
 
@@ -78,15 +78,15 @@ All three platforms are built and tested automatically via GitHub Actions CI (se
 
 ## Windows — Requirements
 
-- **Windows 10 version 1703 (Creators Update) or later is required.**
-  Windows 7, 8, and 8.1 are not supported (missing WinRT BLE APIs).
+- **Windows 10 version 1809 or later is required** (the minimum for Qt 6.11).
+  Windows 7, 8, and 8.1 are not supported.
 - A Bluetooth 4.0+ adapter with a WDM-compatible driver.
 - No special permissions or manifest entries are needed.
 
 ### Windows
 
 **Required tools:** Qt 6.x (msvc2022_64, with the `qtwebengine`, `qtconnectivity`,
-`qtmultimedia`, `qtwebchannel`, `qtpositioning` modules), Visual Studio 2019+ (MSVC).
+`qtmultimedia`, `qtwebchannel`, `qtpositioning` modules), Visual Studio 2022+ (MSVC; Qt 6.11 ships msvc2022 builds only).
 
 **Environment variables** — set before running `qmake`:
 

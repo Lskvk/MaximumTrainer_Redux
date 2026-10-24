@@ -126,13 +126,13 @@ int main(int argc, char *argv[]) {
     app.setQuitOnLastWindowClosed(false);
 
 #ifdef Q_OS_WIN
-    // Windows 10 version 1703 (Creators Update, build 15063) is the minimum
-    // required for the WinRT Bluetooth LE APIs used by Qt Bluetooth.
+    // Windows 10 version 1809 (build 17763) is Qt 6.11's minimum supported
+    // Windows; it also covers the WinRT Bluetooth LE APIs (1703+).
     if (QOperatingSystemVersion::current() <
-            QOperatingSystemVersion(QOperatingSystemVersion::Windows, 10, 0, 15063)) {
+            QOperatingSystemVersion(QOperatingSystemVersion::Windows, 10, 0, 17763)) {
         QMessageBox::critical(nullptr,
             QObject::tr("Unsupported Windows Version"),
-            QObject::tr("MaximumTrainer requires Windows 10 version 1703 (Creators Update) or later.\n"
+            QObject::tr("MaximumTrainer requires Windows 10 version 1809 or later.\n"
                         "Windows 7, 8, and 8.1 are not supported (missing WinRT Bluetooth LE APIs).\n\n"
                         "Please upgrade your operating system."));
         return 1;
