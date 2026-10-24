@@ -27,12 +27,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Download pre-built linux artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: linux
         path: build
@@ -43,7 +43,7 @@ jobs:
       run: chmod +x build/release/MaximumTrainer
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ env.QT_VERSION }}
         host: 'linux'
@@ -66,7 +66,7 @@ jobs:
 
     - name: Restore QWT cache
       id: qwt-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ${{ env.QWT_DIR }}
         key: qwt-6.3.0-qt-${{ env.QT_VERSION }}-linux
@@ -239,7 +239,7 @@ jobs:
         fi
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: linux-appimage
         path: MaximumTrainer-linux-x86_64.AppImage

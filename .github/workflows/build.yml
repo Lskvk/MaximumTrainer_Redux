@@ -55,7 +55,7 @@ jobs:
 
     steps:
     - name: Checkout with full tag history
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
@@ -150,12 +150,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Set up Emscripten
-      uses: mymindstorm/setup-emsdk@v14
+      uses: mymindstorm/setup-emsdk@v16
       with:
         # Qt's WASM build is ABI-locked to the Emscripten it was compiled with;
         # Qt 6.11.x targets Emscripten 4.0.7. It must match or linking against
@@ -163,8 +163,6 @@ jobs:
         version: '4.0.7'
 
     - name: Install Qt (Wasm singlethread)
-      # v4 required: host=all_os / target=wasm (Qt 6.11's WASM repo path) is
-      # rejected by v3, which only allows windows/mac/linux hosts.
       uses: jurplel/install-qt-action@v4
       with:
         version: '6.11.1'
@@ -182,7 +180,7 @@ jobs:
 
     - name: Restore QWT cache (Wasm)
       id: qwt-wasm-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/qwt-wasm
         key: qwt-6.3.0-qt-6.11.1-wasm-em4.0.7
@@ -244,7 +242,7 @@ jobs:
         emmake make -j$(nproc)
 
     - name: Upload Wasm artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: wasm
         path: |
@@ -294,13 +292,13 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Download fresh WASM artifact
       id: download-wasm
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       continue-on-error: true   # wasm build may have failed — fall back to committed binary
       with:
         name: wasm
@@ -320,9 +318,9 @@ jobs:
         [ -f /tmp/wasm-artifact/qtlogo.svg ]  && cp /tmp/wasm-artifact/qtlogo.svg  docs/app/ || true
 
     - name: Install Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
-        node-version: '20'
+        node-version: '24'
 
     - name: Install Playwright and browsers
       run: |
@@ -340,14 +338,14 @@ jobs:
       run: npx playwright test
 
     - name: Upload Playwright report
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: playwright-report
         path: playwright-report/
 
     - name: Upload WASM verification screenshots
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: wasm-verification-screenshots
@@ -421,34 +419,34 @@ jobs:
 
     steps:
     - name: Download Linux AppImage
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: linux-appimage
 
     - name: Download Windows zip
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows-zip
 
     - name: Download Windows MSI
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows-msi
 
     - name: Download macOS dmg
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: macos-dmg
 
     - name: Download Wasm zip
       id: download_wasm
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       continue-on-error: true
       with:
         name: wasm-zip
 
     - name: Checkout repo (for docs/app deploy)
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         path: repo
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -483,7 +481,7 @@ jobs:
         exit 1
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         tag_name: ${{ needs.compute_version.outputs.new_tag }}
         generate_release_notes: true

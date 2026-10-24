@@ -64,34 +64,34 @@ jobs:
 
     steps:
     - name: Download Linux AppImage
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: linux-appimage
 
     - name: Download Windows zip
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows-zip
 
     - name: Download Windows MSI
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows-msi
 
     - name: Download macOS dmg
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: macos-dmg
 
     - name: Download Wasm zip
       id: download_wasm
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       continue-on-error: true
       with:
         name: wasm-zip
 
     - name: Checkout repo (for docs/app deploy)
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         path: repo
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -109,7 +109,7 @@ jobs:
         git push origin HEAD:refs/heads/master
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         tag_name: ${{ github.event.inputs.tag_name }}
         generate_release_notes: true

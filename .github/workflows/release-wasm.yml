@@ -23,13 +23,13 @@ jobs:
 
     steps:
     - name: Checkout (for docs/app/index.html)
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         sparse-checkout: docs/app/index.html
         sparse-checkout-cone-mode: false
 
     - name: Download pre-built wasm artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: wasm
         run-id: ${{ inputs.build_run_id }}
@@ -47,7 +47,7 @@ jobs:
         zip -r ../MaximumTrainer-wasm.zip .
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: wasm-zip
         path: MaximumTrainer-wasm.zip

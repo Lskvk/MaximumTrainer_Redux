@@ -29,12 +29,12 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '6.11.1'
         host: 'mac'
@@ -49,7 +49,7 @@ jobs:
 
     - name: Restore QWT cache
       id: qwt-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         # Cache only the directories needed to compile and link against QWT.
         # Excluding qwt-6.3.0/doc avoids a gtar extraction failure on macOS
@@ -270,7 +270,7 @@ jobs:
     - name: upload artifact
       # Exclude compile intermediates (~3/4 of build/): the test and release
       # jobs only need the binaries, and every one of them downloads this.
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: macos
         path: |
@@ -299,12 +299,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Install Qt (with Bluetooth)
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '6.11.1'
         host: 'mac'
@@ -318,7 +318,7 @@ jobs:
       run: brew install openssl@3
 
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: macos
         path: build
@@ -389,7 +389,7 @@ jobs:
 
     steps:
     - name: Install Qt (full app modules)
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '6.11.1'
         host: 'mac'
@@ -400,7 +400,7 @@ jobs:
         cache-key-prefix: qt-mac
 
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: macos
         path: build
@@ -431,7 +431,7 @@ jobs:
       run: ./build/tests/ui_navigation_tests -v2
 
     - name: Upload GUI test evidence
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: gui-test-artifacts-macos
@@ -461,7 +461,7 @@ jobs:
 
     steps:
     - name: Install Qt (with WebEngine + Bluetooth)
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '6.11.1'
         host: 'mac'
@@ -475,7 +475,7 @@ jobs:
       run: brew install openssl@3
 
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: macos
         path: build
@@ -496,7 +496,7 @@ jobs:
       run: ./build/tests/login_screen_tests -v2
 
     - name: Upload live GUI test evidence
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: gui-live-test-artifacts-macos

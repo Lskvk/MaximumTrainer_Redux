@@ -31,12 +31,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Download pre-built windows artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows
         path: build
@@ -48,7 +48,7 @@ jobs:
       shell: powershell
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: windows-zip
         path: MaximumTrainer-windows-x64.zip
@@ -167,7 +167,7 @@ jobs:
       shell: powershell
 
     - name: Upload MSI artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: windows-msi
         path: MaximumTrainer-windows-x64.msi
@@ -190,7 +190,7 @@ jobs:
 
     steps:
     - name: Download pre-built windows artifact (for test binaries)
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows
         path: build
@@ -198,7 +198,7 @@ jobs:
         github-token: ${{ github.token }}
 
     - name: Download MSI artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows-msi
         path: installer
@@ -269,7 +269,7 @@ jobs:
       shell: powershell
 
     - name: Upload install verification screenshot
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: install-verification-screenshot-windows

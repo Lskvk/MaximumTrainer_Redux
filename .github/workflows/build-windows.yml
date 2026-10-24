@@ -40,12 +40,12 @@ jobs:
       uses: ilammy/msvc-dev-cmd@v1
 
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ env.QT_VERSION }}
         # Released aqt can't resolve Qt 6.11's new Windows repo layout (aqtinstall
@@ -81,7 +81,7 @@ jobs:
 
     - name: Restore OpenSSL cache
       id: openssl-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: C:\openssl
         key: openssl-3.5.4-win64
@@ -110,7 +110,7 @@ jobs:
 
     - name: Restore QWT cache
       id: qwt-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ${{ env.QWT_INSTALL_DIR }}
         key: qwt-6.3.0-qt-${{ env.QT_VERSION }}-msvc2022-win64
@@ -418,7 +418,7 @@ jobs:
       # Exclude compile intermediates (~3/4 of build/): the test and release
       # jobs only need the binaries and deployed DLLs, and every one of them
       # downloads this.
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: windows
         path: |
@@ -448,7 +448,7 @@ jobs:
 
     steps:
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows
         path: build
@@ -507,7 +507,7 @@ jobs:
 
     steps:
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows
         path: build
@@ -548,7 +548,7 @@ jobs:
         }
 
     - name: Upload GUI test evidence
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: gui-test-artifacts-windows
@@ -579,7 +579,7 @@ jobs:
 
     steps:
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: windows
         path: build
@@ -609,7 +609,7 @@ jobs:
       shell: powershell
 
     - name: Upload live GUI test evidence
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: gui-live-test-artifacts-windows
