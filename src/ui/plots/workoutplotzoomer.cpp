@@ -24,10 +24,6 @@
 #include "myqwtpickermachine.h"
 
 
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////
 /// TimeScaleDraw
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +42,6 @@ public:
 private:
     QTime baseTime;
 };
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +63,6 @@ WorkoutPlotZoomer::WorkoutPlotZoomer(QWidget *parent) :
 //    canvas()->setContentsMargins(0,0,25,0);
 
 
-
     d_picker = new MyQwtPlotPicker( QwtPlot::xBottom, QwtPlot::yLeft,
                                     QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn,
                                     this->canvas());
@@ -77,10 +71,7 @@ WorkoutPlotZoomer::WorkoutPlotZoomer(QWidget *parent) :
     d_picker->setTrackerPen(pen);
 
 
-
-
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +131,6 @@ void WorkoutPlotZoomer::setWorkoutData(Workout workout, GRAPH_TYPE graph, bool f
     }
 
 
-
     init(graph, firstInit);
     replot();
 }
@@ -155,10 +145,6 @@ void WorkoutPlotZoomer::setStopped(bool b) {
 /// init
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::init(GRAPH_TYPE graph, bool firstInit) {
-
-
-   // QPalette palette;
-   // palette.setColor(QPalette::WindowText, Qt::blue);
 
 
     if (firstInit) {
@@ -181,7 +167,6 @@ void WorkoutPlotZoomer::init(GRAPH_TYPE graph, bool firstInit) {
         valueQwtText.setBorderRadius(3.0);
         valueQwtText.setFont(fontBig);
         valueQwtText.setRenderFlags( Qt::AlignHCenter | Qt::AlignTop );
-        //    valueQwtText.setBackgroundBrush(QBrush(Util::getColor(Util::ON_TARGET), Qt::SolidPattern));
         valueQwtText.setColor(Qt::white);
         qwtTextLabel = new QwtPlotTextLabel();
         qwtTextLabel->setText( valueQwtText );
@@ -200,20 +185,17 @@ void WorkoutPlotZoomer::init(GRAPH_TYPE graph, bool firstInit) {
         if (graph == GRAPH_TYPE::POWER) {
             extraAfterRange = 15;
             colorCurve = Util::getColor(Util::LINE_POWER);
-//            setAxisTitle( QwtPlot::yLeft, tr("watts") );
             icon->iconType = "POWER";
         }
         else if (graph == GRAPH_TYPE::CADENCE) {
             extraAfterRange = 5;
             colorCurve = Util::getColor(Util::LINE_CADENCE);
-//            setAxisTitle( QwtPlot::yLeft, tr("rpm") );
             icon->iconType = "CADENCE";
 
         }
         else if (graph == GRAPH_TYPE::HEART_RATE) {
             extraAfterRange = 10;
             colorCurve = Util::getColor(Util::LINE_HEARTRATE);
-//            setAxisTitle( QwtPlot::yLeft, tr("bpm") );
             icon->iconType = "HEART_RATE";
         }
 
@@ -241,8 +223,6 @@ void WorkoutPlotZoomer::init(GRAPH_TYPE graph, bool firstInit) {
     }
 
 
-
-
     if (graph == GRAPH_TYPE::POWER && workout.getWorkoutNameEnum() != Workout::OPEN_RIDE) {
         drawGraphIntervalsPower();
     }
@@ -264,15 +244,7 @@ void WorkoutPlotZoomer::init(GRAPH_TYPE graph, bool firstInit) {
     }
 
 
-
-
-
-
-
-
-
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -327,8 +299,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsCadence() {
                 addShapeFromPoints("PARALLELOGRAM_CADENCE", colorCadence, lstPointsCadence, 10, false);
 
 
-
-
             /// CADENCE TARGET LINE
             btnLeft = QPointF(time, val.getCadence_start() - 0.1 );
             topLeft = QPointF(time, val.getCadence_start() + 0.1 );
@@ -364,7 +334,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsCadence() {
         lastVal = val;
     }
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -556,9 +525,6 @@ void WorkoutPlotZoomer::updateCurve(double timeNow, int value) {
 }
 
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::moveIntervalTime(double timeNow_msec) {
 
@@ -569,7 +535,6 @@ void WorkoutPlotZoomer::moveIntervalTime(double timeNow_msec) {
     d_interval = QwtInterval( timeNow_sec - 15 , timeNow_sec + 15);
     setAxisScale( QwtPlot::xBottom, d_interval.minValue(), d_interval.maxValue(), 10 );
     setAxisScale( QwtPlot::yLeft, leftLow, leftHigh, 10);  //Calculated when receiving value or with target
-
 
 
     replot();
@@ -593,7 +558,6 @@ void WorkoutPlotZoomer::moveIntervalTarget(double target, int range) {
         noTarget = true;
         return; /// range will be calculated when received data (updateTextLabelValue)
     }
-
 
 
     /// Make graph smaller when target range is small (zoomed effect)
@@ -621,9 +585,6 @@ void WorkoutPlotZoomer::addMarkerInterval(double time) {
     d_marker1->setZ(3);
     d_marker1->attach( this );
 }
-
-
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -658,14 +619,12 @@ void WorkoutPlotZoomer::updateTextLabelValue(int value) {
         }
         else {  //Cadence
             if (value < leftLow || value > leftHigh) {
-                //                qDebug() << "Ajust scale here cadence";
                 leftLow = value - 15;
                 leftHigh = value + 15 ;
             }
         }
     }
     ///------------------
-
 
 
     int diff = value - target;
@@ -722,8 +681,6 @@ void WorkoutPlotZoomer::setCanvasColor(CanvasColor color) {
 }
 
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlotZoomer::targetChanged(double percentageTarget, int range ) {
 
@@ -745,9 +702,6 @@ void WorkoutPlotZoomer::targetChanged(double percentageTarget, int range ) {
 
 
 }
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -772,9 +726,7 @@ void WorkoutPlotZoomer::addShapeFromPoints(const QString &title, const QColor &c
     lstTargetShape.append(item);
 
 
-
 }
-
 
 
 //--------------------------------------------------------------
@@ -782,5 +734,4 @@ void WorkoutPlotZoomer::setPosition(double timeMsec)  {
 
     moveIntervalTime(timeMsec);
 }
-
 

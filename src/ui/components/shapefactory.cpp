@@ -5,9 +5,6 @@
 #include <QFont>
 
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 QPainterPath ShapeFactory::path( QList<QPointF> lstPoints ) {
 
@@ -21,11 +18,9 @@ QPainterPath ShapeFactory::path( QList<QPointF> lstPoints ) {
     path.addPolygon( para );
 
 
-
     path.closeSubpath();
     return path;
 }
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,14 +47,6 @@ QPainterPath ShapeFactory::path( Shape shape, const QPointF &pos, const QSizeF &
         para += rect.bottomRight();
         para += QPointF(rect.bottomRight().x(),rect.bottomRight().y() + rect.height()) ;
 
-        //        para += rect.bottomRight();
-        //        para += QPointF( rect.top(), rect.bottomLeft().y() + rect.height()  );
-
-        //        para += rect.topLeft();
-
-        //        para += rect.topRight();
-        //        parral += QPointF( rect.center().x(), rect.top() );
-        //        parral += rect.bottomRight();
 
         path.addPolygon( para );
         break;

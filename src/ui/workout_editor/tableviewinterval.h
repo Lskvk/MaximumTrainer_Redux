@@ -13,11 +13,9 @@ public:
     explicit TableViewInterval(QWidget *parent = 0);
 
 
-
 signals:
 
 public slots:
-    //    void setCursor(QModelIndex);
 
 
 private :
@@ -26,13 +24,7 @@ private :
     bool eventFilter(QObject *watched, QEvent *event);
 
 
-
 };
 
 #endif // TABLEVIEWINTERVAL_H
-
-
-
-
-
 

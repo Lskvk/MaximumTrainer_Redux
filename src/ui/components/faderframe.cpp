@@ -21,8 +21,6 @@ FaderFrame::FaderFrame(QWidget *parent) :
 }
 
 
-
-
 //---------------------------------------------------
 void FaderFrame::fadeOutAfterTimer() {
 
@@ -32,7 +30,6 @@ void FaderFrame::fadeOutAfterTimer() {
 //---------------------------------------------------------------------------------
 void FaderFrame::fadeIn(int durationMs) {
 
-//    qDebug() << "animateFadeIn FaderFrame" << durationMs;
     anim->stop();
     anim->setDuration(durationMs);
     anim->setStartValue(0);
@@ -44,7 +41,6 @@ void FaderFrame::fadeIn(int durationMs) {
 //---------------------------------------------------------------------------------
 void FaderFrame::fadeOut(int durationMs) {
 
-//    qDebug() << "animateFadeout FaderFrame" << durationMs;
     anim->stop();
     anim->setDuration(durationMs);
     anim->setStartValue(1);

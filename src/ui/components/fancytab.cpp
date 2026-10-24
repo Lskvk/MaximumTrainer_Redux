@@ -33,7 +33,6 @@
 
 void FancyTab::fadeIn()
 {
-//    qDebug() << "FADE IN";
     mAnimator.stop();
     mAnimator.setDuration(80);
     mAnimator.setEndValue(40);

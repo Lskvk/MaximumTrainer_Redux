@@ -26,19 +26,13 @@ Clock::Clock(QString objectName, QObject *parent) :
     timerClock = new QTimer(this);
     connect(timerClock, SIGNAL(timeout()), this, SLOT(timerClockTimeout()) );
 
-    //    d_clock.start();
-    //    pauseClock();
 
     // for virtual speed
     timerSpeed = new QTimer(this);
     connect(timerSpeed, SIGNAL(timeout()), this, SLOT(timerSpeedTimeout()) );
 
 
-
-
 }
-
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -55,7 +49,6 @@ void Clock::finishClock() {
 
     emit finished();
 }
-
 
 
 //----------------------------
@@ -100,15 +93,6 @@ void Clock::timerClockTimeout() {
 
     lastSecond = currentSecond;
 }
-
-
-
-
-
-
-
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +144,6 @@ void Clock::receiveSlopeData(int userID, double slope) {
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////
 void Clock::timerSpeedTimeout() {
 
@@ -168,7 +151,6 @@ void Clock::timerSpeedTimeout() {
     double diffTime = totalTimeElapsedNow - totalTimeElapsedLast;
     //diffTime , always smaller than 1 second
 
-    //    qDebug() << "totalTimeElapsedNow" << totalTimeElapsedNow << "totalTimeElapsedLast" << totalTimeElapsedLast << "diffTime" << diffTime;
 
     if (!firstSpeedCheck) {
 
@@ -186,15 +168,10 @@ void Clock::timerSpeedTimeout() {
         }
 
 
-
-
     }
 
 
     totalTimeElapsedLast = totalTimeElapsedNow;
     firstSpeedCheck = false;
 }
-
-
-
 

@@ -6,23 +6,15 @@
 #include "simplecrypt.h"
 
 
-
 // Key used to obfuscate the Intervals.icu API key at rest in the .save file.
 // This is the same key used for the remembered-password feature in DialogLogin,
 // giving consistent protection across locally-stored credentials.
 static const quint64 INTERVALS_ICU_CRYPT_KEY = Q_UINT64_C(0xdd85116f2b81d85f);
 
 
-
 //http://qt-project.org/doc/qt-5.0/qtcore/qxmlstreamreader.html#details
 XmlUtil::XmlUtil(QObject *parent) :QObject(parent) {
 }
-
-
-
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,11 +121,8 @@ void XmlUtil::parseLocalSaveFile(Account *account) {
 }
 
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool XmlUtil::saveLocalSaveFile(Account *account) {
-
 
 
     QString nameFile = Util::getMaximumTrainerDocumentPath() + QDir::separator() + account->email_clean + ".save";
@@ -188,7 +177,6 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
         fileMt.close();
 
 
-
         qDebug() << "SAVING FILE xml saveLstWorkoutDone done";
         return true;
     }
@@ -196,12 +184,9 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
 }
 
 
-
-
 ///Save QSet to xml file (.save file)
 //---------------------------------------------------------------------------------------------
 //bool XmlUtil::saveLstWorkoutDone(QString email_clean, QSet<QString> hashWorkout) {
-
 
 
 //    QString nameFile = Util::getMaximumTrainerDocumentPath() + QDir::separator() + email_clean + ".save";
@@ -216,31 +201,8 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
 //    else {
 //        //        this->setDevice(&fileMt);
 
-//        QXmlStreamWriter writer(&fileMt);
-//        writer.setAutoFormatting(true);
-
-//        writer.writeStartDocument();
-//        writer.writeStartElement("WorkoutDone");
-
-//        foreach (const QString value, hashWorkout) {
-//            if (value.size() > 1)
-//                writer.writeTextElement("Workout", value);
-//        }
-
 
 //        writer.writeEndElement();  /// WorkoutDone
-
-
-
-//        writer.writeEndDocument();
-//        fileMt.close();
-
-
-//        qDebug() << "SAVING FILE xml saveLstWorkoutDone done";
-//        return true;
-//    }
-
-//}
 
 
 //---------------------------------------------------------------------------------------------
@@ -252,8 +214,6 @@ QList<Workout> XmlUtil::parseWorkoutLstPath(QStringList lstPath, Workout::WORKOU
     foreach (QString filePath, lstPath)
     {
         workout = parseSingleWorkoutXml(filePath);
-        //        qDebug() << "ok workout has been parsed!" << workout.getName() <<"WorkoutNameEnum:" << workout.getWorkoutNameEnum() << "size source" << workout.getLstIntervalSource().size() <<
-        //                    "lst repeat:" << workout.getLstRepeat().size();
 
 
         if (workoutType == Workout::INCLUDED_WORKOUT)
@@ -266,10 +226,6 @@ QList<Workout> XmlUtil::parseWorkoutLstPath(QStringList lstPath, Workout::WORKOU
     }
     return lstWorkout;
 }
-
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -497,14 +453,12 @@ Workout XmlUtil::parseSingleWorkoutXml(QString filePath) {
     //    qDebug() << "OK CREATING WORKOUT, file path is" << filePath;
     workout =  Workout(filePath, Workout::WORKOUT_NAME::USER_MADE, lstIntervalSource, lstRepeat,
                        name, creator, description, plan, type );
-    //    qDebug() << "size Source inside function " << lstIntervalSource.size() << "lst repeat:" << lstRepeat.size();
     return workout;
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Interval XmlUtil::parseInterval(QXmlStreamReader &xml) {
-
 
 
     QTime duration =  QTime(0,0,5);
@@ -529,10 +483,6 @@ Interval XmlUtil::parseInterval(QXmlStreamReader &xml) {
     double targetHR_start = 0;
     double targetHR_end = 0;
     int HR_range = 20;
-
-
-
-
 
 
     while (xml.tokenType() != QXmlStreamReader::EndElement || xml.name() != QLatin1String("Interval"))
@@ -644,7 +594,6 @@ Interval XmlUtil::parseInterval(QXmlStreamReader &xml) {
 RepeatData XmlUtil::parseRepeat(QXmlStreamReader &xml) {
 
 
-
     RepeatData rep;
 
     while (xml.tokenType() != QXmlStreamReader::EndElement || xml.name() != QLatin1String("Repeat"))
@@ -656,7 +605,6 @@ RepeatData XmlUtil::parseRepeat(QXmlStreamReader &xml) {
         }
         xml.readNextStartElement();
 
-        //        qDebug() << "parseRepeat:" << xml.name();
 
         if(xml.name() == QLatin1String("Id")) {
             rep.setId(xml.readElementText().toInt());
@@ -778,12 +726,4 @@ bool XmlUtil::createWorkoutXml(Workout workout, QString destinationPath) {
     }
 
 }
-
-
-
-
-
-
-
-
 

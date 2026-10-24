@@ -5,9 +5,6 @@
 #include <QColor>
 
 
-
-
-
 RadioTableModel::RadioTableModel(QObject *parent) : QAbstractTableModel(parent) {
 
     rowHovered = -2;
@@ -28,12 +25,10 @@ void RadioTableModel::setActiveIndex(QModelIndex index) {
 }
 
 
-
 //------------------------------------------------------------
 void RadioTableModel::changeRowHovered(int row) {
     this->rowHovered = row;
 }
-
 
 
 //------------------------------------------------------------
@@ -49,7 +44,6 @@ void RadioTableModel::addListRadio(QList<Radio> lstRadio) {
 Radio RadioTableModel::getRadioAtRow(const QModelIndex &index) {
 
     qDebug() << "GetRadioAtRow" << index.row();
-//    if (index.row() >= 0 && index.row() < lstRadio.size() ) {
         return (lstRadio.at(index.row()));
 
     qDebug() << "Done GetRadioAtRow" << index.row();
@@ -112,10 +106,6 @@ int RadioTableModel::columnCount(const QModelIndex &parent) const {
 }
 
 
-
-
-
-
 // --------------------------------------------------------------------------------------------
 QVariant RadioTableModel::headerData(int section, Qt::Orientation  orientation, int role) const {
 
@@ -133,9 +123,6 @@ QVariant RadioTableModel::headerData(int section, Qt::Orientation  orientation, 
         else if (section == 3) {
             return tr("Language");
         }
-        //        else if (section == 2) {
-        //            return tr("Ads");
-        //        }
         else {
             return tr("colum not defined");
         }
@@ -160,9 +147,6 @@ QVariant RadioTableModel::headerData(int section, Qt::Orientation  orientation, 
         else if (section == 3) {
             return tr("Language");
         }
-        //        else if (section == 2) {
-        //            return tr("Ads");
-        //        }
         else {
             return tr("colum not defined");
         }
@@ -197,7 +181,6 @@ QVariant RadioTableModel::data(const QModelIndex &index, int role) const {
     }
 
 
-
     if (role == Qt::DisplayRole) {
 
 
@@ -213,12 +196,6 @@ QVariant RadioTableModel::data(const QModelIndex &index, int role) const {
         else if(index.column() == 3) {
             return radio.getLanguage();
         }
-        //        else if(index.column() == 2) {
-        //            if (radio.getGotAds())
-        //                return tr("Yes");
-        //            else
-        //                return tr("-");
-        //        }
         else {
             return tr("column not defined");
         }
@@ -227,5 +204,4 @@ QVariant RadioTableModel::data(const QModelIndex &index, int role) const {
 
     return QVariant();
 }
-
 

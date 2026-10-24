@@ -8,9 +8,6 @@
 #include "apptheme.h"
 
 
-
-
-
 WorkoutTableModel::WorkoutTableModel(QObject *parent) : QAbstractTableModel(parent) {
 
     qDebug() << "WorkoutTableModel";
@@ -23,8 +20,6 @@ WorkoutTableModel::WorkoutTableModel(QObject *parent) : QAbstractTableModel(pare
 void WorkoutTableModel::changeRowHovered(int row) {
     this->rowHovered = row;
 }
-
-
 
 
 void WorkoutTableModel::addListWorkout(QList<Workout> lstWorkout) {
@@ -55,7 +50,6 @@ void WorkoutTableModel::updateWorkoutsMetrics() {
 }
 
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Workout WorkoutTableModel::getWorkoutAtRow(const QModelIndex &index) {
 
@@ -79,7 +73,6 @@ int WorkoutTableModel::columnCount(const QModelIndex &parent) const {
 }
 
 
-
 //--------------------------------------------------------------------------------------------------------
 bool WorkoutTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
 
@@ -89,7 +82,6 @@ bool WorkoutTableModel::setData(const QModelIndex &index, const QVariant &value,
         lstWorkout.replace(index.row(), workout);
     }
 
-    //    emit dataChanged();
     return true;
 }
 
@@ -157,7 +149,6 @@ QVariant WorkoutTableModel::data(const QModelIndex &index, int role) const {
             return checkFont;
         }
     }
-
 
 
     if (role == Qt::DisplayRole) {
@@ -235,10 +226,6 @@ QVariant WorkoutTableModel::data(const QModelIndex &index, int role) const {
 }
 
 
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutTableModel::deleteWorkoutWithName(QString name) {
 
@@ -281,7 +268,6 @@ void WorkoutTableModel::deleleteMapWorkout() {
 }
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutTableModel::addWorkout(Workout w) {
 
@@ -308,8 +294,6 @@ bool WorkoutTableModel::removeRows(int position, int rows, const QModelIndex &in
     return true;
 
 }
-
-
 
 
 // --------------------------------------------------------------------------------------------

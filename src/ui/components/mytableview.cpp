@@ -4,8 +4,6 @@
 #include <sortfilterproxymodel.h>
 
 
-
-
 MyTableView::MyTableView(QWidget *parent) : QTableView(parent) {
 
     this->setMouseTracking(true);
@@ -16,9 +14,6 @@ MyTableView::MyTableView(QWidget *parent) : QTableView(parent) {
 
     curr_row_hovered = -1;
 }
-
-
-
 
 
 void MyTableView::mouseMoveEvent(QMouseEvent* event) {
@@ -52,7 +47,6 @@ void MyTableView::mouseMoveEvent(QMouseEvent* event) {
     else if (!index.isValid() && curr_row_hovered != -1 ){
 
         SortFilterProxyModel *_model = static_cast<SortFilterProxyModel*>(model());
-        //        qDebug() << "mouse index not valid";
 
         for (int i=0; i<_model->rowCount(); i++) {
             for (int j=0; j<_model->columnCount(); j++) {
@@ -67,7 +61,6 @@ void MyTableView::mouseMoveEvent(QMouseEvent* event) {
     }
     QTableView::mouseMoveEvent(event);
 }
-
 
 
 void MyTableView::leaveEvent(QEvent *event) {
@@ -89,7 +82,4 @@ void MyTableView::leaveEvent(QEvent *event) {
     }
     QTableView::leaveEvent(event);
 }
-
-
-
 

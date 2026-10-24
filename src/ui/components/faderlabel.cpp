@@ -23,7 +23,6 @@ FaderLabel::FaderLabel(QWidget *parent) :
 }
 
 
-
 //---------------------------------------------------
 void FaderLabel::fadeOutAfterTimer() {
 
@@ -33,7 +32,6 @@ void FaderLabel::fadeOutAfterTimer() {
 //---------------------------------------------------------------------------------
 void FaderLabel::fadeIn(int durationMs) {
 
-//    qDebug() << "animateFadeIn FaderLabel" << durationMs;
     anim->stop();
     anim->setDuration(durationMs);
     anim->setStartValue(0);
@@ -47,7 +45,6 @@ void FaderLabel::fadeIn(int durationMs) {
 //---------------------------------------------------------------------------------
 void FaderLabel::fadeOut(int durationMs) {
 
-//    qDebug() << "animateFadeout FaderLabel" << durationMs;
     anim->stop();
     anim->setDuration(durationMs);
     anim->setStartValue(1);

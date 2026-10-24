@@ -29,7 +29,6 @@ public:
     }
 
 
-
 signals:
     void clickedRightPartWidget();
 
@@ -49,7 +48,6 @@ private:
     Ui::RepeatWidget *ui;
     RepeatData *data;
 
-//     void moveEvent (QMoveEvent * event);
 };
 
 #endif // REPEATWIDGET_H

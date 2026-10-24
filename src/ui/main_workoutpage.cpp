@@ -13,9 +13,6 @@
 #include "workout.h"
 
 
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// DESTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,8 +21,6 @@ Main_WorkoutPage::~Main_WorkoutPage() {
 
 
 }
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +34,6 @@ Main_WorkoutPage::Main_WorkoutPage(QWidget *parent) : QWidget(parent), ui(new Ui
     this->settings = qApp->property("User_Settings").value<Settings*>();
 
     loadFilterFields();
-
 
 
     tableModel = new WorkoutTableModel(this);
@@ -117,7 +111,6 @@ Main_WorkoutPage::Main_WorkoutPage(QWidget *parent) : QWidget(parent), ui(new Ui
     ui->tableView_workout->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
-
     connect(ui->tableView_workout->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(tableViewSelectionChanged(QItemSelection,QItemSelection)));
     connect(ui->tableView_workout, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)) );
@@ -146,7 +139,6 @@ Main_WorkoutPage::Main_WorkoutPage(QWidget *parent) : QWidget(parent), ui(new Ui
     actionOpenFolder->setEnabled(false);
 
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,8 +179,6 @@ void Main_WorkoutPage::parseMapWorkout(int userFTP) {
     tableModel->addWorkout(workout);
 
 }
-
-
 
 
 //---------------------------------------------------------------------------------------------------------
@@ -251,7 +241,6 @@ void Main_WorkoutPage::tableViewSelectionChanged(QItemSelection, QItemSelection)
     actionOpenFolder->setEnabled(false);
 
 
-
     QModelIndexList lstIndex = ui->tableView_workout->selectionModel()->selectedRows();
 
     if (lstIndex.size() < 1) {
@@ -278,8 +267,6 @@ void Main_WorkoutPage::tableViewSelectionChanged(QItemSelection, QItemSelection)
         actionDelete->setVisible(false);
         actionOpenFolder->setVisible(false);
         actionEdit->setEnabled(true); //let user edit, no copyright on a workout..
-        //        if (workout.getWorkoutNameEnum() == Workout::MAP_TEST)
-        //            actionEdit->setEnabled(false);
     }
     else {
         actionEdit->setEnabled(true);
@@ -291,8 +278,6 @@ void Main_WorkoutPage::tableViewSelectionChanged(QItemSelection, QItemSelection)
 
 
 }
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,7 +352,6 @@ void Main_WorkoutPage::openFolderWorkout() {
 }
 
 
-
 //--------------------------------------------------------------------------------------
 void Main_WorkoutPage::addToQueue() {
 
@@ -382,7 +366,6 @@ void Main_WorkoutPage::editWorkout() {
 
     qDebug() << "editWorkout";
     Workout workout = tableModel->getWorkoutAtRow(indexSourceSelected);
-
 
 
     qDebug() << "workout repeat size here Before signal" << workout.getLstRepeat().size();
@@ -415,7 +398,6 @@ void Main_WorkoutPage::deleteWorkout() {
 
         tableViewSelectionChanged(QItemSelection(), QItemSelection());
     });
-
 
 
 }
@@ -566,14 +548,7 @@ void Main_WorkoutPage::filterChanged(const QString& field, const QString& value)
     proxyModel->invalidate();
 
 
-
-
-
-
-
 }
-
-
 
 
 //----------------------------------------------------------------------------
@@ -608,14 +583,6 @@ void Main_WorkoutPage::on_checkBox_clicked(bool checked)
 }
 
 
-
-
-
-
-
-
-
-
 //-------------------------------------------------------------------------
 void Main_WorkoutPage::refreshUserWorkout() {
 
@@ -632,8 +599,6 @@ void Main_WorkoutPage::refreshMapWorkout() {
 }
 
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Main_WorkoutPage::paintEvent(QPaintEvent *) {
     QStyleOption opt;
@@ -641,6 +606,4 @@ void Main_WorkoutPage::paintEvent(QPaintEvent *) {
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
-
-
 

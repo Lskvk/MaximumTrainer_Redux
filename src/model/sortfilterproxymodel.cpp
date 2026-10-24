@@ -42,8 +42,6 @@ void SortFilterProxyModel::addFilterFixedString(qint32 column, const QString &pa
 //{
 //    typeWorkout = value;
 
-//}
-
 
 //----------------------------------------------------------------------------------
 void SortFilterProxyModel::addFilterWorkoutType(Workout::WORKOUT_NAME workoutType) {
@@ -58,7 +56,6 @@ void SortFilterProxyModel::addFilterWorkoutType(Workout::WORKOUT_NAME workoutTyp
 }
 
 
-
 //----------------------------------------------------------------------------------
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
@@ -67,13 +64,11 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &so
         return true;
 
 
-
     ///Check Id of workout
     QModelIndex index = sourceModel()->index(sourceRow, 2, sourceParent);
     QVariant variant = sourceModel()->data(index, Qt::UserRole);
     Workout workout;
     workout = variant.value<Workout>();
-    //    qDebug() << "WOKROUT NAME I" << workout.getName()<< "test" <<workout.getCreatedBy() << "ENUM" << workout.getWorkoutNameEnum() << "check with" << typeWorkout;
 
     if (!showWorkoutIncluded && workout.getWorkoutNameEnum() != Workout::USER_MADE)
         return false;
@@ -92,21 +87,11 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &so
         //        contains ( const QString & str, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const
         //        startsWith ( const QString & s, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const
 
-        //        QString data = index.data().toString();
-        //        QString key = iter.value();
-        //        bool resultat =  data.startsWith(key, Qt::CaseInsensitive);
-        //        qDebug() << "startWITH?:" << resultat;
 
-
-        //        qDebug() << "data:" << index.data().toString();
-        //        qDebug() << "value:" << iter.value();
-        //        qDebug() << "equals?:" << ret;
         if(!ret)
             return ret;
     }
 
     return ret;
 }
-
-
 

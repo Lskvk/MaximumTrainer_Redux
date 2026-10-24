@@ -5,7 +5,6 @@
 #include "util.h"
 
 
-
 UserStudioWidget::~UserStudioWidget()
 {
     delete ui;
@@ -360,16 +359,12 @@ void UserStudioWidget::setMaxWorkoutPower(double val) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgIntervalPower(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgIntervalPower->setText(text);
 
     ui->label_avgIntervalPower->setText(QString::number(qRound(val)));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgWorkoutPower(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgWorkoutPower->setText(text);
 
     ui->label_avgWorkoutPower->setText(QString::number(qRound(val)));
 }
@@ -388,16 +383,12 @@ void UserStudioWidget::setMaxWorkoutCad(double val) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgIntervalCad(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgIntervalCadence->setText(text);
 
     ui->label_avgIntervalCadence->setText(QString::number(qRound(val)));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgWorkoutCad(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgWorkoutCadence->setText(text);
 
     ui->label_avgWorkoutCadence->setText(QString::number(qRound(val)));
 }
@@ -416,20 +407,15 @@ void UserStudioWidget::setMaxWorkoutHr(double val) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgIntervalHr(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgIntervalHr->setText(text);
 
     ui->label_avgIntervalHr->setText(QString::number(qRound(val)));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void UserStudioWidget::setAvgWorkoutHr(double val) {
 
-    //    QString text =  locale.toString(val, 'f', 1);
-    //    ui->label_avgWorkoutHr->setText(text);
 
     ui->label_avgWorkoutHr->setText(QString::number(qRound(val)));
 }
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

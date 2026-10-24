@@ -7,16 +7,7 @@
 #include "util.h"
 
 
-
 #include "account.h"
-
-
-
-
-//bool Workout::operator==(const Workout &other) const{
-//    return false;
-
-//}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +23,6 @@ Workout::Workout() {
     this->maxPowerPourcent = 0.0;
     this->durationQTime = QTime(0,0,0);
 
-    //    calculateWorkoutMetrics();
 }
 
 
@@ -61,7 +51,6 @@ Workout::Workout(QString filePath, WORKOUT_NAME workout_name_enum, QList<Interva
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Workout::Workout(QString filePath, WORKOUT_NAME workout_name_enum, QList<Interval> lstInterval,
                  QString name, QString createdBy, QString description, QString plan, Type type) {
@@ -79,7 +68,6 @@ Workout::Workout(QString filePath, WORKOUT_NAME workout_name_enum, QList<Interva
     this->durationQTime = QTime(0,0,0);
 
 
-
     computeWorkoutTotalTime();
 
 
@@ -88,10 +76,8 @@ Workout::Workout(QString filePath, WORKOUT_NAME workout_name_enum, QList<Interva
 }
 
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Workout::computeWorkout() {
-
 
 
     /// Check repeat interval and construct them
@@ -104,7 +90,6 @@ void Workout::computeWorkout() {
             int firstRow = rep.getFirstRow();
             int lastRow = rep.getLastRow();
 
-            //            qDebug() << "numberRepeat:" << numberRepeat << "firstRow" << firstRow << "lastRow" << lastRow;
 
             /// Copy row before first repeat
             if (j==0 && rep.getFirstRow() != 0) {
@@ -195,7 +180,6 @@ void Workout::computeWorkout() {
     }
 
 
-
     computeWorkoutTotalTime();
 
 }
@@ -223,14 +207,9 @@ void Workout::computeWorkoutTotalTime() {
 }
 
 
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Workout::initializeArrayFTP() {
 
-    //    qDebug() << "initializeArrayFTP";
 
     int totalSec  = Util::convertQTimeToSecD(this->durationQTime);
 
@@ -268,7 +247,6 @@ void Workout::initializeArrayFTP() {
     }
 
 
-
     /// 2 - Create array for average %FTP on 30secs -----------------------------
     const int sizeArray2 = (int) (totalSec/30.0 + 0.5);
     const double initValueArray30secFTP = 0.0;
@@ -291,7 +269,6 @@ void Workout::initializeArrayFTP() {
     }
 
 
-
     //    qDebug() << "CHECKING VALUES 1sec";
     //    qDebug() << "Workout:" << this->name << " length is:" << this->getDurationMinutes();
     //    for (int i=0; i<vecFtp1sec.size(); i++)
@@ -307,19 +284,15 @@ void Workout::initializeArrayFTP() {
     //    }
 
 
-
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Workout::calculateWorkoutMetrics() {
 
-    //    qDebug() << "Calculate workout metric";
 
-    /// Get user FTP;
     Account *account = qApp->property("Account").value<Account*>();
     int ftp = account->FTP;
-
 
 
     /// Average Power -----------------------------
@@ -335,7 +308,6 @@ void Workout::calculateWorkoutMetrics() {
     ///--------------------------------------------
 
 
-
     /// Normalized Power ------------------------------
     const double initValueArrayFTP = -1.0;
     QVector<double> vecAvgPowerEvery30sec = QVector<double>(vecFtp30sec.size(), initValueArrayFTP);
@@ -348,9 +320,7 @@ void Workout::calculateWorkoutMetrics() {
         vecAvgPowerEvery30sec[i] = vecAvgPowerEvery30sec[i]*vecAvgPowerEvery30sec[i]*vecAvgPowerEvery30sec[i]*vecAvgPowerEvery30sec[i]; //^4
         avgStep += vecAvgPowerEvery30sec[i];
     }
-    //    qDebug() << "AvgStep:" << avgStep;
     avgStep = avgStep/vecAvgPowerEvery30sec.size();
-    //    qDebug() << "before 1/4:" << avgStep;
 
 
     //    qDebug() << "Workout:" << this->name;
@@ -366,11 +336,7 @@ void Workout::calculateWorkoutMetrics() {
     this->trainingStressScore = (intensityFactor*intensityFactor) * (Util::convertQTimeToSecD(this->durationQTime)/3600) * 100;
 
 
-
-    //    qDebug() << "done calculate Workout Metric";
-
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -440,30 +406,6 @@ QList<RepeatData> Workout::getLstRepeat() const {
 }
 
 
-//QString Workout::getTypeToString(Type type) {
-//    if (type == Workout::T_ENDURANCE ) {
-//        return QApplication::translate("Workout", "Endurance", 0);
-//    }
-//    else if (type == Workout::T_INTERVAL) {
-//        return QApplication::translate("Workout", "Interval", 0);
-//    }
-//    else if (type == Workout::T_TEMPO) {
-//        return QApplication::translate("Workout", "Tempo", 0);
-//    }
-//    else if (type == Workout::T_TEST) {
-//        return QApplication::translate("Workout", "Test", 0);
-//    }
-//    else if (type == Workout::T_OTHERS) {
-//        return QApplication::translate("Workout", "Other", 0);
-//    }
-//    else if (type == Workout::T_THRESHOLD) {
-//        return QApplication::translate("Workout", "Threshold", 0);
-//    }
-//    else {
-//        return QApplication::translate("Workout", "Workout type not defined", 0);
-//    }
-//}
-
 //----------------------------------------------------------------------
 QString Workout::getTypeToString() const {
 
@@ -490,7 +432,4 @@ QString Workout::getTypeToString() const {
     }
 
 }
-
-
-
 

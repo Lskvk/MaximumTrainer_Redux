@@ -40,13 +40,10 @@
 #include "stylehelper.h"
 
 
-
-
 const int iconHeight2 = 45;
 const int widthBar = 85;
 const int FancyTabBar::m_rounding = 30;
 const int FancyTabBar::m_textPadding = 4;
-
 
 
 FancyTabBar::FancyTabBar(const TabBarPosition position, QWidget *parent)
@@ -64,12 +61,10 @@ FancyTabBar::FancyTabBar(const TabBarPosition position, QWidget *parent)
     else
     {
         setMinimumWidth(qMax(2 * m_rounding, 40));
-//        setMaximumWidth(tabSizeHint(false).width());
         setMaximumWidth(widthBar);
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     }
 
-    //    setStyle(new QWindowsStyle);
     setAttribute(Qt::WA_Hover, true);
     setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true); // Needed for hover events
@@ -87,7 +82,6 @@ FancyTabBar::FancyTabBar(const TabBarPosition position, QWidget *parent)
 
 FancyTabBar::~FancyTabBar()
 {
-    //    delete style();
 }
 
 QSize FancyTabBar::tabSizeHint(bool minimum) const
@@ -97,7 +91,6 @@ QSize FancyTabBar::tabSizeHint(bool minimum) const
     boldFont.setBold(true);
     QFontMetrics fm(boldFont);
     int spacing = 8;
-//    int width = 60 + spacing + 2;
     int width = widthBar;
     int maxLabelwidth = 0;
     for (int tab=0 ; tab<count() ;++tab) {
@@ -106,9 +99,7 @@ QSize FancyTabBar::tabSizeHint(bool minimum) const
             maxLabelwidth = width;
     }
     int iconHeight = minimum ? 0 : iconHeight2;
-    //    int iconHeight = minimum ? 0 : 40;
 
-    //        return QSize(qMax(width, maxLabelwidth + 4), iconHeight + spacing + fm.height() );
     return QSize(qMax(width, maxLabelwidth + 4), iconHeight + spacing + fm.height() );
 
 }
@@ -270,19 +261,16 @@ void FancyTabBar::leaveEvent(QEvent *e)
 QSize FancyTabBar::sizeHint() const
 {
     QSize sh = tabSizeHint();
-    //    return QSize(sh.width(), sh.height() * mAttachedTabs.count());
 
     if(mPosition == TabBarPosition::Above || mPosition == TabBarPosition::Below)
         return QSize(sh.width() * mAttachedTabs.count(), sh.height());
     else
         return QSize(sh.width(), 2500);
-    //        return QSize(sh.width(), sh.height() * mAttachedTabs.count());
 }
 
 QSize FancyTabBar::minimumSizeHint() const
 {
     QSize sh = tabSizeHint(true);
-    //    return QSize(sh.width(), sh.height() * mAttachedTabs.count());
 
     if(mPosition == TabBarPosition::Above || mPosition == TabBarPosition::Below)
         return QSize(sh.width() * mAttachedTabs.count(), sh.height());
@@ -357,8 +345,6 @@ void FancyTabBar::paintTab(QPainter *painter, int tabIndex) const
         QLinearGradient grad(getCorner(rect, Corner::OutsideBeginning), getCorner(rect, Corner::InsideBeginning));
         grad.setColorAt(0, QColor(255, 255, 255, 170));
         grad.setColorAt(1, QColor(255, 255, 255, 240));
-//        grad.setColorAt(0, QColor(255, 255, 255, 120));
-//        grad.setColorAt(1, QColor(255, 255, 255, 160));
         painter->fillRect(adjustRect(rect, 0, 0, 0, -1), grad);
         painter->restore();
 

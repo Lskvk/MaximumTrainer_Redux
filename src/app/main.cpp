@@ -30,9 +30,6 @@
 #endif
 
 
-
-
-
 int main(int argc, char *argv[]) {
 
     // Install the Logger as the Qt message handler as early as possible so
@@ -183,13 +180,6 @@ int main(int argc, char *argv[]) {
         LOG_INFO("main", QStringLiteral("Network disabled (MT_NO_NETWORK=1)"));
     }
 
-//    QtMediaPlayer player;
-//    player.setMinimumSize(QSize(500,300));
-//    player.show();
-
-//    WebBrowserV2 player;
-//    player.setMinimumSize(QSize(500,300));
-//    player.show();
 
 #ifndef Q_OS_WASM
     splash.setStatusMessage(QObject::tr("Initializing user profile…"));
@@ -509,7 +499,4 @@ int main(int argc, char *argv[]) {
 
     return app.exec();
 }
-
-
-
 

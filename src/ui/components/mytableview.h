@@ -15,19 +15,14 @@ public:
     explicit MyTableView(QWidget *parent = 0);
 
 
-
-
 private :
     void mouseMoveEvent(QMouseEvent* event);
     void leaveEvent(QEvent *event);
 
 
-    //    void focusOutEvent(QFocusEvent *event);
-
     delegateRowHover *m_background_delegate_hover;
     delegateRowHover *m_background_delegate_notHover;
     int curr_row_hovered;
-
 
 
 };

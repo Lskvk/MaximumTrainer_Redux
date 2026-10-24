@@ -12,7 +12,6 @@ public:
     IntervalData();
     IntervalData( const IntervalData& other );
     ~IntervalData();
-//    bool operator==(const IntervalData &other) const;
 
 
     bool isFreeRideInterval;
@@ -44,10 +43,6 @@ public:
 
     /// Calories
     double calories;
-
-
-
-
 
 
 };

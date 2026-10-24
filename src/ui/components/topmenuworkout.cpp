@@ -67,7 +67,6 @@ TopMenuWorkout::~TopMenuWorkout()
 }
 
 
-
 TopMenuWorkout::TopMenuWorkout(QWidget *parent) : QWidget(parent), ui(new Ui::TopMenuWorkout)
 {
     ui->setupUi(this);
@@ -155,7 +154,6 @@ TopMenuWorkout::TopMenuWorkout(QWidget *parent) : QWidget(parent), ui(new Ui::To
     ui->pushButton_exit->setFocusPolicy(Qt::NoFocus);
 
 
-
 #ifdef Q_OS_WIN32
     ui->pushButton_expand->installEventFilter(this);
     ui->pushButton_expand->setStyleSheet("QPushButton#pushButton_expand{image: url(:/image/icon/exp1);border-radius: 1px;}");
@@ -170,9 +168,7 @@ TopMenuWorkout::TopMenuWorkout(QWidget *parent) : QWidget(parent), ui(new Ui::To
     ui->pushButton_start->setMinimumWidth(130);
     ui->pushButton_lap->setMinimumWidth(130);
 
-    //ui->pushButton_start->setIcon(QIcon());
 #endif
-
 
 
     timeUpdateTime = new QTimer(this);
@@ -288,7 +284,6 @@ bool TopMenuWorkout::eventFilter(QObject *watched, QEvent *event) {
 
     Q_UNUSED(watched);
 
-    //    qDebug() << "watched object" << watched << "event:" << event << "eventType" << event->type();
 
     if(event->type() == QEvent::HoverEnter)
     {
@@ -303,16 +298,9 @@ bool TopMenuWorkout::eventFilter(QObject *watched, QEvent *event) {
 }
 
 
-
-
 ////-----------------------------------------------------------------------------------------------------------------------------------
 //void TopMenuWorkout::setFreeRideMode() {
 
-
-//    ui->label_intervalTime->setVisible(false);
-//    ui->progressBar_interval->setVisible(false);
-
-//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TopMenuWorkout::setMinExpandExitVisible(bool visible) {
@@ -341,9 +329,6 @@ void TopMenuWorkout::on_pushButton_exit_clicked()
 {
     emit exit();
 }
-
-
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -394,30 +379,9 @@ void TopMenuWorkout::setWorkoutNameLabel(QString label) {
     ui->label_nameWorkout->setText(label);
 }
 
-//void TopMenuWorkout::setWorkoutTime(QString time) {
-//    ui->labelTime->setText(time);
-//}
-
-//void TopMenuWorkout::setIntervalTime(QString time) {
-//    ui->label_intervalTime->setText(time);
-//}
-
-//void TopMenuWorkout::setProgressBarMaximum(int value) {
-//    ui->progressBar_interval->setMaximum(value);
-//}
-
-//void TopMenuWorkout::setProgressBarCurrent(int value) {
-//    ui->progressBar_interval->setValue(value);
-//}
-
-//void TopMenuWorkout::setProgressBarMinus1() {
-//    ui->progressBar_interval->setValue(ui->progressBar_interval->value()-1);
-//}
-
 
 //-------------------------------------------------------------------------
 void TopMenuWorkout::setButtonStartPaused(bool showPause) {
-
 
 
     const QSize startIconSize(16, 16);
@@ -439,8 +403,6 @@ void TopMenuWorkout::setButtonStartPaused(bool showPause) {
 void TopMenuWorkout::on_pushButton_start_clicked()
 {
     emit startOrPause();
-
-
 
 
 }
@@ -506,7 +468,6 @@ void TopMenuWorkout::setWorkoutTime(QTime time) {
 
     ui->label_timeElapsed->setText(Util::showQTimeAsString(time));
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////

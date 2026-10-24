@@ -6,11 +6,9 @@
 #include "util.h"
 
 
-
 InfoWidget::~InfoWidget() {
     delete ui;
 }
-
 
 
 InfoWidget::InfoWidget(QWidget *parent) : QWidget(parent), ui(new Ui::InfoWidget) {
@@ -48,23 +46,11 @@ InfoWidget::InfoWidget(QWidget *parent) : QWidget(parent), ui(new Ui::InfoWidget
 }
 
 
-//void InfoWidget::setFreeRideMode() {
-
-//    ui->label_AvgIntervalTxt->setVisible(false);
-//    ui->label_avgInterval->setVisible(false);
-//    ui->label_maxInterval->setVisible(false);
-
-//    ui->label_WorkoutTxt->setVisible(false);
-//    ui->label_range->setVisible(false);
-
-
 //    ///Move Icon and value 1 column to the right
 //    QLabel *labelIcon = ui->label_image;
 //    QLabel *labelValue = ui->label_currentValue;
 //    ui->gridLayout->addWidget(labelIcon,0,3,1,1, Qt::AlignLeft);
 //    ui->gridLayout->addWidget(labelValue,0,4,1,1, Qt::AlignLeft);
-
-//}
 
 
 //////////////////////////////////////////////////////////////
@@ -123,11 +109,9 @@ void InfoWidget::setTrainerSpeed(double v) {
         ui->label_trainerSpeed->setText("" + QString::number(v, 'f', 1));
 
 
-//        ui->label_trainerSpeedTxt->setText(" " + QString::number(v, 'f', 1));
     }
 
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,8 +174,6 @@ void InfoWidget::setValue( int value ) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 void InfoWidget::targetChanged(double percentageValue, int range) {
 
-    //    qDebug() << "infoBox: targetChanged" << target << "r:" << range;
-
 
     if (percentageValue < 0) { //no target
         ui->label_range->setVisible(false);
@@ -213,7 +195,6 @@ void InfoWidget::targetChanged(double percentageValue, int range) {
         realTarget = qRound(percentageValue * LTHR);
     }
 
-    //    ui->label_targetValue->setText(QString::number(target) + " (±" + QString::number(range)  + ")");
     ui->label_targetValue->setText(QString::number(realTarget));
 
 
@@ -273,9 +254,6 @@ void InfoWidget::avgWorkoutChanged(double avg) {
     QString text =  locale.toString(avg, 'f', 1);
     ui->label_avgWorkout->setText(text);
 }
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

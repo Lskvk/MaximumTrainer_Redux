@@ -3,7 +3,6 @@
 #include "util.h"
 
 
-
 MyQwtPlotPicker::MyQwtPlotPicker( int xAxis, int yAxis,
                                   RubberBand rubberBand, DisplayMode trackerMode,
                                   QWidget *canvas ):
@@ -12,7 +11,6 @@ MyQwtPlotPicker::MyQwtPlotPicker( int xAxis, int yAxis,
                    canvas )
 {
 }
-
 
 
 /*!
@@ -41,8 +39,6 @@ QwtText MyQwtPlotPicker::trackerTextF( const QPointF &pos ) const
         text = QString::asprintf( "%.4f", pos.x() );
         break;
     default:
-//        double sec = pos.x()/60.0;
-//        QTime time = Util::convertMinutesToQTime(sec);
 
         QTime time0(0,0,0);
         time0 = time0.addSecs(pos.x());
@@ -50,7 +46,6 @@ QwtText MyQwtPlotPicker::trackerTextF( const QPointF &pos ) const
 
         QString timeToShow = Util::showQTimeAsString(time0);
         text = QString("%1, %2").arg(timeToShow).arg((int)pos.y());
-//        text.sprintf( "%s, %.0f", timeToShow, pos.y() );
     }
 
 

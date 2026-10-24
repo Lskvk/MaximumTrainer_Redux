@@ -24,9 +24,6 @@ private :
 
     void selectionChanged (const QItemSelection & selected, const QItemSelection & deselected );
 
-    //    void focusOutEvent(QFocusEvent *event);
-    //    delegateRowHover *m_background_delegate_hover;
-    //    delegateRowHover *m_background_delegate_notHover;
 
     int curr_row_hovered;
     int curr_row_selected;

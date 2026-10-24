@@ -10,12 +10,6 @@ RepeatWidget::~RepeatWidget() {
     delete data;
 }
 
-//void RepeatWidget::moveEvent (QMoveEvent * event) {
-
-//    qDebug() << "MOVE EVENT repeat Widget";
-//}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 RepeatWidget::RepeatWidget(RepeatData *data, QWidget *parent) :
@@ -44,8 +38,6 @@ RepeatWidget::RepeatWidget(RepeatData *data, QWidget *parent) :
     ui->widget_right->setAttribute(Qt::WA_NoMousePropagation);
 
 
-
-
     this->data = data;
 
     ui->comboBox_repeat->setCurrentText(QString::number(data->getNumberRepeat()));
@@ -67,9 +59,6 @@ bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 //    ///Check if mouse is on the scroll bar, remove hover effect on the rows
 //    QComboBox *ptrCombo = qobject_cast<QComboBox*>(watched);
 
-//    if (ptrCombo != NULL && event->type() == QEvent::MouseButtonPress) {
-//        qDebug() << "Button Press got here EventFilter!...";
-//    }
 
     if (event->type() == QEvent::MouseButtonPress) {
         qDebug() << "Button Press got here EventFilter!...";
@@ -79,7 +68,6 @@ bool RepeatWidget::eventFilter(QObject *watched, QEvent *event) {
 
     return false;
 }
-
 
 
 //---------------------------------------------------------
@@ -94,8 +82,6 @@ bool RepeatWidget::myLessThan(RepeatWidget* left, RepeatWidget* right) {
 }
 
 
-
-
 //////////////////////////////////////////////////////////////////////////////
 void RepeatWidget::on_pushButton_delete_clicked()
 {
@@ -107,5 +93,4 @@ void RepeatWidget::onRepeatCountChanged(const QString &arg1)
     this->data->setNumberRepeat(arg1.toInt());
     emit updateSignal(this->data->getId());
 }
-
 

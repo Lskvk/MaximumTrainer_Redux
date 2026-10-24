@@ -26,14 +26,10 @@ infosWorkout::~infosWorkout()
     delete ui;
 }
 
-//ui->label_image->setStyleSheet("image: url(:/image/icon/burn)");
-//ui->label_image->setToolTip(tr("Calories - kilocalorie"));
-//ui->label_image->setMaximumWidth(32);
 
 //else if(this->type == InfoWidget::CALORIES) {
 //    ui->label_currentValue->setText(QString::number((int)v)); //do not show decimals
 //}
-
 
 
 //------------------------------------------------------
@@ -85,7 +81,6 @@ void infosWorkout::distanceChanged(double meters) {
     }
 
 }
-
 
 
 //--------------------------------------------------

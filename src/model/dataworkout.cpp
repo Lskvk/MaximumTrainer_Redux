@@ -12,7 +12,6 @@
 #include "myconstants.h"
 
 
-
 DataWorkout::~DataWorkout() {
 
     qDebug() << "Destructor DataWorkout";
@@ -74,7 +73,6 @@ DataWorkout::DataWorkout(Workout workout, int userftp, QObject *parent) : QObjec
     nbPointsWorkoutPower = 0;
 
 
-
     /// Calories
     calories = 0.0;
     lapCalories = 0.0;
@@ -116,20 +114,7 @@ DataWorkout::DataWorkout(Workout workout, int userftp, QObject *parent) : QObjec
     numberTimeUsedLastSaturatedHemoglobinPercent = 0;
 
 
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +147,6 @@ QString DataWorkout::getFitFilename() {
         return fitCreator.getFilename();
     else return "";
 }
-
 
 
 //-----------------------------------------------------------------------------------------------
@@ -292,18 +276,12 @@ void DataWorkout::updateData(bool studioMode, int secReceived,
     }
 
 
-
     if (writeRecord) {
         fitCreator.writeRecord(secReceived,
                                averageHr1sec, averageCadence1sec, averageSpeed1sec, averagePower1sec,
                                rightPedal, avgLeftTorqueEff, avgRightTorqueEff, avgLeftPedalSmooth,avgRightPedalSmooth, avgCombinedPedalSmooth,
                                saturatedHemoglobinPercent, totalHemoglobinConc);
     }
-
-
-
-
-
 
 
 }
@@ -369,7 +347,6 @@ void DataWorkout::checkUpdateMaxPower(int value) {
 //-----------------------------------------------------------------------------------------------
 void DataWorkout::updateDistance(double metersToAdd) {
 
-//    qDebug() << "updateDistanceDone" << "metersToAdd" << metersToAdd << "totalMeters" << totalMeters;
     totalMeters += metersToAdd;
 
     emit totalDistanceChanged(totalMeters);
@@ -377,16 +354,11 @@ void DataWorkout::updateDistance(double metersToAdd) {
 }
 
 
-
-
-
-
 //-----------------------------------------------------------------------------------------------
 void DataWorkout::changeInterval(double timeStarted, double timeNow, int timePaused_msec, bool workoutOver, bool testInterval) {
 
 
     qDebug() << "CHANGE INTERVAL! timeStarted:" << timeStarted << "timeNow" << timeNow;
-
 
 
     fitCreator.writeLapMesg(timeStarted, timeNow, timePaused_msec,
@@ -436,7 +408,6 @@ void DataWorkout::changeInterval(double timeStarted, double timeNow, int timePau
     nbLap++;
 
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -505,7 +476,6 @@ void DataWorkout::cadDataReceived(double value) {
 }
 
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::speedDataReceived(double value) {
 
@@ -538,7 +508,6 @@ void DataWorkout::speedDataReceived(double value) {
     emit avgSpeedWorkoutChanged(avgWorkoutSpeed);
     emit avgSpeedIntervalChanged(avgIntervalSpeed);
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -584,16 +553,12 @@ void DataWorkout::powerDataReceived(int secReceived, double value) {
 }
 
 
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
 
 
     ///--------------- Update vecMeanPower30sec for NP, TSS, IF in real-time ----------------------
     //    qDebug() << "UpdateWorkoutMetrics, secReveiced:" << secReceived << "nbPoints30SecPower" << nbPoints30SecPower << "power:" << value;
-
-
 
 
     /// 2- Put the value of each vecMeanPower30sec[x] ^4
@@ -620,7 +585,6 @@ void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
 
 
     double totalSumExp4WithLast30Sec = totalSumExp4 + (last30secMean*last30secMean*last30secMean*last30secMean);
-    //    qDebug() << "TotalSumExp4:" << totalSumExp4 << "TotalSumExp4WithLast30sec:" << totalSumExp4WithLast30Sec << "last30secMean:" << last30secMean;
     double avgStep2 = totalSumExp4WithLast30Sec/nb30secMean;
     normalizedPower = qPow(avgStep2, 1/4.);
     //    qDebug() << "NP IS:" << normalizedPower;
@@ -633,7 +597,6 @@ void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
 
 
     if (nbPoints30SecPower == 29) {
-        //        qDebug() << "#######30 sec done, increment index value!";
         nbPoints30SecPower = 0;
         // add last 30sec mean to cumulative totalSumExp4
         totalSumExp4 += last30secMean*last30secMean*last30secMean*last30secMean;
@@ -648,12 +611,7 @@ void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
     emit tssChanged(trainingStressScore);
 
 
-
 }
-
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -697,7 +655,6 @@ int DataWorkout::getFTP_8min() {
 }
 
 
-
 //---------------------------------------------------------------
 int DataWorkout::getLTHR() {
 
@@ -713,13 +670,4 @@ int DataWorkout::getLTHR() {
 
     return ((int)(moyenne + 0.5));
 }
-
-
-
-
-
-
-
-
-
 

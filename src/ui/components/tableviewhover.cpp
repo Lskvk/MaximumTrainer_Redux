@@ -19,7 +19,6 @@ TableViewHover::TableViewHover(QWidget *parent) :
 }
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool TableViewHover::eventFilter(QObject *watched, QEvent *event) {
 
@@ -28,7 +27,6 @@ bool TableViewHover::eventFilter(QObject *watched, QEvent *event) {
     QScrollBar *ptrScroll = qobject_cast<QScrollBar*>(watched);
 
     if (ptrScroll != NULL && (event->type() == QEvent::HoverEnter || event->type() == QEvent::HoverMove) ) {
-//        qDebug() << "got here EventFilter...";
         bandHover->setVisible(false);
         curr_row_hovered = -1;
     }
@@ -40,10 +38,8 @@ bool TableViewHover::eventFilter(QObject *watched, QEvent *event) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TableViewHover::selectionChanged (const QItemSelection & selected, const QItemSelection & deselected ) {
 
-//    qDebug() << "selectionChanged TableViewHover!";
 
     QModelIndexList lstSelected = selected.indexes();
-//    qDebug() << lstSelected.size();
 
     if (lstSelected.size() < 1) {
         this->selectionModel()->clearSelection();
@@ -55,9 +51,6 @@ void TableViewHover::selectionChanged (const QItemSelection & selected, const QI
         curr_row_selected = modelIndex.row();
         QTableView::selectionChanged(selected, deselected);
     }
-
-
-
 
 
 }
@@ -120,8 +113,6 @@ void TableViewHover::mouseMoveEvent(QMouseEvent* event) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void TableViewHover::leaveEvent(QEvent *event) {
 
-//    qDebug() << "LeaveEvent" << curr_row_hovered;
-
 
     if (curr_row_hovered != -1) {
         bandHover->setVisible(false);
@@ -130,17 +121,13 @@ void TableViewHover::leaveEvent(QEvent *event) {
     }
 
 
-
     QTableView::leaveEvent(event);
 }
-
 
 
 //-------------------------------------------------------------
 void TableViewHover::focusOutEvent(QFocusEvent* event) {
 
-
-//    qDebug() << "FOCUS OUT EVENT" << curr_row_hovered << "EventType" << event;
 
     //avoid right clicking lost focus on row
     if (event->reason() == Qt::PopupFocusReason )

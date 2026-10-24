@@ -212,7 +212,6 @@ void myCreatorPlot::ajustScales() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void myCreatorPlot::pointClicked(QPointF pt) {
 
-    qDebug() << "point clicked**********************" << pt.x() << pt.y();
 
     if (pickerMachine->rightClickPressed) {
         emit rightClickedGraph(pt);  /// this is the graph spot coords, not good place to show

@@ -41,16 +41,11 @@ const int fecChannelNumber = 1;
 const int pmChannelNumber = 2;
 const int oxyChannelNumber = 3;
 
-//const int nbMaxAntStick = 8;
-
-
 
 //----- Color changing on Widget target -----------------
 const QString stylesheetOK = "background-color: transparent;";
 const QString stylesheetTooLow = "background-color: rgba(14, 61, 170, 255);";
 const QString stylesheetTooHigh = "background-color: rgba(128, 0, 0, 255);";
-
-
 
 
 // Used for Gzip convertion
@@ -102,7 +97,6 @@ const quint32 crc_32_tab[] = { /* CRC polynomial 0xedb88320 */
 
 
 } // namespace constants
-
 
 
 #endif // MYCONSTANTS

@@ -9,7 +9,6 @@
 #include "repeatdata.h"
 
 
-
 class Workout
 {
     //http://qt-project.org/doc/qt-4.8/containers.html#assignable-data-types
@@ -43,7 +42,6 @@ public:
     };
 
 
-
     Workout();
     Workout(QString filePath, WORKOUT_NAME workout_name_enum, QList<Interval> lstIntervalSource, QList<RepeatData> lstRepeat,
             QString name, QString createdBy, QString description, QString plan, Type type);
@@ -52,15 +50,12 @@ public:
             QString name, QString createdBy, QString description, QString plan, Type type);
 
 
-//    bool operator==(const Workout &other) const;
     void computeWorkout();
     void computeWorkoutTotalTime();
 
     /// update NP, IF, TSS
     void initializeArrayFTP();
     void calculateWorkoutMetrics();
-
-
 
 
     const QList<Interval> &getLstInterval() const;
@@ -85,7 +80,6 @@ public:
     double getNormalizedPower() const;
     double getIntensityFactor() const;
     double getTrainingStressScore() const;
-
 
 
     void setFilePath(QString filePath) {

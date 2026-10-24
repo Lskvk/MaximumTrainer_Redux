@@ -29,16 +29,13 @@ void delegateRowHover::paint(QPainter *painter, const QStyleOptionViewItem &opti
     if (option.state & QStyle::State_HasFocus) {
 
          if (option.state & QStyle::State_Selected) {
-             //do nothing;
          }
          else {
              painter->setPen(QColor(Qt::red));
              painter->drawRect(option.rect);
          }
 
-//        QModelIndex leftIndex = index.model()->index(index.row(), 0, QModelIndex());
     }
-
 
 
     /// Name
@@ -76,18 +73,11 @@ void delegateRowHover::paint(QPainter *painter, const QStyleOptionViewItem &opti
         plotRender.render(&plot, painter, option.rect);
 
 
-
     }
 
     else {
         QStyledItemDelegate::paint(painter, opt, index);
     }
-
-
-
-
-
-
 
 
 }

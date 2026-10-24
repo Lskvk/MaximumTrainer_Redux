@@ -5,14 +5,12 @@
 #include <QCursor>
 
 
-
 IntervalTableModel::IntervalTableModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
 
     this->account = qApp->property("Account").value<Account*>();
 }
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +31,6 @@ void IntervalTableModel::setListInterval(QList<Interval> lstInterval) {
 
     updateRowSourceInterval();
     endResetModel();
-    //    emit dataChanged();
 
 }
 
@@ -59,8 +56,6 @@ void  IntervalTableModel::removeIntervalRepeatData(int firstRow, int lastRow) {
             interval.setRepeatIncreaseCadence(0);
             interval.setRepeatIncreaseLTHR(0);
             lstInterval.replace(i, interval);
-            //            qDebug() << "after" << i << "setRepeatIncreaseLTHR" << interval.getRepeatIncreaseLTHR() <<
-            //                        "setRepeatIncreaseCadence" << interval.getRepeatIncreaseCadence() << "setRepeatIncreaseLTHR" << interval.getRepeatIncreaseLTHR();
         }
     }
 }
@@ -69,7 +64,6 @@ void  IntervalTableModel::removeIntervalRepeatData(int firstRow, int lastRow) {
 QList<Interval> IntervalTableModel::getLstInterval() {
     return this->lstInterval;
 }
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -304,9 +298,6 @@ QVariant IntervalTableModel::data(const QModelIndex &index, int role) const {
 }
 
 
-
-
-
 //--------------------------------------------------------------------------------------------------------
 bool IntervalTableModel::setData(const QModelIndex &index, const QVariant &value, int role) {
 
@@ -347,8 +338,6 @@ bool IntervalTableModel::setData(const QModelIndex &index, const QVariant &value
     emit dataChanged();
     return true;
 }
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -433,7 +422,6 @@ bool IntervalTableModel::copyRows(int row) {
 }
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool IntervalTableModel::insertRows(int position, int rows, const QModelIndex &index)
 {
@@ -483,7 +471,6 @@ bool IntervalTableModel::removeRows(int position, int rows, const QModelIndex &i
     qDebug() << "removeRows done";
     return true;
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

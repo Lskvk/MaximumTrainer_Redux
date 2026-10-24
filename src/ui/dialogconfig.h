@@ -13,7 +13,6 @@
 #include "radiotablemodel.h"
 
 
-
 namespace Ui {
 class DialogConfig;
 }
@@ -33,19 +32,13 @@ public:
     void saveSettings();
 
 
-
-
-
-
 signals:
     void signal_connectToRadioUrl(QString url);
     void signal_volumeRadioChanged(int volume);
     void signal_stopPlayingRadio();
 
 
-
     void radioStatus(QString status);
-
 
 
 public slots:
@@ -59,8 +52,6 @@ public slots:
     void radioVolumeDown();
     /// Current radio volume (0-100), for the workout top-bar indicator.
     int radioVolume() const;
-
-
 
 
 private slots:
@@ -122,9 +113,6 @@ private slots:
     void on_checkBox_showCurrentTarget_clicked(bool checked);
 
 
-
-
-
     void on_pushButton_rightTimer_clicked();
 
     void on_pushButton_leftTimer_clicked();
@@ -160,10 +148,6 @@ private slots:
     void on_pushButton_rightOxygen_clicked();
 
 
-
-
-
-
     void on_checkBox_showTrainerSpeed_clicked(bool checked);
 
     void on_spinBox_value_intervalmessage_duration_sec_valueChanged(int arg1);
@@ -191,7 +175,6 @@ private:
 
     Ui::DialogConfig *ui;
     WorkoutDialog *parentDialog;
-    //    Settings *settings;
     Account *account;
     SoundPlayer *soundPlayer;
 
@@ -207,5 +190,4 @@ private:
 };
 
 #endif // DIALOGCONFIG_H
-
 

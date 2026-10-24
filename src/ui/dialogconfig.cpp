@@ -16,7 +16,6 @@
 #include "account.h"
 
 
-
 DialogConfig::~DialogConfig() {
 
 
@@ -31,14 +30,12 @@ DialogConfig::~DialogConfig() {
 }
 
 
-
 DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialog *ptrParent) : QDialog(parent), ui(new Ui::DialogConfig) {
 
 
     qDebug() << "DialogConfig constructor";
 
     ui->setupUi(this);
-
 
 
     currentRadioName = "";
@@ -79,10 +76,6 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
     ///-----
 
 
-
-
-
-
     isHoldingSliderSound = true;
     playOnNextSliderRelease = false;
 
@@ -100,8 +93,6 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
 
     initUi();
     isHoldingSliderSound = false;
-
-
 
 
     /// ------------------------------ Internet Radio --------------------------------------
@@ -135,7 +126,6 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
     }
 
 
-    //    ui->tableView_radio->sortByColumn(0, Qt::AscendingOrder);
     ui->tableView_radio->setColumnWidth(0, 160);
     ui->tableView_radio->setColumnWidth(1, 160);
     ui->tableView_radio->setColumnWidth(2, 50);
@@ -148,7 +138,6 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
     int volume = settings.value("volume", 100 ).toInt();
     settings.endGroup();
     ui->slider_volumeRadio->setValue(volume);
-
 
 
     connect(ui->tableView_radio, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(RadioDoubleClicked(QModelIndex)) );
@@ -166,10 +155,7 @@ DialogConfig::DialogConfig(QList<Radio> lstRadio, QWidget *parent,  WorkoutDialo
     connect(ui->pushButton_playPause, SIGNAL(clicked()), this, SLOT(playPauseRadio()) );
 
 
-
 }
-
-
 
 
 void DialogConfig::on_pushButton_prevRadio_clicked()
@@ -229,10 +215,6 @@ void DialogConfig::playNextOrPreviousRadio(bool next) {
     RadioDoubleClicked(indexToSelect);
 
 
-
-
-
-
 }
 
 
@@ -243,7 +225,6 @@ void DialogConfig::RadioDoubleClicked(QModelIndex index) {
 
     currentRadioIndex = index;
     qDebug() << "RadioDoubleClicked1" << index << "currentNow:" << currentRadioIndex;
-
 
 
     qDebug() << "Getting radio from model...";
@@ -274,7 +255,6 @@ void DialogConfig::RadioDoubleClicked(QModelIndex index) {
 
     emit signal_connectToRadioUrl(radio.getUrl());
     emit signal_volumeRadioChanged(ui->slider_volumeRadio->value());
-
 
 
 }
@@ -324,9 +304,6 @@ void DialogConfig::playPauseRadio() {
     }
 
 
-
-
-
 }
 
 
@@ -335,27 +312,6 @@ void DialogConfig::currentListViewSelectionChanged(int section) {
 
     ui->stackedWidget->setCurrentIndex(section);
 
-    //    if (section == 0) {
-    //        ui->label_headerSettings->setText(tr("General"));
-    //    }
-    //    else if (section == 1) {
-    //        ui->label_headerSettings->setText(tr("Widgets"));
-    //    }
-    //    else if (section == 2) {
-    //        ui->label_headerSettings->setText(tr("Graph"));
-    //    }
-    //    else if (section == 3) {
-    //        ui->label_headerSettings->setText(tr("Sounds"));
-    //    }
-    //    else if (section == 4) {
-    //        ui->label_headerSettings->setText(tr("Video Player"));
-    //    }
-    //    else if (section == 5) {
-    //        ui->label_headerSettings->setText(tr("Radio"));
-    //    }
-    //    else {
-    //        ui->label_headerSettings->setText(tr("-"));
-    //    }
 
 }
 
@@ -387,7 +343,6 @@ void DialogConfig::sliderValueMoved(int value) {
 void DialogConfig::playSoundTestEffect() {
     soundPlayer->setVolume(ui->horizontalSlider_volume->value());
     soundPlayer->playSoundEffectTest();
-
 
 
 }
@@ -606,7 +561,6 @@ void DialogConfig::on_checkBox_showTimerOnTop_clicked(bool checked)
 }
 
 
-
 void DialogConfig::on_checkBox_showIntervalRemainingTime_clicked(bool checked)
 {
 
@@ -661,7 +615,6 @@ void DialogConfig::on_checkBox_showTrainerSpeed_clicked(bool checked)
     account->show_trainer_speed = checked;
     parentDialog->showTrainerSpeed(checked);
 }
-
 
 
 //-----------------------------------------------------------------------------------
@@ -740,7 +693,6 @@ void DialogConfig::on_checkBox_enableOxygen_clicked(bool checked)
 }
 
 
-
 //------------------------------------------------------------------------------------
 void DialogConfig::on_checkBox_enableCalories_clicked(bool checked) {
 
@@ -748,10 +700,6 @@ void DialogConfig::on_checkBox_enableCalories_clicked(bool checked) {
     parentDialog->showCaloriesDisplayWidget();
 
 }
-
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -790,9 +738,6 @@ void DialogConfig::on_comboBox_startTrigger_activated(int index) {
     saveSettings();
 
 }
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -875,7 +820,6 @@ void DialogConfig::saveSettings() {
     account->show_current_target = ui->checkBox_showCurrentTarget->isChecked();
 
 
-
     /// Display widgets
     account->display_hr = ui->comboBox_displayHR->currentIndex() + 1;
     account->display_power = ui->comboBox_displayPower->currentIndex() + 1;
@@ -930,22 +874,8 @@ void DialogConfig::saveSettings() {
 }
 
 
-
-
-
-
-
-
-
-
 //-------------------------------------------------------------------------------------
 void DialogConfig::moveElement(QString widgetIdentifier, bool moveRight) {
-
-
-    //    qDebug() << "Before moving";
-    //    for (int i=0; i<settings->getNumberWidget(); i++) {
-    //        qDebug() << settings->tabDisplay[i];
-    //    }
 
 
     //get position current widget
@@ -972,19 +902,9 @@ void DialogConfig::moveElement(QString widgetIdentifier, bool moveRight) {
     account->tab_display[positionWidget] = widgetToSwitch;
 
 
-    //    qDebug() << "**After moving";
-    //    for (int i=0; i<settings->getNumberWidget(); i++) {
-    //        qDebug() << settings->tabDisplay[i];
-    //    }
-
-
     //redraw
     parentDialog->moveWidgetsPosition();
 }
-
-
-
-
 
 
 //---------------------------------------------------------
@@ -1061,15 +981,10 @@ void DialogConfig::on_pushButton_rightOxygen_clicked()
 }
 
 
-
-
-
 void DialogConfig::on_spinBox_value_intervalmessage_duration_sec_valueChanged(int arg1)
 {
     account->saveNbSecShowInterval(arg1);
 }
-
-
 
 
 void DialogConfig::on_spinBox_value_intervalmessage_before_valueChanged(int arg1)

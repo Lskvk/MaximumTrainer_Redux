@@ -26,12 +26,9 @@ HrEditor::HrEditor(QWidget *parent) :
     editingInBpm = false;
 
 
-
     setAutoFillBackground(true);
     setAttribute(Qt::WA_NoMousePropagation);
     setWindowFlags(Qt::WindowStaysOnTopHint);
-
-
 
 
     ui->gridLayout->setRowMinimumHeight(0,45);
@@ -39,7 +36,6 @@ HrEditor::HrEditor(QWidget *parent) :
 
     MetricEditorVisibility::applyNativeOkCancelButtons(ui->pushButton_ok, ui->pushButton_default);
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -56,20 +52,8 @@ void HrEditor::setInterval(const Interval &interval) {
 
     qDebug() << "SEt interval Hr range is" <<  myInterval.getHR_range();
 
-    //    if (myInterval.getHR_range() < 5 || myInterval.getHR_range() > 100 ) {
-    //        ui->spinBox_rangeLthr->setValue(20);
-    //        on_spinBox_rangeLthr_valueChanged(20);
-    //    }
-    //    else {
-    //        ui->spinBox_rangeLthr->setValue(myInterval.getCadence_range());
-    //        on_spinBox_rangeLthr_valueChanged(myInterval.getCadence_range());
-    //    }
-
-
 
 }
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -117,9 +101,6 @@ void HrEditor::on_spinBox_lthrEnd_valueChanged(double arg1)
          myInterval.setTargetHR_end(arg1/100.0);
     }
 }
-
-
-
 
 
 void HrEditor::on_spinBox_rangeLthr_valueChanged(int arg1)

@@ -44,7 +44,6 @@ Workout WorkoutUtil::getWorkoutMap(int userFTP) {
 Workout WorkoutUtil::MAP(int userFTP) {
 
 
-    qDebug() << "GOT HERE MAP TEST!" << userFTP;
 
     //Le dernier palier complété donne la PAM.
     //Si l'on complète 1'15 au palier de 300W, le résultat est 270 (dernier palier complété) + 12,5W (1'15 de fait sur 3:00 à 300W) = PAM de 282,5W

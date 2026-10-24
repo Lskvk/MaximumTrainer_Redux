@@ -4,14 +4,10 @@
 #include "util.h"
 
 
-
-
 TimeWidget::~TimeWidget()
 {
     delete ui;
 }
-
-
 
 
 TimeWidget::TimeWidget(QWidget *parent) :
@@ -28,7 +24,6 @@ TimeWidget::TimeWidget(QWidget *parent) :
     ui->label_imagePower->setToolTip(tr("Power - %FTP"));
     ui->label_targetPower->setToolTip(tr("Power - %FTP"));
 
-    //    ui->label_imagePower->setPixmap();
 
     ui->label_imageCad->setStyleSheet("image: url(:/image/icon/crank2)");
     ui->label_imageCad->setToolTip(tr("Cadence - rpm"));
@@ -49,7 +44,6 @@ TimeWidget::TimeWidget(QWidget *parent) :
 
 
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,21 +135,18 @@ void TimeWidget::showIntervalRemaining(bool show) {
 
     intervalEnabled = show;
     ui->label_intervalTime->setVisible(show);
-    //    ui->label_timeInterval_txt->setVisible(show);
 }
 
 void TimeWidget::showWorkoutRemaining(bool show) {
 
     remainingEnabled = show;
     ui->label_remainingTime->setVisible(show);
-    //    ui->label_timeWorkoutRemaining_txt->setVisible(show);
 }
 
 void TimeWidget::showWorkoutElapsed(bool show) {
 
     elapsedEnabled = show;
     ui->label_timeElapsed->setVisible(show);
-    //    ui->label_timeWorkoutElaps_txt->setVisible(show);
 
 }
 
@@ -171,18 +162,15 @@ bool TimeWidget::hasVisibleContent() const {
 }
 
 
-
 //-----------------------------------------------------
 void TimeWidget::setFreeRideMode() {
 
-    //    ui->label_timeInterval_txt->setText(tr("Elapsed Interval"));
     ui->label_intervalTime->setToolTip(tr("Elapsed Interval"));
 
     ui->label_remainingTime->setVisible(false);
     ui->label_timeWorkoutRemaining_txt->setVisible(false);
 
     ui->groupBox->setVisible(false);
-
 
 
 }

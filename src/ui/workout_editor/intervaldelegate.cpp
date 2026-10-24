@@ -13,22 +13,9 @@
 #include "tableviewinterval.h"
 
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //void IntervalDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 //{
-
-//    QStyleOptionViewItemV4 opt = option;
-//    initStyleOption(&opt, index);
-//    opt.showDecorationSelected = true;
-
-
-
-//    else {
-//        QStyledItemDelegate::paint(painter, option, index);
-//    }
-//}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +32,6 @@ QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 {
 
 
-    /// Duration;
     if (index.column() == 1 ) {
         QTimeEdit *editor = new QTimeEdit(parent);
         editor->setDisplayFormat("hh:mm:ss");
@@ -117,7 +103,6 @@ void IntervalDelegate::cancelWidgetEditor() {
 void IntervalDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 
-    /// Duration;
     if (index.column() == 1 ) {
         QTime time1 = index.model()->data(index, Qt::EditRole).toTime();
         QTimeEdit *timeEdit = static_cast<QTimeEdit*>(editor);
@@ -244,23 +229,14 @@ void IntervalDelegate::updateEditorGeometry(QWidget *editor,  const QStyleOption
     }
 
 
-
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 QSize IntervalDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 
-    //    return QSize(500,200);
 
     return QStyledItemDelegate::sizeHint(option, index);
 
-    //    if (index.data().canConvert<StarRating>()) {
-    //        StarRating starRating = qvariant_cast<StarRating>(index.data());
-    //        return starRating.sizeHint();
-    //    } else {
-    //        return QStyledItemDelegate::sizeHint(option, index);
-    //    }
 }
