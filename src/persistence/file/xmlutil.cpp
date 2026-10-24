@@ -620,8 +620,6 @@ RepeatData XmlUtil::parseRepeat(QXmlStreamReader &xml) {
         }
     }
 
-    /// TODO Verif validity first row, with interval list
-
     return rep;
 
 }

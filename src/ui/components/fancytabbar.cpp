@@ -376,7 +376,6 @@ void FancyTabBar::paintTab(QPainter *painter, int tabIndex) const
     const bool drawIcon = rect.height() > 36;
     QRect tabIconRect(tabTextRect);
 
-    //        tabTextRect.translate(0, drawIcon ? -2 : 1);  //TODO: ici
     tabTextRect.translate(0, drawIcon ? -2 : 1);
     QFont boldFont(painter->font());
     boldFont.setPointSizeF(StyleHelper::sidebarFontSize());

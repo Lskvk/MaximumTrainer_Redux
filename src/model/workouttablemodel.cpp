@@ -229,7 +229,6 @@ QVariant WorkoutTableModel::data(const QModelIndex &index, int role) const {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutTableModel::deleteWorkoutWithName(QString name) {
 
-    //TOFIX; Use hashtable instead QList, faster access
     for (int i=0; i<lstWorkout.size(); i++)
     {
         Workout workout = lstWorkout.at(i);

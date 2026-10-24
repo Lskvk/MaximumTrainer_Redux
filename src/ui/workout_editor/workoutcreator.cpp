@@ -83,7 +83,7 @@ WorkoutCreator::WorkoutCreator(QWidget *parent) : QWidget(parent), ui(new Ui::Wo
     ui->tableView->setModel(intervalModel);
 
 
-    //Connect Edit trigger (fix bug that sometimes select Cell instead of edit, TOFIX: edit: editing failed on columns not editable..)
+    // Open the editor on click; otherwise a click sometimes only selected the cell.
     connect(ui->tableView, SIGNAL(clicked(QModelIndex)), ui->tableView, SLOT(edit(QModelIndex)));
 
     // Column widths are distributed responsively to fill the table — see
