@@ -14,8 +14,6 @@
 
 DataWorkout::~DataWorkout() {
 
-    qDebug() << "Destructor DataWorkout";
-
 
     closeFitFile();
 }
@@ -152,7 +150,6 @@ void DataWorkout::updateData(bool studioMode, int secReceived,
 
 
     bool writeRecord = false;
-    //    qDebug() << secReceived << "update Data DataWorkout" <<
     //                "HR:" << averageHr1sec << "CAD:" << averageCadence1sec << "Speed:" << averageSpeed1sec<< "Power:" << averagePower1sec <<
     //                "rightPedal:" << rightPedal << "saturatedHemoglobinPercent:" << saturatedHemoglobinPercent << "totalHemoglobinConc:" << totalHemoglobinConc;
 
@@ -347,9 +344,6 @@ void DataWorkout::updateDistance(double metersToAdd) {
 void DataWorkout::changeInterval(double timeStarted, double timeNow, int timePaused_msec, bool workoutOver, bool testInterval) {
 
 
-    qDebug() << "CHANGE INTERVAL! timeStarted:" << timeStarted << "timeNow" << timeNow;
-
-
     fitCreator.writeLapMesg(timeStarted, timeNow, timePaused_msec,
                             avgIntervalSpeed, avgIntervalCad, avgIntervalPower, avgIntervalHr,
                             maxIntervalSpeed, maxIntervalCad, maxIntervalPower, maxIntervalHr,
@@ -368,9 +362,7 @@ void DataWorkout::changeInterval(double timeStarted, double timeNow, int timePau
         meanPowerTest.append(avgIntervalPower);
     }
 
-    //    qDebug() << "OK LST OF DATA IN MEANPOWER IS:";
     //    for (int i =0; i<meanPower.size(); i++) {
-    //        qDebug() << "MEAN:" << i << "IS:" << meanPower.at(i);
     //    }
 
 
@@ -542,7 +534,6 @@ void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
 
 
     ///--------------- Update vecMeanPower30sec for NP, TSS, IF in real-time ----------------------
-    //    qDebug() << "UpdateWorkoutMetrics, secReveiced:" << secReceived << "nbPoints30SecPower" << nbPoints30SecPower << "power:" << value;
 
 
     /// 2- Put the value of each vecMeanPower30sec[x] ^4
@@ -564,14 +555,12 @@ void DataWorkout::updateWorkoutMetrics(int secReceived, double value) {
         double firstEle = last30secMean *((double)nbPoints30SecPower/(nbPoints30SecPower+1));
         double secondEle = ((double)value)/(nbPoints30SecPower+1);
         last30secMean = firstEle + secondEle;
-        //        qDebug() << "New mean is" << last30secMean;
     }
 
 
     double totalSumExp4WithLast30Sec = totalSumExp4 + (last30secMean*last30secMean*last30secMean*last30secMean);
     double avgStep2 = totalSumExp4WithLast30Sec/nb30secMean;
     normalizedPower = qPow(avgStep2, 1/4.);
-    //    qDebug() << "NP IS:" << normalizedPower;
 
     //    Intensity Factor = NP/FTP
     intensityFactor = normalizedPower/ftp;
@@ -619,7 +608,6 @@ int DataWorkout::getFTP() {
 int DataWorkout::getFTP_normal() {
 
     double moyenne = meanPowerTest.first() * 0.95;
-    qDebug() << "meanPowerTest" << meanPowerTest.first();
     return ((int)(moyenne + 0.5));
 }
 
@@ -629,9 +617,7 @@ int DataWorkout::getFTP_8min() {
     double moyenne2 =  meanPowerTest.last();
     double avg = ((moyenne + moyenne2)/2) * 0.90;
 
-    qDebug() << "meanPowerTest1" << meanPowerTest.first()<< "meanPowerTest1" << meanPowerTest.last();
 
-    qDebug() << "moyenne" << moyenne << "moyenne2:" << moyenne2 << "result:" << avg;
     return ((int)(avg + 0.5));
 }
 

@@ -1,5 +1,4 @@
 #include "intervaldelegate.h"
-#include <QDebug>
 #include <QTimeEdit>
 #include <QLineEdit>
 #include <QPainter>
@@ -76,7 +75,6 @@ QWidget *IntervalDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 
 void IntervalDelegate::closeWidgetEditor() {
 
-    qDebug() << "CLOSE EDITOR NOW!";
     QWidget *editor = qobject_cast<QWidget*>(sender());
 
     emit commitData(editor);

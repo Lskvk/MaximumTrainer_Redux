@@ -34,8 +34,6 @@ FitActivityCreator::FitActivityCreator() {
 
 QString FitActivityCreator::generateFileName(bool createDir, QString username, QString nameWorkout, QDateTime startTimeWorkout) {
 
-    qDebug() << "generateFileName";
-
 
     QString nameFile = Util::getSystemPathHistory() + "/";
     if (createDir) {
@@ -46,7 +44,6 @@ QString FitActivityCreator::generateFileName(bool createDir, QString username, Q
     }
 
     nameFile += startTimeWorkout.toLocalTime().toString("yyyy-MM-dd(hh-mm-ss)") + "-MT-" + username + "-" + nameWorkout + ".fit";
-    qDebug() << "name of fit file:" << nameFile;
 
 
     return nameFile;
@@ -57,7 +54,6 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
     m_rowing = rowing;
 
 
-    qDebug() << "initialize_FIT_File";
     fileName = generateFileName(createDir, username, nameWorkout, startTimeWorkout);
 
 
@@ -70,7 +66,7 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
 
 
     if (!file.is_open()) {
-        qDebug() << "Error opening file" << fileName;
+        qWarning() << "Error opening file" << fileName;
         return;
     }
 
@@ -109,18 +105,14 @@ void FitActivityCreator::initialize_FIT_File(bool createDir, QString username, Q
 void FitActivityCreator::close_FIT_File() {
 
 
-    qDebug() << "close_FIT_File, fileisOpen?" << fileIsOpen;
-
     if (!fileIsOpen)
         return;
 
-    qDebug() << "closeFitFile!";
 
     if (!encode.Close()) {
-        qDebug() << "Error closing encode\n";
+        qWarning() << "Error closing FIT encoder";
     }
     file.close();
-    qDebug() << "Encoded FIT file test.fit\n";
 
 
     fileIsComplete = true;
@@ -157,11 +149,6 @@ void FitActivityCreator::writeEndFile(double timeNow,
 
     if (!fileIsOpen)
         return;
-
-    qDebug() <<  "Fit:writeEndFile" << timeNow;
-
-
-    qDebug() << "SEC SARTED WORKOUT:" << secStartedWorkout;
 
 
     // --------------- SessionMesg ------------------
@@ -236,8 +223,6 @@ void FitActivityCreator::writeLapMesg(double timeStarted, double timeNow, int ti
 
     totalTimePaused += durationPause;
 
-    qDebug() << "timeStarted" << timeStarted << "timeNow" << timeNow << "Duration:" << durationInterval;
-    qDebug() << "WE WERE PAUSED FOR " << durationPause;
 
     if (!fileIsOpen)
         return;

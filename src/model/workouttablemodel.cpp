@@ -1,6 +1,5 @@
 #include "workouttablemodel.h"
 
-#include <QDebug>
 #include <QFont>
 #include <QBrush>
 
@@ -10,7 +9,6 @@
 
 WorkoutTableModel::WorkoutTableModel(QObject *parent) : QAbstractTableModel(parent) {
 
-    qDebug() << "WorkoutTableModel";
     this->account = qApp->property("Account").value<Account*>();
 
     rowHovered = -2;
@@ -270,7 +268,6 @@ void WorkoutTableModel::addWorkout(Workout w) {
 
 bool WorkoutTableModel::removeRows(int position, int rows, const QModelIndex &index)
 {
-    qDebug() << "REMOVE ROW";
     Q_UNUSED(index);
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 

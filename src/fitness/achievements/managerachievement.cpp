@@ -22,8 +22,6 @@ ManagerAchievement::ManagerAchievement(QObject *parent) : QObject(parent)
 void ManagerAchievement::checkMAPAchievement(int lastStepCompleted) {
 
 
-    qDebug() << "checkMAPAchievement" << lastStepCompleted;
-
     if (lastStepCompleted < 6)
         return;
 

@@ -1,7 +1,6 @@
 #include "repeatincreaseeditor.h"
 #include "ui_repeatincreaseeditor.h"
 
-#include <QDebug>
 #include <QPushButton>
 #include <QStyle>
 
@@ -48,14 +47,12 @@ RepeatIncreaseEditor::RepeatIncreaseEditor(QWidget *parent) :
 
 void RepeatIncreaseEditor::setInterval(const Interval &interval) {
 
-    qDebug() << "RepeatIncreaseEditor start setInterval!";
     this->myInterval = interval;
 
     ui->doubleSpinBox_increaseFTP->setValue(myInterval.getRepeatIncreaseFTP());
     ui->spinBox_increaseCadence->setValue(myInterval.getRepeatIncreaseCadence());
     ui->doubleSpinBox_increaseLTHR->setValue(myInterval.getRepeatIncreaseLTHR());
 
-    qDebug() << "setInterval RepeatIncreaseEditor done!";
 
 }
 

@@ -1,7 +1,6 @@
 #include "achievementchecker.h"
 
 #include "interval.h"
-#include <QDebug>
 
 AchievementChecker::AchievementChecker()
 {
@@ -16,8 +15,6 @@ AchievementChecker::~AchievementChecker()
 
 bool AchievementChecker::checkTargetManiac(Workout workout) {
 
-    qDebug() << "AchievementTargetManiac, check completed";
-
 
     bool powerTarget = false;
     bool powerBalanceTarget = false;
@@ -26,7 +23,6 @@ bool AchievementChecker::checkTargetManiac(Workout workout) {
 
     foreach (Interval interval, workout.getLstInterval()) {
 
-        qDebug() << "CHECKING INTERVAL NOW!!!!";
 
         if (interval.getPowerStepType() != Interval::NONE)
             powerTarget = true;
@@ -42,10 +38,8 @@ bool AchievementChecker::checkTargetManiac(Workout workout) {
     }
 
     if (powerTarget && powerBalanceTarget && cadenceTarget && heartRateTarget) {
-        qDebug() << "AchievementTargetManiac, check completed yes!";
         return true;
     }
-    qDebug() << "AchievementTargetManiac, check completed no!";
     return false;
 
 }

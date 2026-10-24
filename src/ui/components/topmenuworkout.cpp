@@ -4,7 +4,6 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
-#include <QDebug>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QStyle>
@@ -458,13 +457,11 @@ void TopMenuWorkout::showIntervalRemaining(bool show) {
 }
 void TopMenuWorkout::showWorkoutRemaining(bool show) {
 
-    qDebug() << "TOP MENU, show Workout Remaining" << show;
     // Not allowed on certain Workouts
     if (dontShowRemainingTime) {
         return;
     }
 
-    qDebug() << "TOP MENU2, show Workout Remaining" << show;
 
     ui->label_remainingTime->setVisible(show);
     ui->label_dash2->setVisible(show);

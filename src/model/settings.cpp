@@ -1,11 +1,9 @@
 #include "settings.h"
 
-#include <QDebug>
 #include <QSettings>
 
 
 Settings::~Settings() {
-    qDebug() << "destructor Settings;";
 }
 
 
@@ -28,8 +26,6 @@ Settings::Settings(QObject *parent) : QObject(parent)  {
 void Settings::saveGeneralSettings() {
 
     QSettings settings;
-
-    qDebug() << "saveGeneralSettings!";
 
 
     settings.beginGroup("SettingsGeneral");

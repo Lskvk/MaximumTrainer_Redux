@@ -116,6 +116,6 @@ void NetworkMonitor::setOnline(bool online)
         return;
 
     m_isOnline = online;
-    qDebug() << "NetworkMonitor: online =" << online;
+    qInfo() << "NetworkMonitor: online =" << online;
     emit onlineChanged(online);
 }

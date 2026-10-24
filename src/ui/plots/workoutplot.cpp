@@ -469,8 +469,6 @@ void WorkoutPlot::init(bool firstInit) {
     }
 
 
-    qDebug() << "workoutPlot init done";
-
 }
 
 
@@ -793,7 +791,6 @@ void WorkoutPlot::pointClicked(QPointF pt) {
         secCounter += secInterval;
     }
 
-    qDebug() << "interval clicked is:" << nbIntervalClicked << "x:" << pt.x();
 
     emit intervalClicked(nbIntervalClicked, pt.x(), secCounter, true);
 }
@@ -961,14 +958,12 @@ void WorkoutPlot::showHideCurveSpeed(bool show) {
 void WorkoutPlot::showHideGrid(bool show) {
     grid->setVisible(show);
     replot();
-    qDebug() << "showHideGrid" << show;
 }
 void WorkoutPlot::showHideSeperator(bool show) {
     for (int i=0; i<lstPlotMarkerSeperatorInterval.size(); i++) {
         lstPlotMarkerSeperatorInterval.at(i)->setVisible(show);
     }
     replot();
-    qDebug() << "showHideSeperator" << show;
 }
 
 

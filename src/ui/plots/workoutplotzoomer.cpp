@@ -355,7 +355,6 @@ void WorkoutPlotZoomer::drawGraphIntervalsPower() {
 
 
         double secInterval = Util::convertQTimeToSecD(val.getDurationQTime());
-        //        qDebug() << "interval QTime IS" << val.getDurationQTime() << " secInterval:" << secInterval;
 
 
         lstPointsPower.clear();
@@ -530,7 +529,6 @@ void WorkoutPlotZoomer::moveIntervalTarget(double target, int range) {
     this->target = target;
     this->targetRange = range;
 
-    //    qDebug() << "target is :" << "graphType is:" << this->type;
 
     /// No target
     if (target > 0) {

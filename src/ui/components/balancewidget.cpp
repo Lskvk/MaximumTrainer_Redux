@@ -1,7 +1,6 @@
 #include "balancewidget.h"
 #include "ui_balancewidget.h"
 
-#include <QDebug>
 #include "util.h"
 
 BalanceWidget::~BalanceWidget()
@@ -50,10 +49,6 @@ void BalanceWidget::setValue(int value) {
     int diff = value - zoneTarget;
     int diffAbs = qAbs(diff);
 
-
-    //    qDebug() << "is stopped?" << isStopped;
-    //    qDebug() << "zone Target?" << zoneTarget;
-    //    qDebug() << "diff is" << diff << "zoneRange is " << zoneRange;
 
     if (isStopped || zoneTarget == -1 || diffAbs <= zoneRange)
     {

@@ -1,7 +1,6 @@
 #include "hreditor.h"
 #include "ui_hreditor.h"
 #include "metriceditorvisibility.h"
-#include <QDebug>
 
 HrEditor::~HrEditor()
 {
@@ -47,9 +46,6 @@ void HrEditor::setInterval(const Interval &interval) {
     ui->spinBox_lthrStart->setValue(myInterval.getHR_start()*100);
     ui->spinBox_lthrEnd->setValue(myInterval.getHR_end()*100);
     ui->spinBox_rangeLthr->setValue(myInterval.getHR_range());
-
-
-    qDebug() << "SEt interval Hr range is" <<  myInterval.getHR_range();
 
 
 }
@@ -101,7 +97,6 @@ void HrEditor::on_spinBox_lthrEnd_valueChanged(double arg1)
 
 void HrEditor::on_spinBox_rangeLthr_valueChanged(int arg1)
 {
-    qDebug() << "on_spinBox_rangeLthr_valueChanged" << arg1;
     myInterval.setTargetHR_range(arg1);
 }
 

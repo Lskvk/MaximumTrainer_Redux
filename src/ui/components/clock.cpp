@@ -2,7 +2,6 @@
 #include "myconstants.h"
 #include "cyclingphysics.h"   // shared power→speed model (also used by the retro race)
 
-#include <QDebug>
 
 Clock::Clock(QString objectName, QObject *parent) :
     QObject(parent)
@@ -37,7 +36,6 @@ Clock::Clock(QString objectName, QObject *parent) :
 
 void Clock::startClock()  {
 
-    qDebug() << "starting clock object";
 
     d_clock.start();
     timerClock->start(timerClockMs);
@@ -52,7 +50,6 @@ void Clock::finishClock() {
 void Clock::pauseClock() {
 
     pauseActivatedAt_time_msec = d_clock.elapsed();
-    qDebug() << "Current time when paused:" << pauseActivatedAt_time_msec;
 
     timerClock->stop();
 }
@@ -60,9 +57,7 @@ void Clock::pauseClock() {
 void Clock::resumeClock() {
 
     resumeActivatedAt_time_msec = d_clock.elapsed();
-    qDebug() << "Current time when resumed:" << resumeActivatedAt_time_msec;
     totalTimePaused_msec += resumeActivatedAt_time_msec - pauseActivatedAt_time_msec;
-    qDebug() << "Workout was paused for:" << totalTimePaused_msec;
 
     emit updateTimePaused(totalTimePaused_msec);
 
@@ -92,7 +87,6 @@ void Clock::timerClockTimeout() {
 
 void Clock::startClockSpeed() {
 
-    qDebug() << "STarting clock speed!";
 
     // initiale virtual speed calculation, calculated at timerSpeedMs Interval
     totalTimeElapsedLast = 0;
@@ -105,7 +99,6 @@ void Clock::startClockSpeed() {
 
 void Clock::receiveUserInfo(int userID, double cda, double weightKG, int nbUser) {
 
-    qDebug() << "OK RECEIVED USER INFO!" << userID << "cda" << cda << "w:" << weightKG << "nbUser" << nbUser;
 
     this->cda[userID-1] = cda;
     this->weightKG[userID-1] = weightKG;

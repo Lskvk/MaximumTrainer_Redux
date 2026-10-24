@@ -1,7 +1,6 @@
 #include "radiotablemodel.h"
 
 
-#include <QDebug>
 #include <QColor>
 
 
@@ -39,10 +38,8 @@ void RadioTableModel::addListRadio(QList<Radio> lstRadio) {
 
 Radio RadioTableModel::getRadioAtRow(const QModelIndex &index) {
 
-    qDebug() << "GetRadioAtRow" << index.row();
         return (lstRadio.at(index.row()));
 
-    qDebug() << "Done GetRadioAtRow" << index.row();
 }
 
 void RadioTableModel::addRadio(const Radio& radio) {

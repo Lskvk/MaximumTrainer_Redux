@@ -19,16 +19,14 @@ XmlUtil::XmlUtil(QObject *parent) :QObject(parent) {
 
 void XmlUtil::parseWorkoutDone(Account *account, QXmlStreamReader& xml) {
 
-    qDebug() << "parseWorkoutDone";
 
     while (true) {
 
         if (xml.hasError()) {
-            qDebug() << "Error in XML, parseWorkoutDone method" << xml.error();
+            qWarning() << "Error in XML, parseWorkoutDone method" << xml.error();
             return;
         }
         xml.readNextStartElement();
-        qDebug() << "name now:" << xml.name();
 
         //stop condition
         if (xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == QLatin1String("WorkoutDone"))
@@ -37,7 +35,6 @@ void XmlUtil::parseWorkoutDone(Account *account, QXmlStreamReader& xml) {
         ///-------------------------------------------------------------------------------
         if(xml.name() == QLatin1String("Workout")) {
             QString workoutName  = xml.readElementText();
-            qDebug() << "workoutName XML is:" << workoutName;
             if (workoutName.size() > 0)
                 account->hashWorkoutDone.insert(workoutName);
         }
@@ -48,11 +45,9 @@ void XmlUtil::parseWorkoutDone(Account *account, QXmlStreamReader& xml) {
 ///Read xml file (.save file), construct Settings Object and Account QSet from it
 void XmlUtil::parseLocalSaveFile(Account *account) {
 
-    qDebug() << "\n\n Parsing Local Save file!";
 
     //Load Xml file
     QString nameFile = Util::getMaximumTrainerDocumentPath() + QDir::separator() + account->email_clean + ".save";
-    qDebug() << "name of File should be" << nameFile;
     QFile fileMt(nameFile);
     /// Open File
     QXmlStreamReader xml(&fileMt);
@@ -62,7 +57,7 @@ void XmlUtil::parseLocalSaveFile(Account *account) {
 
 
     if (!fileMt.open(QIODevice::ReadOnly)) {
-        qDebug() << "problem reading file " << nameFile;
+        qWarning() << "problem reading file " << nameFile;
         return;
     }
     else {
@@ -70,7 +65,7 @@ void XmlUtil::parseLocalSaveFile(Account *account) {
         while(!xml.atEnd()  ) {
 
             if (xml.hasError()) {
-                qDebug() << "Error in XML - parseLocalSaveFile" << xml.error();
+                qWarning() << "Error in XML - parseLocalSaveFile" << xml.error();
                 return;
             }
             xml.readNextStartElement();
@@ -114,7 +109,6 @@ void XmlUtil::parseLocalSaveFile(Account *account) {
         }
     }
 
-    qDebug() << "\n\n End Parsing Local Save file!";
 
 }
 
@@ -123,12 +117,11 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
 
 
     QString nameFile = Util::getMaximumTrainerDocumentPath() + QDir::separator() + account->email_clean + ".save";
-    qDebug() << "name of File should be" << nameFile;
     QFile fileMt(nameFile);
 
 
     if (!fileMt.open(QIODevice::WriteOnly)) {
-        qDebug() << "problem writing to file xml SaveLstWorkoutDone";
+        qWarning() << "problem writing to file xml SaveLstWorkoutDone";
         return false;
     }
     else {
@@ -174,7 +167,6 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
         fileMt.close();
 
 
-        qDebug() << "SAVING FILE xml saveLstWorkoutDone done";
         return true;
     }
 
@@ -186,12 +178,10 @@ bool XmlUtil::saveLocalSaveFile(Account *account) {
 
 
 //    QString nameFile = Util::getMaximumTrainerDocumentPath() + QDir::separator() + email_clean + ".save";
-//    qDebug() << "name of File should be" << nameFile;
 //    QFile fileMt(nameFile);
 
 
 //    if (!fileMt.open(QIODevice::WriteOnly)) {
-//        qDebug() << "problem writing to file xml SaveLstWorkoutDone";
 //        return false;
 //    }
 //    else {
@@ -340,7 +330,7 @@ Trackpoint XmlUtil::parseTrackpoint(QXmlStreamReader &xml) {
     while (xml.tokenType() != QXmlStreamReader::EndElement || xml.name() != QLatin1String("Trackpoint"))
     {
         if (xml.hasError()) {
-            qDebug() << "Error in XML, parseTrackpoint method" << xml.error();
+            qWarning() << "Error in XML, parseTrackpoint method" << xml.error();
             return tp;
         }
         xml.readNextStartElement();
@@ -364,14 +354,12 @@ Trackpoint XmlUtil::parseTrackpoint(QXmlStreamReader &xml) {
     }
 
     tp = Trackpoint(lon, lat, elevation, slopePercentage, distanceAtThisPoint);
-    qDebug() << "Trackpoint parse, lon:" << lon << "lat" << lat << "ele" << elevation << "slopePercentage" << slopePercentage << "distanceAtThisPoint" << distanceAtThisPoint;
 
     return tp;
 }
 
 Workout XmlUtil::parseSingleWorkoutXml(QString filePath) {
 
-    //    qDebug() << "OK GO TO PARSE THIS WORKOUT" << filePath;
 
     /// Version of workout xml
     QString versionXml = "-1";
@@ -391,7 +379,7 @@ Workout XmlUtil::parseSingleWorkoutXml(QString filePath) {
     QXmlStreamReader xml(&fileXml);
 
     if (!fileXml.open(QIODevice::ReadOnly)) {
-        qDebug() << "problem reading file " << filePath;
+        qWarning() << "problem reading file " << filePath;
         return workout;
     }
     else {
@@ -399,7 +387,7 @@ Workout XmlUtil::parseSingleWorkoutXml(QString filePath) {
         while(!xml.atEnd()  )
         {
             if (xml.hasError()) {
-                qDebug() << "Error in XML - parseSingleWorkoutXml" << xml.error();
+                qWarning() << "Error in XML - parseSingleWorkoutXml" << xml.error();
                 return workout;
             }
             xml.readNextStartElement();
@@ -428,14 +416,12 @@ Workout XmlUtil::parseSingleWorkoutXml(QString filePath) {
             /// --------------------------------- Parse Repeat -------------------------------------------------
             else if(xml.name() == QLatin1String("Repeat")) {
                 RepeatData rep = parseRepeat(xml);
-                //                qDebug() << "RepeatWidget parsed, first row is" << rep.getFirstRow();
                 if (rep.getId() != -1)
                     lstRepeat.append(rep);
             }
         }
     }
 
-    //    qDebug() << "OK CREATING WORKOUT, file path is" << filePath;
     workout =  Workout(filePath, Workout::WORKOUT_NAME::USER_MADE, lstIntervalSource, lstRepeat,
                        name, creator, description, plan, type );
     return workout;
@@ -472,7 +458,7 @@ Interval XmlUtil::parseInterval(QXmlStreamReader &xml) {
     while (xml.tokenType() != QXmlStreamReader::EndElement || xml.name() != QLatin1String("Interval"))
     {
         if (xml.hasError()) {
-            qDebug() << "Error in XML, parseInterval method" << xml.error();
+            qWarning() << "Error in XML, parseInterval method" << xml.error();
             return Interval();
         }
         xml.readNextStartElement();
@@ -582,7 +568,7 @@ RepeatData XmlUtil::parseRepeat(QXmlStreamReader &xml) {
     while (xml.tokenType() != QXmlStreamReader::EndElement || xml.name() != QLatin1String("Repeat"))
     {
         if (xml.hasError()) {
-            qDebug() << "Error in XML, parseRepeat method" << xml.error();
+            qWarning() << "Error in XML, parseRepeat method" << xml.error();
             rep.setId(-1);
             return rep;
         }
@@ -621,12 +607,11 @@ bool XmlUtil::createWorkoutXml(Workout workout, QString destinationPath) {
     else {
         nameFile = destinationPath;
     }
-    qDebug() << "name of File should be" << nameFile;
     QFile fileMt(nameFile);
 
 
     if (!fileMt.open(QIODevice::WriteOnly)) {
-        qDebug() << "problem writing to file tcx";
+        qWarning() << "problem writing to file tcx";
         return false;
     }
     ///----------------------------------- WRITE TO MT FILE ------------------------------------------------
@@ -701,7 +686,6 @@ bool XmlUtil::createWorkoutXml(Workout workout, QString destinationPath) {
         fileMt.close();
 
 
-        qDebug() << "SAVING FILE DONE";
         return true;
     }
 

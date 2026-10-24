@@ -21,7 +21,7 @@ GlobalVars::GlobalVars(QObject *parent) :
     QObject(parent)
 {
 
-    qDebug() << "SSL version"
+    qInfo() << "SSL version"
 #ifndef GC_WASM_BUILD
              << QSslSocket::sslLibraryBuildVersionString()
 #endif
