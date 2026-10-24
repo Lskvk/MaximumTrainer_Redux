@@ -47,6 +47,28 @@ jobs:
     - name: Install OpenSSL
       run: brew install openssl@3
 
+    - name: Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2.24
+      with:
+        key: macos-qt6.11.3
+        max-size: 400M
+        evict-old-files: job
+        job-summary: ccache stats
+
+    - name: Enable ccache in qmake
+      # qmake's built-in ccache feature prefixes the compiler (after macOS
+      # xcrun resolution). A root .qmake.conf reaches every .pro in the repo,
+      # including the test projects, without touching each qmake call.
+      run: echo 'CONFIG += ccache' > .qmake.conf
+
+    - name: Prepare QWT cache target
+      # /usr/local is root-owned on the macOS runners, so actions/cache could
+      # not recreate qwt-6.3.0 on restore ("Cannot mkdir: Permission denied")
+      # and every run rebuilt QWT from source.
+      run: |
+        sudo mkdir -p /usr/local/qwt-6.3.0
+        sudo chown -R "$(whoami)" /usr/local/qwt-6.3.0
+
     - name: Restore QWT cache
       id: qwt-cache
       uses: actions/cache@v6

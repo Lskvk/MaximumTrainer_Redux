@@ -46,11 +46,43 @@ jobs:
         target: 'desktop'
         arch: 'clang_64'
         modules: 'qtwebengine qtconnectivity qtwebchannel qtpositioning qtmultimedia'
+        cache: true
+        cache-key-prefix: qt-mac
 
     - name: Install OpenSSL
       run: brew install openssl@3
 
+    - name: Prepare QWT cache target
+      run: |
+        sudo mkdir -p /usr/local/qwt-6.3.0
+        sudo chown -R "$(whoami)" /usr/local/qwt-6.3.0
+
+    - name: Restore QWT cache
+      id: qwt-cache
+      uses: actions/cache@v6
+      with:
+        # Same paths and key as build-mac.yml, so packaging reuses that build.
+        path: |
+          /usr/local/qwt-6.3.0/lib
+          /usr/local/qwt-6.3.0/include
+          /usr/local/qwt-6.3.0/features
+          /usr/local/qwt-6.3.0/mkspecs
+        key: qwt-6.3.0-qt-6.11.3-macos-nodoc
+
+    - name: Validate QWT cache
+      id: qwt-validate
+      run: |
+        if [ "${{ steps.qwt-cache.outputs.cache-hit }}" = "true" ] && \
+           [ -f /usr/local/qwt-6.3.0/lib/libqwt.6.dylib ] && \
+           [ -f /usr/local/qwt-6.3.0/include/qwt_plot.h ]; then
+          echo "ok=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "ok=false" >> "$GITHUB_OUTPUT"
+          sudo rm -rf /usr/local/qwt-6.3.0
+        fi
+
     - name: Build and install QWT
+      if: steps.qwt-validate.outputs.ok != 'true'
       run: |
         brew uninstall qwt --force --ignore-dependencies 2>/dev/null || true
         cd /tmp

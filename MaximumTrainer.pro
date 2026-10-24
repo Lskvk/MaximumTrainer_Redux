@@ -34,7 +34,14 @@ isEmpty(GIT_VERSION) {
     # by a digit, so treat it as an unknown version.
     !contains(GIT_VERSION, ^[vV][0-9]): GIT_VERSION = "v0.0.0"
 }
-DEFINES += APP_VERSION=\\\"$$GIT_VERSION\\\"
+# Generated header rather than a global DEFINE: a per-release define changes
+# every compile command, so each new tag would rebuild (and ccache-miss) the
+# whole app instead of the one file that reads it.
+APP_VERSION_LITERAL = "\"$$GIT_VERSION\""
+app_version_header.input = $$PWD/src/persistence/db/app_version.h.in
+app_version_header.output = $$OUT_PWD/app_version.h
+QMAKE_SUBSTITUTES += app_version_header
+INCLUDEPATH += $$OUT_PWD
 
 # Intervals.icu OAuth2 client_id — supplied at build time via the
 # INTERVALS_OAUTH_CLIENT_ID env var, defaulting to the public client 259.
