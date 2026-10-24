@@ -4,6 +4,10 @@
 #include <QUrl>
 #include <QUrlQuery>
 
+#if __has_include("app_version.h")
+#include "app_version.h"
+#endif
+
 Environnement::Environnement()
 {  
 }

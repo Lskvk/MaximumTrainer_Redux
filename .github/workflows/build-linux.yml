@@ -56,6 +56,20 @@ jobs:
           cmake \
           build-essential
 
+    - name: Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2.24
+      with:
+        key: linux-qt${{ env.QT_VERSION }}
+        max-size: 400M
+        evict-old-files: job
+        job-summary: ccache stats
+
+    - name: Enable ccache in qmake
+      # qmake's built-in ccache feature prefixes the compiler (after macOS
+      # xcrun resolution). A root .qmake.conf reaches every .pro in the repo,
+      # including the test projects, without touching each qmake call.
+      run: echo 'CONFIG += ccache' > .qmake.conf
+
     - name: Restore QWT cache
       id: qwt-cache
       uses: actions/cache@v6
@@ -213,6 +227,20 @@ jobs:
       run: |
         sudo apt-get update -y
         sudo apt-get install -y libssl-dev
+
+    - name: Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2.24
+      with:
+        key: linux-unit-qt${{ env.QT_VERSION }}
+        max-size: 400M
+        evict-old-files: job
+        job-summary: ccache stats
+
+    - name: Enable ccache in qmake
+      # qmake's built-in ccache feature prefixes the compiler (after macOS
+      # xcrun resolution). A root .qmake.conf reaches every .pro in the repo,
+      # including the test projects, without touching each qmake call.
+      run: echo 'CONFIG += ccache' > .qmake.conf
 
     - name: Logger unit tests
       run: |
