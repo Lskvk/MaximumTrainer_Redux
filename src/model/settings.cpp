@@ -19,6 +19,10 @@ Settings::Settings(QObject *parent) : QObject(parent)  {
     settings.beginGroup("SettingsGeneral");
     lastLoggedUsername = settings.value("lastLoggedUsername", "").toString();
     lastLoggedKey = settings.value("lastLoggedKey", "").toString();
+    // Keys of the removed remembered-usernames list; "username"+i was pointer
+    // arithmetic, hence the truncated names.
+    for (const char *staleKey : {"rememberMyPassword", "username", "sername", "ername", "rname", "name"})
+        settings.remove(staleKey);
     settings.endGroup();
 
 
