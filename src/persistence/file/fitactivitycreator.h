@@ -67,7 +67,7 @@ private :
     QString folderPathStudio;
     bool studioMode;
 
-    fit::Encode encode;
+    fit::Encode encode{fit::ProtocolVersion::V10};
     std::fstream file;
 
     int timeSecLastWriteRecord;

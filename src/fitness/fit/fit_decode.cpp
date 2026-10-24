@@ -83,7 +83,7 @@ FIT_BOOL Decode::IsFIT(std::istream &file)
             currentByteIndex = 0;
         } while ( file.good() && ( state == STATE_FILE_HDR ) );
     }
-    catch (RuntimeException e)
+    catch (const RuntimeException&)
     {
          // Reset buffer state.
         bytesRead = 0;
@@ -133,7 +133,7 @@ FIT_BOOL Decode::CheckIntegrity(std::istream &file)
             currentByteIndex = 0;
         } while ( file.good() && (status == FIT_TRUE) );
     }
-    catch (RuntimeException e)
+    catch (const RuntimeException&)
     {
         // Fall through and return failure.
         status = FIT_FALSE;
@@ -276,7 +276,7 @@ FIT_BOOL Decode::Resume(void)
                                     DeveloperFieldDescription( descMesg, developers[index] )
                                     );
                         }
-                        catch (std::out_of_range)
+                        catch (const std::out_of_range&)
                         {
                             // Description without a Developer Data Id Message
                         }
@@ -730,7 +730,7 @@ Decode::RETURN Decode::ReadByte(FIT_UINT8 data)
                 localMesgDefs[localMesgIndex]
                     .AddDevField(DeveloperFieldDefinition(desc, developer, fieldData[DevFieldSizeOffset]));
             }
-            catch (std::out_of_range)
+            catch (const std::out_of_range&)
             {
                 // No Matching Description Message add a Generic Definition
                 localMesgDefs[localMesgIndex]

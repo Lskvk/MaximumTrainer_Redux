@@ -155,7 +155,8 @@ static QString makeTempFile()
 {
     QTemporaryFile f;
     f.setAutoRemove(false);
-    f.open();
+    if (!f.open())
+        return QString();
     return f.fileName();
 }
 

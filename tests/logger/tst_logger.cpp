@@ -39,7 +39,7 @@ struct FileCapture
     explicit FileCapture(LogLevel level = LogLevel::Verbose)
         : savedLevel(Logger::instance().logLevel())
     {
-        file.open();
+        QVERIFY(file.open());
         file.close();                          // close so Logger can re-open
         Logger::instance().setLogLevel(level);
         Logger::instance().setFileLogging(true, file.fileName());
@@ -54,7 +54,8 @@ struct FileCapture
     /// Read all content written so far.
     QString content()
     {
-        file.open();
+        if (!file.open())
+            return QString();
         const QString data = QString::fromUtf8(file.readAll());
         file.close();
         return data;
@@ -223,13 +224,13 @@ void TstLogger::testFile_notWrittenWhenDisabled()
     Logger::instance().setLogLevel(LogLevel::Verbose);
 
     QTemporaryFile tmp;
-    tmp.open(); tmp.close();
+    QVERIFY(tmp.open()); tmp.close();
     // (Don't enable file logging — just verify the guard works)
     Logger::instance().log(LogLevel::Info, QStringLiteral("test"),
                            QStringLiteral("should not go to file"));
 
     // The temp file should remain empty (Logger never opened it).
-    tmp.open();
+    QVERIFY(tmp.open());
     const QByteArray bytes = tmp.readAll();
     tmp.close();
     QVERIFY2(bytes.isEmpty(),
@@ -256,7 +257,7 @@ void TstLogger::testFile_multipleEntries()
 void TstLogger::testFile_pathReturned()
 {
     QTemporaryFile tmp;
-    tmp.open(); tmp.close();
+    QVERIFY(tmp.open()); tmp.close();
     Logger::instance().setFileLogging(true, tmp.fileName());
     QCOMPARE(Logger::instance().logFilePath(), tmp.fileName());
     Logger::instance().setFileLogging(false);

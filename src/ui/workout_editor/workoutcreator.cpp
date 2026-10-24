@@ -730,7 +730,7 @@ void WorkoutCreator::deletedRepeatWidget(int id) {
 
     QItemSelection selection = ui->tableView->selectionModel()->selection();
 
-    RepeatWidget *widgetToDelete;
+    RepeatWidget *widgetToDelete = nullptr;
     /// Better way to delete without iterating over QList? Array worth it? small data set..
     foreach (RepeatWidget *wid, lstRepeatWidget) {
         if (wid->getRepeatData()->getId() == id) {
@@ -742,8 +742,10 @@ void WorkoutCreator::deletedRepeatWidget(int id) {
             break;
         }
     }
-    lstRepeatWidget.removeOne(widgetToDelete);
-    delete widgetToDelete;
+    if (widgetToDelete) {
+        lstRepeatWidget.removeOne(widgetToDelete);
+        delete widgetToDelete;
+    }
 
 
     ui->tableView->selectionModel()->select(selection, QItemSelectionModel::Select);

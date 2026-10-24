@@ -1018,7 +1018,6 @@ void FieldBase::SetSTRINGValue(const FIT_WSTRING& value, const FIT_UINT8 fieldAr
     FIT_UINT8 idx = 0;
     FIT_UINT8 nextIdx = 0;
     FIT_UINT8 numStrings = (FIT_UINT8)stringIndexes.size();
-    FIT_UINT8 dif = 0;
 
     if ( fieldArrayIndex < numStrings )
     {
@@ -1026,7 +1025,6 @@ void FieldBase::SetSTRINGValue(const FIT_WSTRING& value, const FIT_UINT8 fieldAr
         if (fieldArrayIndex + 1 < numStrings)
         {
             nextIdx = stringIndexes[fieldArrayIndex + 1];
-            dif = (FIT_UINT8)( (value.length() + 1) - (nextIdx - idx) );
             values.erase(values.begin() + idx, values.begin() + nextIdx);
         }
         else

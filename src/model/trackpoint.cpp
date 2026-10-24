@@ -23,13 +23,5 @@ Trackpoint::Trackpoint(double lon, double lat, double elevation, double slopePer
 
 
 
-Trackpoint::Trackpoint( const Trackpoint& other ) {
-
-    this->lon = other.lon;
-    this->lat = other.lat;
-    this->elevation = other.elevation;
-    this->slopePercentage = other.slopePercentage;
-    this->distanceAtThisPoint = other.distanceAtThisPoint;
-}
 
 

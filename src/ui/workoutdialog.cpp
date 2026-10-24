@@ -2013,6 +2013,7 @@ void WorkoutDialog::CadenceDataReceived(int userID, int value) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutDialog::TrainerSpeedDataReceived(int userID, double value) {
+    Q_UNUSED(userID);
 
     //    qDebug() <<  "TrainerSpeedDataReceived" << "userId" << userID << "value" << value;
 

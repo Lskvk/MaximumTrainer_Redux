@@ -1,5 +1,7 @@
 #include "intervaldata.h"
 
+#include <QTimeZone>
+
 IntervalData::~IntervalData() {
 
 }
@@ -8,7 +10,7 @@ IntervalData::~IntervalData() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 IntervalData::IntervalData() {
 
-    startTimeInterval.setTimeSpec(Qt::UTC);
+    startTimeInterval.setTimeZone(QTimeZone::UTC);
 
     isFreeRideInterval = false;
 

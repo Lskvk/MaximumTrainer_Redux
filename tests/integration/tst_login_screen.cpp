@@ -876,7 +876,7 @@ private slots:
             QString("dialoglogin-initial-state-%1-%2.png")
                 .arg(kPlatformTag, m_timestamp);
         dialog.show();
-        QTest::qWaitForWindowExposed(&dialog);
+        (void)QTest::qWaitForWindowExposed(&dialog);
         dialog.resize(1280, 720);
         QTest::qWait(50);
         saveScreenshot(dialog, screenshotName, m_outDir);
@@ -911,7 +911,7 @@ private slots:
         dialog.show();
         // qWaitForWindowExposed guarantees the window is fully shown on all
         // platforms before any isVisible() or mouseClick() calls.
-        QTest::qWaitForWindowExposed(&dialog);
+        (void)QTest::qWaitForWindowExposed(&dialog);
 
         auto *checkBox   = dialog.findChild<QCheckBox  *>("checkBox_workOffline");
         auto *btnOffline = dialog.findChild<QPushButton *>("pushButton_startOffline");
@@ -999,7 +999,7 @@ private slots:
     {
         DialogLogin dialog(nullptr, /*testMode=*/true);
         dialog.show();
-        QTest::qWaitForWindowExposed(&dialog);
+        (void)QTest::qWaitForWindowExposed(&dialog);
 
         auto *btn = dialog.findChild<QPushButton *>("pushButton_loginIntervalsIcu");
 
@@ -1044,7 +1044,7 @@ private slots:
     {
         DialogLogin dialog(nullptr, /*testMode=*/true);
         dialog.show();
-        QTest::qWaitForWindowExposed(&dialog);
+        (void)QTest::qWaitForWindowExposed(&dialog);
 
         auto *btn = dialog.findChild<QPushButton *>("pushButton_loginIntervalsIcu");
         QVERIFY2(btn != nullptr,

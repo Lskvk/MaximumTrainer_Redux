@@ -11,15 +11,17 @@ HistoryFilterProxyModel::HistoryFilterProxyModel(QObject *parent)
 
 void HistoryFilterProxyModel::setNameFilter(const QString &text)
 {
+    beginFilterChange();
     m_nameFilter = text.trimmed();
-    invalidateFilter();
+    endFilterChange();
 }
 
 void HistoryFilterProxyModel::setDateRange(const QDate &from, const QDate &to)
 {
+    beginFilterChange();
     m_from = from;
     m_to   = to;
-    invalidateFilter();
+    endFilterChange();
 }
 
 bool HistoryFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

@@ -37,38 +37,6 @@ Workout::Workout() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Workout::Workout( const Workout& other ) {
-
-    this->lstInterval = other.lstInterval;
-    this->lstIntervalSource = other.lstIntervalSource;
-    this->lstRepeatData = other.lstRepeatData;
-
-
-    this->filePath = other.filePath;
-    this->workout_name_enum = other.workout_name_enum;
-    this->name = other.name;
-    this->createdBy = other.createdBy;
-    this->description = other.description;
-    this->type = other.type;
-    this->plan = other.plan;
-
-    this->maxPowerPourcent = other.maxPowerPourcent;
-    this->durationQTime = other.durationQTime;
-
-    this->averagePower = other.averagePower;
-    this->normalizedPower = other.normalizedPower;
-    this->intensityFactor = other.intensityFactor;
-    this->trainingStressScore = other.trainingStressScore;
-
-
-    this->vecFtp1sec = other.vecFtp1sec;
-    this->vecFtp30sec = other.vecFtp30sec;
-
-}
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Workout::Workout(QString filePath, WORKOUT_NAME workout_name_enum, QList<Interval> lstIntervalSource, QList<RepeatData> lstRepeatData,
                  QString name, QString createdBy, QString description, QString plan, Type type) {
 

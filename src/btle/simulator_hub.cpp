@@ -47,6 +47,7 @@ void SimulatorHub::tick()
     // Helper: random delta 0..maxDelta, applied in current direction
     auto drift = [&](double &val, int &dir, double base,
                      double lo, double hi, double maxDelta) {
+        Q_UNUSED(base);
         double delta = rng.bounded(maxDelta);
         val += dir * delta;
         val = clamp(val, lo, hi);
