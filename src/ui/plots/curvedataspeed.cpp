@@ -14,7 +14,7 @@ DataSpeed &CurveDataSpeed::values()
 
 QPointF CurveDataSpeed::sample( size_t i ) const
 {
-    return DataSpeed::instance().value( i );
+    return DataSpeed::instance().value( static_cast<int>( i ) );
 }
 
 size_t CurveDataSpeed::size() const

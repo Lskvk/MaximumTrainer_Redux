@@ -13,7 +13,7 @@ DataCadence &CurveDataCadence::values()
 
 QPointF CurveDataCadence::sample( size_t i ) const
 {
-    return DataCadence::instance().value( i );
+    return DataCadence::instance().value( static_cast<int>( i ) );
 }
 
 size_t CurveDataCadence::size() const

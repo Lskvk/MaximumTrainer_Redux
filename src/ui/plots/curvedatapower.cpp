@@ -13,7 +13,7 @@ DataPower &CurveDataPower::values()
 
 QPointF CurveDataPower::sample( size_t i ) const
 {
-    return DataPower::instance().value( i );
+    return DataPower::instance().value( static_cast<int>( i ) );
 }
 
 size_t CurveDataPower::size() const
