@@ -16,7 +16,7 @@ on:
         default: ''
 
 env:
-  QT_VERSION: '6.11.1'
+  QT_VERSION: '6.11.3'
   QWT_DIR: /tmp/qwt6
   # Retry/timeout tuning for aqtinstall (Qt CDN flakes). No-op in jobs that
   # install Qt without a checkout — aqt ignores a missing config file.
