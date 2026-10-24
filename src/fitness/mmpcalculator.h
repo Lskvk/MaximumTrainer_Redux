@@ -5,7 +5,7 @@
 #include <QString>
 #include <QList>
 
-class WorkoutHistorySummary;
+struct WorkoutHistorySummary;
 
 /// Standard MMP durations in seconds.
 static const QVector<int> MMP_DURATIONS = {

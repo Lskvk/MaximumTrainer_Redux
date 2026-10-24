@@ -16,8 +16,6 @@ public:
 
 
     /// --------------- Program Settings saved locally
-    bool rememberMyPassword;
-    QStringList lstUsername;
     QString lastLoggedUsername;
     QString lastLoggedKey;
 

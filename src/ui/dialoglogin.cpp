@@ -90,14 +90,14 @@ EM_JS(void, js_openOAuthPopup, (const char *authUrlCStr), {
         window.removeEventListener('message', window._mtOAuthMsgListener);
         window._mtOAuthMsgListener = null;
 
-        var code  = String(event.data.mt_oauth_code  || '');
-        var state = String(event.data.mt_oauth_state || '');
-        var err   = String(event.data.mt_oauth_error || '');
+        var code  = String(event.data.mt_oauth_code  || "");
+        var state = String(event.data.mt_oauth_state || "");
+        var err   = String(event.data.mt_oauth_error || "");
 
         if (err) {
             // Forward error to C++ as an empty code so the state-mismatch / empty
             // code paths in onWasmOAuthCodeReceived() invoke onOAuthFailed().
-            code = '';
+            code = "";
         }
 
         // Marshal code and state strings into Emscripten heap and call C++.
@@ -127,9 +127,9 @@ EM_JS(void, js_openOAuthPopup, (const char *authUrlCStr), {
         window.removeEventListener('message', window._mtOAuthMsgListener);
         window._mtOAuthMsgListener = null;
 
-        var stateParam = '';
+        var stateParam = "";
         try {
-            stateParam = new URL(authUrl).searchParams.get('state') || '';
+            stateParam = new URL(authUrl).searchParams.get('state') || "";
         } catch (e) {}
 
         var enc      = new TextEncoder();

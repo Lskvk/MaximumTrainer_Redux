@@ -16,7 +16,7 @@ public:
     using QWebEnginePage::QWebEnginePage;
 
 
-    bool acceptNavigationRequest(const QUrl & url, QWebEnginePage::NavigationType type, bool isMainFrame) {
+    bool acceptNavigationRequest(const QUrl & url, QWebEnginePage::NavigationType type, bool isMainFrame) override {
 
         Q_UNUSED(isMainFrame);
         if (type == QWebEnginePage::NavigationTypeLinkClicked)

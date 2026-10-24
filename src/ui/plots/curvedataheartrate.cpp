@@ -14,7 +14,7 @@ DataHeartRate &CurveDataHeartRate::values()
 
 QPointF CurveDataHeartRate::sample( size_t i ) const
 {
-    return DataHeartRate::instance().value( i );
+    return DataHeartRate::instance().value( static_cast<int>( i ) );
 }
 
 size_t CurveDataHeartRate::size() const

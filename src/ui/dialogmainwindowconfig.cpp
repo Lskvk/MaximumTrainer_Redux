@@ -480,6 +480,8 @@ void DialogMainWindowConfig::setOnlineMode(bool isOnline)
 {
 #ifndef GC_WASM_BUILD
     ui->groupBox_intervals->setVisible(isOnline);
+#else
+    Q_UNUSED(isOnline);
 #endif
 }
 

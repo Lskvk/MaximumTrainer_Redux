@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
     // --screenshots [dir] / /screenshots [dir]: bypass login, capture UI
     // screenshots to [dir] (default: <appdir>/screenshots), then quit.
     const QStringList &cliArgs = QCoreApplication::arguments();
-    const bool screenshotMode = cliArgs.contains(QLatin1String("--screenshots"), Qt::CaseInsensitive)
+    [[maybe_unused]] const bool screenshotMode = cliArgs.contains(QLatin1String("--screenshots"), Qt::CaseInsensitive)
                              || cliArgs.contains(QLatin1String("/screenshots"),  Qt::CaseInsensitive);
 
 #ifndef Q_OS_WASM

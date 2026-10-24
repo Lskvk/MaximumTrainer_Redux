@@ -17,13 +17,6 @@ Settings::Settings(QObject *parent) : QObject(parent)  {
 
 
     settings.beginGroup("SettingsGeneral");
-    rememberMyPassword = settings.value("rememberMyPassword", false).toBool();
-
-    for (int i=0; i<5; i++) {
-        QString username = settings.value("username"+i, "").toString();
-        if (username != "")
-            lstUsername.append(settings.value("username"+i, "").toString());
-    }
     lastLoggedUsername = settings.value("lastLoggedUsername", "").toString();
     lastLoggedKey = settings.value("lastLoggedKey", "").toString();
     settings.endGroup();
@@ -40,15 +33,6 @@ void Settings::saveGeneralSettings() {
 
 
     settings.beginGroup("SettingsGeneral");
-    settings.setValue("rememberMyPassword", rememberMyPassword);
-
-    int nbUsername = lstUsername.size();
-    for (int i=0; i<nbUsername; i++) {
-        settings.setValue("username"+i, lstUsername.at(i));
-    }
-    for (int i=nbUsername; i<5; i++) {
-        settings.setValue("username"+i, "");
-    }
     settings.setValue("lastLoggedUsername", lastLoggedUsername);
     settings.setValue("lastLoggedKey", lastLoggedKey);
     settings.endGroup();

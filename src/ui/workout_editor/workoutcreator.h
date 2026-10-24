@@ -23,7 +23,7 @@ public:
     explicit WorkoutCreator(QWidget *parent = 0);
     ~WorkoutCreator();
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;

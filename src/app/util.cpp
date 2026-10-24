@@ -601,7 +601,7 @@ QString Util::getStringFromUCHAR(unsigned char* ch) {
 
     QString temp;
 
-    int len = strlen((char*)ch);
+    int len = static_cast<int>(strlen((char*)ch));
 
     for (int i=0; i<len; i++) {
         char s = ch[i];
