@@ -1582,8 +1582,11 @@ void MainWindow::startWorkoutWithConnectedHub(const Workout &workout, BtleHub *b
     connect(btleHub, &BtleHub::signal_cadence, w, &WorkoutDialog::CadenceDataReceived);
     connect(btleHub, &BtleHub::signal_speed, w, &WorkoutDialog::TrainerSpeedDataReceived);
     connect(btleHub, &BtleHub::signal_power, w, &WorkoutDialog::PowerDataReceived);
+#ifndef GC_WASM_BUILD
+    // The Web Bluetooth hub has no L/R balance or pedal-metric signals.
     connect(btleHub, &BtleHub::signal_balance, w, &WorkoutDialog::PowerBalanceDataReceived);
     connect(btleHub, &BtleHub::signal_pedal, w, &WorkoutDialog::pedalMetricReceived);
+#endif
     connect(btleHub, &BtleHub::signal_oxygen, w, &WorkoutDialog::OxygenValueChanged);
     connect(btleHub, &BtleHub::signal_battery, w, &WorkoutDialog::batteryStatusReceived);
 
