@@ -3257,10 +3257,10 @@ void WorkoutDialog::keyPressEvent(QKeyEvent *event)
         return;
     case Qt::Key_Plus:
     case Qt::Key_Equal:
-        adjustWorkoutDifficulty(currentWorkoutDifficultyPercentage + 5);
+        ui->widget_workoutPlot->adjustDifficultyBy(5);
         return;
     case Qt::Key_Minus:
-        adjustWorkoutDifficulty(currentWorkoutDifficultyPercentage - 5);
+        ui->widget_workoutPlot->adjustDifficultyBy(-5);
         return;
     case Qt::Key_L:
         if (!event->isAutoRepeat())

@@ -65,6 +65,7 @@
 #include <QAbstractButton>
 
 #include "../../src/ui/dialog_connection_method.h"
+#include "../../src/ui/plots/workoutplot.h"
 #include "../../src/model/account.h"
 #include "../../src/model/workout.h"
 #include "../../src/model/interval.h"
@@ -256,6 +257,57 @@ private slots:
         DialogConnectionMethod dlg;
         QCOMPARE(dlg.selectedMethod(), DialogConnectionMethod::BTLE);
         qDebug().noquote() << "[ConnectionDialog] Default method is BTLE — PASS";
+    }
+
+    // Keyboard-sized difficulty changes must use the same state transition as
+    // the on-screen 1% buttons. Otherwise the ERG target changes while the
+    // percentage label retains an independent, stale value.
+    void testWorkoutDifficulty_keyboardAndButtonStaySynchronized()
+    {
+        Interval interval;
+        interval.setTime(QTime(0, 1, 0));
+        interval.setPowerStepType(Interval::FLAT);
+        interval.setTargetFTP_start(0.75);
+        interval.setTargetFTP_end(0.75);
+
+        Workout workout(QString(), Workout::USER_MADE, {interval},
+                        QStringLiteral("Difficulty test"), QString(),
+                        QString(), QString(), Workout::T_OTHERS);
+
+        WorkoutPlot plot;
+        plot.setUserData(200.0, 170.0);
+        plot.setWorkoutData(workout, true);
+
+        QLabel *difficultyLabel =
+            plot.findChild<QLabel *>(QStringLiteral("labelDifficulty"));
+        QVERIFY2(difficultyLabel != nullptr,
+                 "WorkoutPlot must expose its difficulty label for UI verification");
+
+        QSignalSpy changedSpy(&plot, &WorkoutPlot::workoutDifficultyChanged);
+
+        plot.adjustDifficultyBy(5);       // '+' keyboard shortcut
+        QCOMPARE(difficultyLabel->text(), QStringLiteral("+5%"));
+        QCOMPARE(changedSpy.takeFirst().at(0).toInt(), 5);
+
+        plot.increaseDifficulty();        // on-screen '+' button
+        QCOMPARE(difficultyLabel->text(), QStringLiteral("+6%"));
+        QCOMPARE(changedSpy.takeFirst().at(0).toInt(), 6);
+
+        plot.adjustDifficultyBy(200);     // keyboard route shares UI bounds
+        QCOMPARE(difficultyLabel->text(), QStringLiteral("+100%"));
+        QCOMPARE(changedSpy.takeFirst().at(0).toInt(), 100);
+
+        plot.adjustDifficultyBy(-5);      // '-' keyboard shortcut
+        QCOMPARE(difficultyLabel->text(), QStringLiteral("+95%"));
+        QCOMPARE(changedSpy.takeFirst().at(0).toInt(), 95);
+
+        plot.decreaseDifficulty();        // on-screen '−' button
+        QCOMPARE(difficultyLabel->text(), QStringLiteral("+94%"));
+        QCOMPARE(changedSpy.takeFirst().at(0).toInt(), 94);
+
+        plot.adjustDifficultyBy(-200);
+        QCOMPARE(difficultyLabel->text(), QStringLiteral("-100%"));
+        QCOMPARE(changedSpy.takeFirst().at(0).toInt(), -100);
     }
 
     // -----------------------------------------------------------------------

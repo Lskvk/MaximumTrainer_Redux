@@ -347,6 +347,7 @@ void WorkoutPlot::init(bool firstInit) {
         btnIncreaseDifficulty->setFixedSize(40, 40);
 
         labelDifficulty = new QLabel(QStringLiteral("0%"), this);
+        labelDifficulty->setObjectName(QStringLiteral("labelDifficulty"));
         labelDifficulty->setAlignment(Qt::AlignCenter);
         labelDifficulty->setMinimumWidth(56);
 
@@ -792,11 +793,15 @@ void WorkoutPlot::addMarkerInterval(double time) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WorkoutPlot::increaseDifficulty() {
-    setDifficulty(difficultyPercent + 1);
+    adjustDifficultyBy(1);
 }
 
 void WorkoutPlot::decreaseDifficulty() {
-    setDifficulty(difficultyPercent - 1);
+    adjustDifficultyBy(-1);
+}
+
+void WorkoutPlot::adjustDifficultyBy(int percentagePoints) {
+    setDifficulty(difficultyPercent + percentagePoints);
 }
 
 void WorkoutPlot::flashDifficulty(bool increase) {
