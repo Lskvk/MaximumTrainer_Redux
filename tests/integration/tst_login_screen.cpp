@@ -433,7 +433,6 @@ private slots:
         m_nam      = new QNetworkAccessManager(this);
 
         // Prevent auto-login from any persisted credentials.
-        m_settings->rememberMyPassword  = false;
         m_settings->lastLoggedUsername  = QString();
         m_settings->lastLoggedKey       = QString();
 
