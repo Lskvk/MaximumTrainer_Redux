@@ -31,12 +31,12 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ env.QT_VERSION }}
         host: 'linux'
@@ -58,7 +58,7 @@ jobs:
 
     - name: Restore QWT cache
       id: qwt-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ${{ env.QWT_DIR }}
         key: qwt-6.3.0-qt-${{ env.QT_VERSION }}-linux
@@ -162,7 +162,7 @@ jobs:
     - name: Upload artifact
       # Exclude compile intermediates (~3/4 of build/): the test and release
       # jobs only need the binaries, and every one of them downloads this.
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: linux
         path: |
@@ -195,12 +195,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ env.QT_VERSION }}
         host: 'linux'
@@ -327,7 +327,7 @@ jobs:
 
     steps:
     - name: Install Qt (with Bluetooth)
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ env.QT_VERSION }}
         host: 'linux'
@@ -346,7 +346,7 @@ jobs:
           libxext6
 
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: linux
         path: build
@@ -393,7 +393,7 @@ jobs:
 
     steps:
     - name: Install Qt (full app modules)
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ env.QT_VERSION }}
         host: 'linux'
@@ -421,7 +421,7 @@ jobs:
           libasound2
 
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: linux
         path: build
@@ -463,7 +463,7 @@ jobs:
       run: ./build/tests/ui_navigation_tests -v2
 
     - name: Upload GUI test evidence
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: gui-test-artifacts-linux
@@ -494,7 +494,7 @@ jobs:
 
     steps:
     - name: Install Qt (with WebEngine + Bluetooth)
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ env.QT_VERSION }}
         host: 'linux'
@@ -522,7 +522,7 @@ jobs:
           libasound2
 
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: linux
         path: build
@@ -550,7 +550,7 @@ jobs:
       run: ./build/tests/login_screen_tests -v2
 
     - name: Upload live GUI test evidence
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: gui-live-test-artifacts-linux
