@@ -238,7 +238,7 @@ jobs:
         export QMAKEFEATURES="$HOME/qwt-wasm/features"
         mkdir -p build-wasm && cd build-wasm
         qmake ../MaximumTrainer.pro \
-          "QWT_INSTALL=$HOME/qwt-wasm"
+          "QWT_INSTALL=$HOME/qwt-wasm" CONFIG+=werror
         emmake make -j$(nproc)
 
     - name: Upload Wasm artifact

@@ -122,7 +122,7 @@ jobs:
 
     - name: Create Makefile
       run: |
-        qmake MaximumTrainer.pro "QWT_INSTALL=$QWT_DIR"
+        qmake MaximumTrainer.pro "QWT_INSTALL=$QWT_DIR" CONFIG+=werror
       env:
         INTERVALS_OAUTH_CLIENT_ID: ${{ secrets.INTERVALS_OAUTH_CLIENT_ID }}
 
