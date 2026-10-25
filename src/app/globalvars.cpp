@@ -13,7 +13,9 @@
 #include "config_bootstrap.h"
 #include "logger.h"
 #include "startup_trace.h"
+#include "webengine_safe_mode.h"
 
+#include <QSettings>
 #include <QWebEngineSettings>
 #include <QWebEngineProfile>
 
@@ -30,8 +32,17 @@ GlobalVars::GlobalVars(QObject *parent) :
 
 #ifndef Q_OS_WASM
     {
-        StartupStep step("GlobalVars: QWebEngineProfile init");
-        QWebEngineProfile::defaultProfile()->settings()->setAttribute(QWebEngineSettings::PluginsEnabled, true);
+        // The first QWebEngineProfile call starts Chromium in-process; a crash
+        // there leaves the pending marker set, and the next launch starts
+        // Chromium with the GPU disabled (#381).
+        WebEngineSafeMode::applyAtStartup(QCoreApplication::arguments());
+        QSettings settings;
+        WebEngineSafeMode::markInitBegin(settings);
+        {
+            StartupStep step("GlobalVars: QWebEngineProfile init");
+            QWebEngineProfile::defaultProfile()->settings()->setAttribute(QWebEngineSettings::PluginsEnabled, true);
+        }
+        WebEngineSafeMode::markInitDone(settings);
     }
 #endif // !Q_OS_WASM
 
