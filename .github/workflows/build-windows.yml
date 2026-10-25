@@ -255,6 +255,37 @@ jobs:
             build\release\MaximumTrainer.exe
       shell: powershell
 
+    - name: Bundle the Visual C++ runtime next to MaximumTrainer.exe
+      # Qt 6.11 is built with a recent MSVC 2022 toolset and needs
+      # msvcp140.dll 14.40 or newer. Machines with an older VC++ redistributable
+      # in System32 crash with an access violation in MSVCP140.dll on the first
+      # std::mutex lock (inside QWebEngineProfile::defaultProfile, #381).
+      # App-local copies are loaded before System32, so ship the toolset's own
+      # CRT DLLs with the app (and therefore in the zip and the MSI).
+      run: |
+        $crtDir = Get-ChildItem -Path "$env:VCToolsRedistDir\x64" -Directory -Filter "Microsoft.VC14*.CRT" |
+                  Sort-Object Name -Descending | Select-Object -First 1
+        if (-not $crtDir) {
+          Write-Error "No Microsoft.VC14*.CRT folder under $env:VCToolsRedistDir\x64"
+          exit 1
+        }
+        Get-ChildItem $crtDir.FullName -Filter "*.dll" | ForEach-Object {
+          Copy-Item $_.FullName "build\release\" -Force
+          Write-Host "Copied $($_.Name) $($_.VersionInfo.FileVersion)"
+        }
+        $bundled = [version](Get-Item "build\release\msvcp140.dll").VersionInfo.FileVersion.Split(' ')[0]
+        $system  = [version](Get-Item "$env:WINDIR\System32\msvcp140.dll").VersionInfo.FileVersion.Split(' ')[0]
+        Write-Host "Bundled msvcp140.dll $bundled (runner System32: $system)"
+        if ($bundled -lt [version]'14.40.0.0') {
+          Write-Error "Bundled msvcp140.dll $bundled is older than 14.40, which Qt 6.11 requires"
+          exit 1
+        }
+        if ($bundled -lt $system) {
+          Write-Error "Bundled msvcp140.dll $bundled is older than the runner's $system; the redist folder is stale"
+          exit 1
+        }
+      shell: powershell
+
     - name: Copy QtMultimedia FFmpeg backend DLLs
       # Qt 6.7's QtMultimedia uses the FFmpeg backend by default. windeployqt
       # copies the multimedia plugin but NOT the FFmpeg runtime DLLs it depends
