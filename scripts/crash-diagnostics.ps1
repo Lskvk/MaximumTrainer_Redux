@@ -59,7 +59,9 @@ Require $crash.Log 'crash dump written to ' 'dump line'
 if (-not (Test-Path $dump)) { Fail "no dump at $dump" }
 Write-Host ("minidump: {0:N0} KB" -f ((Get-Item $dump).Length / 1KB))
 
-$recovery = Run-App @{ MT_NO_NETWORK = '1' }
+# --v=1 so Chromium is guaranteed to write something: a quiet start on the
+# runner's software GPU would leave the file empty even when capture works.
+$recovery = Run-App @{ MT_NO_NETWORK = '1'; QTWEBENGINE_CHROMIUM_FLAGS = '--v=1' }
 if ($recovery.ExitCode -ne 0) { Fail "the recovery launch exited with code $($recovery.ExitCode)" }
 Require $recovery.Log 'WebEngine safe graphics: on \(previous launch crashed' 'safe graphics after the crash'
 Require $recovery.Log 'WebEngine log: ' 'Chromium log line'
