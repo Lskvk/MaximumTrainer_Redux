@@ -1,5 +1,6 @@
 #include "webengine_safe_mode.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -15,16 +16,30 @@
 
 namespace WebEngineSafeMode {
 
-Decision decide(QSettings &settings, const QStringList &args, const QByteArray &envValue)
+static void forgetRemembered(QSettings &settings)
+{
+    settings.remove(QLatin1String(EnabledKey));
+    settings.remove(QLatin1String(EnabledVersionKey));
+}
+
+Decision decide(QSettings &settings, const QStringList &args, const QByteArray &envValue,
+                const QString &appVersion)
 {
     Decision decision;
     const bool pending = settings.value(QLatin1String(PendingKey), false).toBool();
     bool remembered = settings.value(QLatin1String(EnabledKey), false).toBool();
 
+    if (remembered && settings.value(QLatin1String(EnabledVersionKey)).toString() != appVersion) {
+        forgetRemembered(settings);
+        remembered = false;
+        decision.retriedAfterUpdate = true;
+    }
+
     if (pending) {
         decision.crashedInSafeMode = remembered;
         if (!remembered) {
             settings.setValue(QLatin1String(EnabledKey), true);
+            settings.setValue(QLatin1String(EnabledVersionKey), appVersion);
             remembered = true;
             decision.reason = Reason::PreviousCrash;
         }
@@ -32,7 +47,7 @@ Decision decide(QSettings &settings, const QStringList &args, const QByteArray &
 
     const QByteArray env = envValue.trimmed();
     if (env == "0") {
-        settings.remove(QLatin1String(EnabledKey));
+        forgetRemembered(settings);
         decision.enabled = false;
         decision.reason = Reason::ForcedOff;
     } else if (!env.isEmpty()) {
@@ -122,7 +137,13 @@ static bool redirectStderr(const QString &path)
 Decision applyAtStartup(const QStringList &args)
 {
     QSettings settings;
-    const Decision decision = decide(settings, args, qgetenv(EnvVar));
+    const Decision decision = decide(settings, args, qgetenv(EnvVar),
+                                     QCoreApplication::applicationVersion());
+
+    if (decision.retriedAfterUpdate && decision.reason != Reason::PreviousCrash)
+        LOG_INFO("Startup", QStringLiteral(
+            "WebEngine safe graphics was on after an earlier crash; the app has been updated "
+            "since, so the GPU is tried again"));
 
     if (decision.crashedInSafeMode)
         LOG_ERROR("Startup", QStringLiteral(
