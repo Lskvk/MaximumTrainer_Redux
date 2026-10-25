@@ -250,7 +250,10 @@ jobs:
           "Qt6OpenGLWidgets.dll",
           "libssl-3-x64.dll",
           "libcrypto-3-x64.dll",
-          "Qt6Multimedia.dll"
+          "Qt6Multimedia.dll",
+          "msvcp140.dll",
+          "vcruntime140.dll",
+          "vcruntime140_1.dll"
         )
         $failed = $false
         foreach ($file in $required) {
@@ -260,6 +263,14 @@ jobs:
           } else {
             Write-Host "PASS: $file found"
           }
+        }
+        # The app-local VC++ runtime must be new enough for Qt 6.11 (#381).
+        $crt = [version](Get-Item "$installDir\msvcp140.dll").VersionInfo.FileVersion.Split(' ')[0]
+        if ($crt -lt [version]'14.40.0.0') {
+          Write-Error "FAIL: installed msvcp140.dll is $crt, need 14.40 or newer"
+          $failed = $true
+        } else {
+          Write-Host "PASS: installed msvcp140.dll $crt"
         }
         if ($failed) { exit 1 }
       shell: powershell

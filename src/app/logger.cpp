@@ -17,6 +17,13 @@
 
 #include <cstdio>
 
+#ifdef Q_OS_WIN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#endif
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Static helpers
 // ─────────────────────────────────────────────────────────────────────────────
@@ -253,6 +260,15 @@ void Logger::writeBanner(const QStringList& args)
     log(LogLevel::Info, mod,
         QStringLiteral("Settings: %1 at %2")
             .arg(backend, QDir::toNativeSeparators(settings.fileName())));
+#ifdef Q_OS_WIN
+    // An outdated System32 copy instead of the bundled one crashes Qt 6.11 (#381).
+    if (HMODULE crt = GetModuleHandleW(L"msvcp140.dll")) {
+        wchar_t crtPath[MAX_PATH] = {};
+        GetModuleFileNameW(crt, crtPath, MAX_PATH);
+        log(LogLevel::Info, mod,
+            QStringLiteral("C++ runtime: %1").arg(QString::fromWCharArray(crtPath)));
+    }
+#endif
     log(LogLevel::Info, mod,
         QStringLiteral("Log level: %1%2")
             .arg(QLatin1String(levelTag(logLevel())),

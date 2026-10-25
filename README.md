@@ -229,6 +229,11 @@ off ("safe graphics") and keeps doing so. That launch also saves the web engine'
 to turn safe graphics off again, `MT_WEBENGINE_SAFE_MODE=1` to force it on, or launch with
 `--safe-graphics` to try it once. `MT_WEBENGINE_LOG=1` saves the web engine's log on any launch.
 
+The Windows build ships its own Visual C++ runtime (`msvcp140.dll`, `vcruntime140*.dll`) next to
+`MaximumTrainer.exe`, because Qt 6.11 needs version 14.40 or newer and an older copy in
+`System32` makes the app crash at startup with a fault in `MSVCP140.dll`. The log's
+`C++ runtime:` line shows which copy was loaded.
+
 Set the log level to **Debug** before reproducing an issue (or launch with `--debug`, or `/debug` on
 Windows), then attach the log file to your bug report.
 The **Open log file** button in the Logging settings page opens the file directly in your default text editor.
