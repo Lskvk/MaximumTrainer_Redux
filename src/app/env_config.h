@@ -17,6 +17,9 @@
  *                   |         | where remote servers are unreachable.
  *                   |         | QProcess child processes inherit the
  *                   |         | variable automatically.
+ * MT_WEBENGINE_SAFE_MODE | (unset) | 1: start QtWebEngine with the GPU
+ *                   |         | off; 0: never (forgets the choice made
+ *                   |         | after a crash). See webengine_safe_mode.h.
  * ------------------------------------------------------------------
  *
  * Usage in CI (GitHub Actions step):

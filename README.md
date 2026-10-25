@@ -214,6 +214,14 @@ If you chose a custom path in **Preferences → Logging**, the app switches to i
 configuration has loaded. Anything logged before that point (the startup banner and the
 configuration steps) is still in the default file, so check both when the app fails early.
 
+On Windows, a crash also logs the DLL and offset that faulted and writes
+`MaximumTrainer-crash.dmp` next to the log file; attach both to the bug report.
+
+If the app crashes while the embedded web engine starts (the last log line reads
+`during GlobalVars: QWebEngineProfile init`), the next launch starts it with GPU acceleration
+off ("safe graphics") and keeps doing so. Set `MT_WEBENGINE_SAFE_MODE=0` to turn that off again,
+`MT_WEBENGINE_SAFE_MODE=1` to force it on, or launch with `--safe-graphics` to try it once.
+
 Set the log level to **Debug** before reproducing an issue (or launch with `--debug`, or `/debug` on
 Windows), then attach the log file to your bug report.
 The **Open log file** button in the Logging settings page opens the file directly in your default text editor.

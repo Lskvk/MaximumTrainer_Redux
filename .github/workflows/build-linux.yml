@@ -195,7 +195,7 @@ jobs:
   #
   # Suites: logger, apptheme, intervals_icu (service / ZWO importer / DAO
   # bearer / OAuth exchange), strava + third-party services, credential_store,
-  # config_bootstrap,
+  # config_bootstrap, webengine_safe_mode,
   # plan_adherence, history, and the live Intervals.icu integration suite
   # (uses secrets; QSKIPs gracefully without them).
   # ──────────────────────────────────────────────────────────────────────────
@@ -300,6 +300,14 @@ jobs:
         make -j$(nproc)
         cd ../..
         ./build/tests/config_bootstrap_tests -v2
+
+    - name: WebEngine safe mode tests
+      run: |
+        cd tests/webengine_safe_mode
+        qmake webengine_safe_mode_tests.pro
+        make -j$(nproc)
+        cd ../..
+        ./build/tests/webengine_safe_mode_tests -v2
 
     - name: PlanAdherence tests
       run: |

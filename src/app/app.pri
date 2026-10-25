@@ -5,6 +5,7 @@ SOURCES += $$PWD/main.cpp\
     $$PWD/logger.cpp \
     $$PWD/config_bootstrap.cpp \
     $$PWD/startup_trace.cpp \
+    $$PWD/webengine_safe_mode.cpp \
     $$PWD/util.cpp \
     $$PWD/globalvars.cpp \
     $$PWD/simplecrypt.cpp \
@@ -42,6 +43,7 @@ HEADERS += $$PWD/util.h \
     $$PWD/config_bootstrap.h \
     $$PWD/config_defaults.h \
     $$PWD/startup_trace.h \
+    $$PWD/webengine_safe_mode.h \
     $$PWD/soundplayer.h \
     $$PWD/globalvars.h \
     $$PWD/simplecrypt.h \
