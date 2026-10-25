@@ -30,6 +30,9 @@ inline constexpr char EnabledKey[]   = "startup/webengine_safe_mode";
 inline constexpr char EnvVar[]       = "MT_WEBENGINE_SAFE_MODE";
 inline constexpr char Switch[]       = "--safe-graphics";
 inline constexpr char ChromiumFlags[] = "--disable-gpu --disable-gpu-compositing";
+inline constexpr char LogEnvVar[]    = "MT_WEBENGINE_LOG";
+inline constexpr char ChromiumLogFlags[] = "--enable-logging=stderr --log-level=0";
+inline constexpr char ChromiumLogFile[]  = "MaximumTrainer-webengine.log";
 
 enum class Reason {
     Off,             // normal start
@@ -53,8 +56,18 @@ Decision decide(QSettings &settings, const QStringList &args, const QByteArray &
 /// safe graphics is off or the flags are already there).
 QByteArray chromiumFlags(const Decision &decision, const QByteArray &existingFlags);
 
+/// Chromium's own log explains why its GPU start failed, so it is captured on
+/// the launch after a crash during init, or always with MT_WEBENGINE_LOG=1.
+bool wantsChromiumLog(const Decision &decision, const QByteArray &logEnvValue);
+
+/// @p existingFlags plus the Chromium logging switches (unchanged when logging
+/// is already requested there).
+QByteArray withChromiumLogging(const QByteArray &existingFlags);
+
 /// decide() on the default settings scope, set QTWEBENGINE_CHROMIUM_FLAGS and
-/// log the outcome.  Must run before the first QtWebEngine call.
+/// log the outcome; when wantsChromiumLog(), also send stderr (where Chromium
+/// logs) to MaximumTrainer-webengine.log next to the app log.  Must run before
+/// the first QtWebEngine call.
 Decision applyAtStartup(const QStringList &args);
 
 /// Set / clear the pending marker around the QtWebEngine initialisation.

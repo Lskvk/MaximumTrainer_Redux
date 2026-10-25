@@ -31,6 +31,8 @@ private slots:
     void testEnvOne_forcesOn();
     void testSwitch_enablesForOneLaunch();
     void testChromiumFlags();
+    void testChromiumLog_afterCrashOrOnRequest();
+    void testWithChromiumLogging();
 
 private:
     std::unique_ptr<QTemporaryDir> m_dir;
@@ -126,6 +128,27 @@ void TstWebEngineSafeMode::testChromiumFlags()
     QCOMPARE(chromiumFlags(on, " --foo "), QByteArray("--foo ") + ChromiumFlags);
     QCOMPARE(chromiumFlags(on, "--disable-gpu"), QByteArray("--disable-gpu"));
     QCOMPARE(chromiumFlags(Decision(), "--foo"), QByteArray("--foo"));
+}
+
+void TstWebEngineSafeMode::testChromiumLog_afterCrashOrOnRequest()
+{
+    QVERIFY(!wantsChromiumLog(decide(*m_settings, {}, {}), {}));
+    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}), " 1 "));
+
+    markInitBegin(*m_settings);
+    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}), {}));      // previous launch crashed
+    markInitDone(*m_settings);
+    QVERIFY(!wantsChromiumLog(decide(*m_settings, {}, {}), {}));     // remembered, no new crash
+
+    markInitBegin(*m_settings);
+    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}), {}));      // crashed in safe mode
+}
+
+void TstWebEngineSafeMode::testWithChromiumLogging()
+{
+    QCOMPARE(withChromiumLogging({}), QByteArray(ChromiumLogFlags));
+    QCOMPARE(withChromiumLogging(ChromiumFlags), QByteArray(ChromiumFlags) + ' ' + ChromiumLogFlags);
+    QCOMPARE(withChromiumLogging("--enable-logging --v=1"), QByteArray("--enable-logging --v=1"));
 }
 
 QTEST_GUILESS_MAIN(TstWebEngineSafeMode)

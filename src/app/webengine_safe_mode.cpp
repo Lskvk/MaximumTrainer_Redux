@@ -1,6 +1,15 @@
 #include "webengine_safe_mode.h"
 
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QSettings>
+#include <cstdio>
+
+#ifdef Q_OS_WIN
+#include <io.h>
+#include <windows.h>
+#endif
 
 #include "logger.h"
 
@@ -50,6 +59,66 @@ QByteArray chromiumFlags(const Decision &decision, const QByteArray &existingFla
                               : existing + ' ' + QByteArray(ChromiumFlags);
 }
 
+bool wantsChromiumLog(const Decision &decision, const QByteArray &logEnvValue)
+{
+    return logEnvValue.trimmed() == "1"
+        || decision.reason == Reason::PreviousCrash
+        || decision.crashedInSafeMode;
+}
+
+QByteArray withChromiumLogging(const QByteArray &existingFlags)
+{
+    const QByteArray existing = existingFlags.trimmed();
+    if (existing.contains("--enable-logging"))
+        return existing;
+    return existing.isEmpty() ? QByteArray(ChromiumLogFlags)
+                              : existing + ' ' + QByteArray(ChromiumLogFlags);
+}
+
+#ifdef Q_OS_WIN
+static HANDLE s_chromiumLogHandle = INVALID_HANDLE_VALUE;
+
+/// On Windows, QtWebEngine sends Chromium's log to OutputDebugString rather
+/// than stderr.  With no debugger attached, OutputDebugString raises
+/// DBG_PRINTEXCEPTION_C (the wide variant falls back to it), so a vectored
+/// handler sees every message first and copies it to the log file.
+static LONG WINAPI copyDebugOutput(EXCEPTION_POINTERS *info)
+{
+    const EXCEPTION_RECORD *record = info->ExceptionRecord;
+    if (record->ExceptionCode == DBG_PRINTEXCEPTION_C && record->NumberParameters >= 2) {
+        const auto length = static_cast<DWORD>(record->ExceptionInformation[0]);
+        const char *text = reinterpret_cast<const char *>(record->ExceptionInformation[1]);
+        if (text && length > 1) {
+            DWORD written = 0;
+            WriteFile(s_chromiumLogHandle, text, length - 1, &written, nullptr);  // without the NUL
+        }
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+#endif
+
+/// Points stderr, at both the C runtime and (on Windows) the process level, at
+/// @p path, and on Windows also copies OutputDebugString there.  Unbuffered, so
+/// the lines written before a crash are kept.
+static bool redirectStderr(const QString &path)
+{
+#ifdef Q_OS_WIN
+    // _wfreopen_s would open the file without read sharing, locking the log
+    // while the app runs.
+#pragma warning(suppress: 4996)
+    if (!_wfreopen(reinterpret_cast<const wchar_t *>(QDir::toNativeSeparators(path).utf16()), L"w", stderr))
+        return false;
+    s_chromiumLogHandle = reinterpret_cast<HANDLE>(_get_osfhandle(_fileno(stderr)));
+    SetStdHandle(STD_ERROR_HANDLE, s_chromiumLogHandle);
+    AddVectoredExceptionHandler(0, copyDebugOutput);
+#else
+    if (!freopen(QFile::encodeName(path).constData(), "w", stderr))
+        return false;
+#endif
+    setvbuf(stderr, nullptr, _IONBF, 0);
+    return true;
+}
+
 Decision applyAtStartup(const QStringList &args)
 {
     QSettings settings;
@@ -72,6 +141,18 @@ Decision applyAtStartup(const QStringList &args)
     } else {
         LOG_INFO("Startup", QStringLiteral("WebEngine safe graphics: off (%1)")
                                 .arg(reasonName(decision.reason)));
+    }
+
+    const QString appLog = Logger::instance().logFilePath();
+    if (wantsChromiumLog(decision, qgetenv(LogEnvVar)) && !appLog.isEmpty()) {
+        const QString chromiumLog = QFileInfo(appLog).absolutePath() + QLatin1Char('/')
+                                    + QLatin1String(ChromiumLogFile);
+        if (redirectStderr(chromiumLog)) {
+            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", withChromiumLogging(qgetenv("QTWEBENGINE_CHROMIUM_FLAGS")));
+            LOG_INFO("Startup", QStringLiteral("WebEngine log: %1").arg(QDir::toNativeSeparators(chromiumLog)));
+        } else {
+            LOG_WARN("Startup", QStringLiteral("WebEngine log: could not open %1").arg(chromiumLog));
+        }
     }
     return decision;
 }

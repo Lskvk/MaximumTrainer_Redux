@@ -60,6 +60,14 @@ namespace StartupTrace {
 /// Windows: write one final "fatal: … during <step>" line before the process
 /// dies.
 void installCrashHandlers();
+
+/// Windows: log each GPU adapter's name, PCI ids and driver version.  Other
+/// platforms: no-op.
+void logGraphicsAdapters();
+
+/// Access violation on purpose, so CI can exercise the crash report end to end
+/// (MT_CRASH_TEST=1).
+void crashForTesting();
 }
 
 #endif // STARTUP_TRACE_H
