@@ -20,6 +20,11 @@
  * MT_WEBENGINE_SAFE_MODE | (unset) | 1: start QtWebEngine with the GPU
  *                   |         | off; 0: never (forgets the choice made
  *                   |         | after a crash). See webengine_safe_mode.h.
+ * MT_WEBENGINE_LOG  | (unset) | 1: write Chromium's log to
+ *                   |         | MaximumTrainer-webengine.log (also done
+ *                   |         | automatically after a crash in init).
+ * MT_CRASH_TEST     | (unset) | 1: crash on purpose during the WebEngine
+ *                   |         | init, to test the crash report (CI).
  * ------------------------------------------------------------------
  *
  * Usage in CI (GitHub Actions step):
@@ -56,6 +61,10 @@ namespace EnvConfig {
  *       offline during automated screenshot tests.
  */
 constexpr const char *NoNetwork = "MT_NO_NETWORK";
+
+/// MT_CRASH_TEST=1: access violation inside the WebEngine init step, so CI can
+/// check the crash report and the next launch's recovery end to end.
+constexpr const char *CrashTest = "MT_CRASH_TEST";
 
 } // namespace EnvConfig
 

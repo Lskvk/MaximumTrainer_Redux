@@ -1,6 +1,15 @@
 #include "webengine_safe_mode.h"
 
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QSettings>
+#include <cstdio>
+
+#ifdef Q_OS_WIN
+#include <io.h>
+#include <windows.h>
+#endif
 
 #include "logger.h"
 
@@ -50,6 +59,38 @@ QByteArray chromiumFlags(const Decision &decision, const QByteArray &existingFla
                               : existing + ' ' + QByteArray(ChromiumFlags);
 }
 
+bool wantsChromiumLog(const Decision &decision, const QByteArray &logEnvValue)
+{
+    return logEnvValue.trimmed() == "1"
+        || decision.reason == Reason::PreviousCrash
+        || decision.crashedInSafeMode;
+}
+
+QByteArray withChromiumLogging(const QByteArray &existingFlags)
+{
+    const QByteArray existing = existingFlags.trimmed();
+    if (existing.contains("--enable-logging"))
+        return existing;
+    return existing.isEmpty() ? QByteArray(ChromiumLogFlags)
+                              : existing + ' ' + QByteArray(ChromiumLogFlags);
+}
+
+/// Points stderr, at both the C runtime and (on Windows) the process level, at
+/// @p path.  Unbuffered, so the lines written before a crash are kept.
+static bool redirectStderr(const QString &path)
+{
+#ifdef Q_OS_WIN
+    if (!_wfreopen(reinterpret_cast<const wchar_t *>(QDir::toNativeSeparators(path).utf16()), L"w", stderr))
+        return false;
+    SetStdHandle(STD_ERROR_HANDLE, reinterpret_cast<HANDLE>(_get_osfhandle(_fileno(stderr))));
+#else
+    if (!freopen(QFile::encodeName(path).constData(), "w", stderr))
+        return false;
+#endif
+    setvbuf(stderr, nullptr, _IONBF, 0);
+    return true;
+}
+
 Decision applyAtStartup(const QStringList &args)
 {
     QSettings settings;
@@ -72,6 +113,18 @@ Decision applyAtStartup(const QStringList &args)
     } else {
         LOG_INFO("Startup", QStringLiteral("WebEngine safe graphics: off (%1)")
                                 .arg(reasonName(decision.reason)));
+    }
+
+    const QString appLog = Logger::instance().logFilePath();
+    if (wantsChromiumLog(decision, qgetenv(LogEnvVar)) && !appLog.isEmpty()) {
+        const QString chromiumLog = QFileInfo(appLog).absolutePath() + QLatin1Char('/')
+                                    + QLatin1String(ChromiumLogFile);
+        if (redirectStderr(chromiumLog)) {
+            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", withChromiumLogging(qgetenv("QTWEBENGINE_CHROMIUM_FLAGS")));
+            LOG_INFO("Startup", QStringLiteral("WebEngine log: %1").arg(QDir::toNativeSeparators(chromiumLog)));
+        } else {
+            LOG_WARN("Startup", QStringLiteral("WebEngine log: could not open %1").arg(chromiumLog));
+        }
     }
     return decision;
 }

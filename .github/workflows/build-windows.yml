@@ -577,12 +577,24 @@ jobs:
       run: .\scripts\startup-smoke.ps1 -App build\release\MaximumTrainer.exe -Mode second
       shell: powershell
 
+    - name: Crash report and recovery (#381)
+      # MT_CRASH_TEST=1 crashes inside the WebEngine init: checks the fault
+      # line, the PDB-symbolized stack, the module list and the minidump, then
+      # that the next launch starts with safe graphics and Chromium's log.
+      run: .\scripts\crash-diagnostics.ps1 -App build\release\MaximumTrainer.exe
+      shell: powershell
+
     - name: Collect startup log
       if: always()
       shell: powershell
       run: |
         $log = Join-Path $env:APPDATA 'MaximumTrainer\MaximumTrainer_Redux\MaximumTrainer.log'
         if (Test-Path $log) { Copy-Item $log build\tests\startup-windows.log }
+        $dir = Join-Path $env:APPDATA 'MaximumTrainer\MaximumTrainer_Redux'
+        foreach ($name in 'MaximumTrainer-crash.dmp', 'MaximumTrainer-webengine.log') {
+          $file = Join-Path $dir $name
+          if (Test-Path $file) { Copy-Item $file "build\tests\$name" }
+        }
 
     - name: Upload GUI test evidence
       uses: actions/upload-artifact@v7
@@ -597,6 +609,8 @@ jobs:
           build\tests\app-journey-*\
           build\tests\ui-navigation-test-output.txt
           build\tests\startup-windows.log
+          build\tests\MaximumTrainer-crash.dmp
+          build\tests\MaximumTrainer-webengine.log
 
   # ──────────────────────────────────────────────────────────────────────────
   # Live GUI Tests (Windows + Intervals.icu secrets) — consolidated (#352)
