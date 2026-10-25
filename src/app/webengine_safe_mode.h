@@ -27,6 +27,7 @@ namespace WebEngineSafeMode {
 
 inline constexpr char PendingKey[]   = "startup/webengine_init_pending";
 inline constexpr char EnabledKey[]   = "startup/webengine_safe_mode";
+inline constexpr char EnabledVersionKey[] = "startup/webengine_safe_mode_version";
 inline constexpr char EnvVar[]       = "MT_WEBENGINE_SAFE_MODE";
 inline constexpr char Switch[]       = "--safe-graphics";
 inline constexpr char ChromiumFlags[] = "--disable-gpu --disable-gpu-compositing";
@@ -47,10 +48,15 @@ struct Decision {
     bool enabled = false;
     Reason reason = Reason::Off;
     bool crashedInSafeMode = false;  // last launch crashed even with the GPU off
+    bool retriedAfterUpdate = false; // remembered choice dropped: app version changed
 };
 
 /// Read the marker and overrides, update the remembered choice in @p settings.
-Decision decide(QSettings &settings, const QStringList &args, const QByteArray &envValue);
+/// The remembered choice only holds for the @p appVersion that crashed: an
+/// update may fix the cause (#381 was an outdated VC++ runtime, not the GPU),
+/// so the first launch of a new version tries the GPU again.
+Decision decide(QSettings &settings, const QStringList &args, const QByteArray &envValue,
+                const QString &appVersion);
 
 /// Chromium flags for @p decision appended to @p existingFlags (unchanged when
 /// safe graphics is off or the flags are already there).

@@ -224,7 +224,8 @@ It also writes `MaximumTrainer-crash.dmp` next to the log file. Attach both to t
 
 If the app crashes while the embedded web engine starts (the last log line reads
 `during GlobalVars: QWebEngineProfile init`), the next launch starts it with GPU acceleration
-off ("safe graphics") and keeps doing so. That launch also saves the web engine's own log in
+off ("safe graphics") and keeps doing so until the app is updated; the first launch of a new
+version tries the GPU again. That launch also saves the web engine's own log in
 `MaximumTrainer-webengine.log` next to the app log; attach it too. Set `MT_WEBENGINE_SAFE_MODE=0`
 to turn safe graphics off again, `MT_WEBENGINE_SAFE_MODE=1` to force it on, or launch with
 `--safe-graphics` to try it once. `MT_WEBENGINE_LOG=1` saves the web engine's log on any launch.

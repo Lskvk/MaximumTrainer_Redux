@@ -16,6 +16,9 @@
 
 using namespace WebEngineSafeMode;
 
+static const QString V1 = QStringLiteral("0.0.237");
+static const QString V2 = QStringLiteral("0.0.238");
+
 class TstWebEngineSafeMode : public QObject
 {
     Q_OBJECT
@@ -33,6 +36,8 @@ private slots:
     void testChromiumFlags();
     void testChromiumLog_afterCrashOrOnRequest();
     void testWithChromiumLogging();
+    void testUpdate_retriesGpu();
+    void testCrashAfterUpdate_remembersNewVersion();
 
 private:
     std::unique_ptr<QTemporaryDir> m_dir;
@@ -49,7 +54,7 @@ void TstWebEngineSafeMode::init()
 
 void TstWebEngineSafeMode::testCleanStart_off()
 {
-    const Decision d = decide(*m_settings, {}, {});
+    const Decision d = decide(*m_settings, {}, {}, V1);
     QVERIFY(!d.enabled);
     QCOMPARE(d.reason, Reason::Off);
     QVERIFY(!d.crashedInSafeMode);
@@ -61,14 +66,14 @@ void TstWebEngineSafeMode::testInitCompleted_clearsMarker()
     QVERIFY(m_settings->value(QLatin1String(PendingKey)).toBool());
     markInitDone(*m_settings);
     QVERIFY(!m_settings->contains(QLatin1String(PendingKey)));
-    QVERIFY(!decide(*m_settings, {}, {}).enabled);
+    QVERIFY(!decide(*m_settings, {}, {}, V1).enabled);
 }
 
 void TstWebEngineSafeMode::testCrashDuringInit_enablesAndRemembers()
 {
     markInitBegin(*m_settings);           // crash: no markInitDone
 
-    Decision d = decide(*m_settings, {}, {});
+    Decision d = decide(*m_settings, {}, {}, V1);
     QVERIFY(d.enabled);
     QCOMPARE(d.reason, Reason::PreviousCrash);
     QVERIFY(!d.crashedInSafeMode);
@@ -76,7 +81,7 @@ void TstWebEngineSafeMode::testCrashDuringInit_enablesAndRemembers()
     markInitBegin(*m_settings);           // this launch starts fine
     markInitDone(*m_settings);
 
-    d = decide(*m_settings, {}, {});      // and the next one keeps safe graphics
+    d = decide(*m_settings, {}, {}, V1);      // and the next one keeps safe graphics
     QVERIFY(d.enabled);
     QCOMPARE(d.reason, Reason::Remembered);
 }
@@ -84,10 +89,10 @@ void TstWebEngineSafeMode::testCrashDuringInit_enablesAndRemembers()
 void TstWebEngineSafeMode::testCrashInSafeMode_reported()
 {
     markInitBegin(*m_settings);
-    decide(*m_settings, {}, {});          // safe graphics on
+    decide(*m_settings, {}, {}, V1);          // safe graphics on
     markInitBegin(*m_settings);           // crashes again
 
-    const Decision d = decide(*m_settings, {}, {});
+    const Decision d = decide(*m_settings, {}, {}, V1);
     QVERIFY(d.enabled);
     QVERIFY(d.crashedInSafeMode);
 }
@@ -95,10 +100,10 @@ void TstWebEngineSafeMode::testCrashInSafeMode_reported()
 void TstWebEngineSafeMode::testEnvZero_forcesOffAndForgets()
 {
     markInitBegin(*m_settings);
-    decide(*m_settings, {}, {});
+    decide(*m_settings, {}, {}, V1);
     QVERIFY(m_settings->value(QLatin1String(EnabledKey)).toBool());
 
-    const Decision d = decide(*m_settings, { QString::fromLatin1(Switch) }, "0");
+    const Decision d = decide(*m_settings, { QString::fromLatin1(Switch) }, "0", V1);
     QVERIFY(!d.enabled);
     QCOMPARE(d.reason, Reason::ForcedOff);
     QVERIFY(!m_settings->contains(QLatin1String(EnabledKey)));
@@ -106,7 +111,7 @@ void TstWebEngineSafeMode::testEnvZero_forcesOffAndForgets()
 
 void TstWebEngineSafeMode::testEnvOne_forcesOn()
 {
-    const Decision d = decide(*m_settings, {}, "1");
+    const Decision d = decide(*m_settings, {}, "1", V1);
     QVERIFY(d.enabled);
     QCOMPARE(d.reason, Reason::Environment);
     QVERIFY(!m_settings->contains(QLatin1String(EnabledKey)));
@@ -114,10 +119,10 @@ void TstWebEngineSafeMode::testEnvOne_forcesOn()
 
 void TstWebEngineSafeMode::testSwitch_enablesForOneLaunch()
 {
-    const Decision d = decide(*m_settings, { QStringLiteral("app"), QStringLiteral("--SAFE-GRAPHICS") }, {});
+    const Decision d = decide(*m_settings, { QStringLiteral("app"), QStringLiteral("--SAFE-GRAPHICS") }, {}, V1);
     QVERIFY(d.enabled);
     QCOMPARE(d.reason, Reason::CommandLine);
-    QVERIFY(!decide(*m_settings, {}, {}).enabled);
+    QVERIFY(!decide(*m_settings, {}, {}, V1).enabled);
 }
 
 void TstWebEngineSafeMode::testChromiumFlags()
@@ -132,16 +137,16 @@ void TstWebEngineSafeMode::testChromiumFlags()
 
 void TstWebEngineSafeMode::testChromiumLog_afterCrashOrOnRequest()
 {
-    QVERIFY(!wantsChromiumLog(decide(*m_settings, {}, {}), {}));
-    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}), " 1 "));
+    QVERIFY(!wantsChromiumLog(decide(*m_settings, {}, {}, V1), {}));
+    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}, V1), " 1 "));
 
     markInitBegin(*m_settings);
-    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}), {}));      // previous launch crashed
+    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}, V1), {}));      // previous launch crashed
     markInitDone(*m_settings);
-    QVERIFY(!wantsChromiumLog(decide(*m_settings, {}, {}), {}));     // remembered, no new crash
+    QVERIFY(!wantsChromiumLog(decide(*m_settings, {}, {}, V1), {}));     // remembered, no new crash
 
     markInitBegin(*m_settings);
-    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}), {}));      // crashed in safe mode
+    QVERIFY(wantsChromiumLog(decide(*m_settings, {}, {}, V1), {}));      // crashed in safe mode
 }
 
 void TstWebEngineSafeMode::testWithChromiumLogging()
@@ -149,6 +154,37 @@ void TstWebEngineSafeMode::testWithChromiumLogging()
     QCOMPARE(withChromiumLogging({}), QByteArray(ChromiumLogFlags));
     QCOMPARE(withChromiumLogging(ChromiumFlags), QByteArray(ChromiumFlags) + ' ' + ChromiumLogFlags);
     QCOMPARE(withChromiumLogging("--enable-logging --v=1"), QByteArray("--enable-logging --v=1"));
+}
+
+void TstWebEngineSafeMode::testUpdate_retriesGpu()
+{
+    markInitBegin(*m_settings);
+    QVERIFY(decide(*m_settings, {}, {}, V1).enabled);     // crash in V1: safe graphics
+    markInitDone(*m_settings);
+    QVERIFY(decide(*m_settings, {}, {}, V1).enabled);     // still V1: remembered
+
+    const Decision d = decide(*m_settings, {}, {}, V2);   // updated: GPU again
+    QVERIFY(!d.enabled);
+    QVERIFY(d.retriedAfterUpdate);
+    QCOMPARE(d.reason, Reason::Off);
+    QVERIFY(!m_settings->contains(QLatin1String(EnabledKey)));
+    QVERIFY(!decide(*m_settings, {}, {}, V2).enabled);
+}
+
+void TstWebEngineSafeMode::testCrashAfterUpdate_remembersNewVersion()
+{
+    markInitBegin(*m_settings);
+    decide(*m_settings, {}, {}, V1);
+    markInitDone(*m_settings);
+
+    markInitBegin(*m_settings);                           // V2 retries the GPU and crashes
+    const Decision d = decide(*m_settings, {}, {}, V2);
+    QVERIFY(d.enabled);
+    QCOMPARE(d.reason, Reason::PreviousCrash);
+    QVERIFY(!d.crashedInSafeMode);
+    QCOMPARE(m_settings->value(QLatin1String(EnabledVersionKey)).toString(), V2);
+    markInitDone(*m_settings);
+    QCOMPARE(decide(*m_settings, {}, {}, V2).reason, Reason::Remembered);
 }
 
 QTEST_GUILESS_MAIN(TstWebEngineSafeMode)
