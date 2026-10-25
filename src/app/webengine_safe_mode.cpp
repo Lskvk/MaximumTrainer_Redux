@@ -80,6 +80,9 @@ QByteArray withChromiumLogging(const QByteArray &existingFlags)
 static bool redirectStderr(const QString &path)
 {
 #ifdef Q_OS_WIN
+    // _wfreopen_s would open the file without read sharing, locking the log
+    // while the app runs.
+#pragma warning(suppress: 4996)
     if (!_wfreopen(reinterpret_cast<const wchar_t *>(QDir::toNativeSeparators(path).utf16()), L"w", stderr))
         return false;
     SetStdHandle(STD_ERROR_HANDLE, reinterpret_cast<HANDLE>(_get_osfhandle(_fileno(stderr))));
