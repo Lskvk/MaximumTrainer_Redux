@@ -155,6 +155,21 @@ TEMPLATE = app
 !isEmpty(APP_NAME) { TARGET = $${APP_NAME} }
 CONFIG(debug, debug|release) { QMAKE_CXXFLAGS += -DGC_DEBUG }
 
+# CI builds with CONFIG+=werror to keep the app at zero compiler warnings;
+# local builds leave it off so a newer compiler or Qt can't break them.
+# Qt's own headers trigger C4996 on MSVC; silence warnings from them.
+msvc: QMAKE_CXXFLAGS += /external:anglebrackets /external:I$$shell_quote($$[QT_INSTALL_HEADERS]) /external:W0
+
+werror {
+    msvc {
+        QMAKE_CFLAGS_WARN_ON += -WX
+        QMAKE_CXXFLAGS_WARN_ON += -WX
+    } else {
+        QMAKE_CFLAGS_WARN_ON += -Werror
+        QMAKE_CXXFLAGS_WARN_ON += -Werror
+    }
+}
+
 qtHaveModule(uitools):!embedded: QT += uitools
 else: DEFINES += QT_NO_UITOOLS
 

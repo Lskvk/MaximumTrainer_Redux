@@ -191,7 +191,7 @@ jobs:
         $qwtInstallDirFwd = $env:QWT_INSTALL_DIR -replace '\\','/'
         $env:INTERVALS_OAUTH_CLIENT_ID = "${{ secrets.INTERVALS_OAUTH_CLIENT_ID }}"
         qmake MaximumTrainer.pro `
-          "QWT_INSTALL=$qwtInstallDirFwd"
+          "QWT_INSTALL=$qwtInstallDirFwd" CONFIG+=werror
       shell: powershell
 
     - name: Build
