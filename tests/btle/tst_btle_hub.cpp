@@ -96,6 +96,7 @@ private slots:
     // ── FTMS multi-field layout (field skipping) ─────────────────────────────
     void testFtms_allOptionalFieldsBeforePowerSkipped();
     void testFtms_negativeInstantPower();
+    void testFtms_kickrCoreFlags_cadenceAndPowerPresent();
     void testHrService_firesTrainerProvidesHr();
 
     // ── SimulatorHub no-op slot verification ─────────────────────────────────
@@ -854,6 +855,44 @@ void TstBtleHub::testFtms_negativeInstantPower()
 
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spy.at(0).at(1).toInt(), -10);
+}
+
+/**
+ * Regression: FTMS Indoor Bike Data as sent by a Wahoo KICKR CORE.
+ * Flags 0x0044 = bit 2 (Instantaneous Cadence present) + bit 6
+ * (Instantaneous Power present); bit 0 clear, so speed is present too.
+ * Bits 2 and 6 mean "present" when SET — only bit 0 ("More Data") is
+ * inverted. Built from raw bytes (not BtlePacketBuilder) so the test does
+ * not share the encoder's reading of the flags.
+ *
+ *   [0-1] flags   = 0x0044
+ *   [2-3] speed   = 2950 (29.50 km/h)
+ *   [4-5] cadence = 176  (88.0 rpm in 0.5 rpm units)
+ *   [6-7] power   = 156 W
+ */
+void TstBtleHub::testFtms_kickrCoreFlags_cadenceAndPowerPresent()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    QByteArray pkt;
+    pkt.append(char(0x44)); pkt.append(char(0x00)); // flags
+    pkt.append(char(0x86)); pkt.append(char(0x0B)); // speed = 2950
+    pkt.append(char(0xB0)); pkt.append(char(0x00)); // cadence = 176
+    pkt.append(char(0x9C)); pkt.append(char(0x00)); // power = 156
+
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, pkt);
+
+    QCOMPARE(spySpd.count(), 1);
+    QVERIFY2(qAbs(spySpd.at(0).at(1).toDouble() - 29.5) < SPEED_TOLERANCE,
+             "KICKR CORE FTMS speed mismatch");
+
+    QCOMPARE(spyCad.count(), 1);
+    QCOMPARE(spyCad.at(0).at(1).toInt(), 88);
+
+    QCOMPARE(spyPwr.count(), 1);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 156);
 }
 
 /**
