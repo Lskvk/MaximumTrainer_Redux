@@ -791,11 +791,11 @@ void BtleHub::parsePowerMeasurement(const QByteArray &data)
 // Field order (all little-endian):
 //   Instantaneous Speed  (uint16, 0.01 km/h) – flag bit 0 = NOT present (inverted!)
 //   Average Speed        (uint16) – bit 1
-//   Instantaneous Cadence (uint16, 0.5 rpm) – bit 2 = NOT present
+//   Instantaneous Cadence (uint16, 0.5 rpm) – bit 2 = present
 //   Average Cadence      (uint16) – bit 3
 //   Total Distance       (uint24) – bit 4
 //   Resistance Level     (int16) – bit 5
-//   Instantaneous Power  (int16, 1 W) – bit 6 = NOT present
+//   Instantaneous Power  (int16, 1 W) – bit 6 = present
 //   Average Power        (int16) – bit 7
 //   Expended Energy      (uint16+uint16+uint8) – bit 8
 //   Heart Rate           (uint8) – bit 9
@@ -829,8 +829,8 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
     // Bit 1: Average Speed present
     if (flags & 0x0002) offset += 2;
 
-    // Bit 2: Instantaneous Cadence NOT present when set
-    if (!(flags & 0x0004)) {
+    // Bit 2: Instantaneous Cadence present when set
+    if ((flags & 0x0004)) {
         emit signal_cadence(m_userID, static_cast<int>(readU16() * 0.5));
     }
 
@@ -843,8 +843,8 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
     // Bit 5: Resistance Level present
     if (flags & 0x0020) offset += 2;
 
-    // Bit 6: Instantaneous Power NOT present when set
-    if (!(flags & 0x0040)) {
+    // Bit 6: Instantaneous Power present when set
+    if ((flags & 0x0040)) {
         qint16 power = static_cast<qint16>(readU16());
         emit signal_power(m_userID, static_cast<int>(power));
     }

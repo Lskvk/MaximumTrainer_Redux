@@ -777,13 +777,14 @@ void TstBtleHub::testCsc_tooShort_ignored()
 
 /**
  * FTMS Indoor Bike Data with all optional fields before "Instantaneous Power"
- * present: speed (bit0=0), average speed (bit1=1), cadence (bit2=0),
- * average cadence (bit3=1), total distance (bit4=1), resistance (bit5=1).
+ * present: speed (bit0=0), average speed (bit1=1), cadence (bit2=1),
+ * average cadence (bit3=1), total distance (bit4=1), resistance (bit5=1),
+ * power (bit6=1).
  * Verifies the parser correctly skips 2+2+2+2+3+2 = 13 bytes before reaching
  * the power field at offset 15 (2 flags + 13 skipped bytes).
  *
  * Raw packet layout (little-endian):
- *   [0-1]  flags  = 0x003A  (bits 1,3,4,5 set; bits 0,2,6 clear)
+ *   [0-1]  flags  = 0x007E  (bits 1-6 set; bit 0 clear)
  *   [2-3]  speed  = 3800  (38.00 km/h)
  *   [4-5]  avgSpd = 3600
  *   [6-7]  cad    = 180   (90.0 rpm in 0.5 rpm units)
@@ -798,15 +799,16 @@ void TstBtleHub::testFtms_allOptionalFieldsBeforePowerSkipped()
     QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
     QSignalSpy spyPwr(hub, &BtleHub::signal_power);
 
-    // flags: bit0=0 (spd present), bit1=1 (avgSpd present), bit2=0 (cad present),
-    //        bit3=1 (avgCad present), bit4=1 (dist present), bit5=1 (res present)
-    // => 0b00111010 = 0x3A, high byte = 0x00
+    // flags: bit0=0 (spd present), bit1=1 (avgSpd present), bit2=1 (cad present),
+    //        bit3=1 (avgCad present), bit4=1 (dist present), bit5=1 (res present),
+    //        bit6=1 (power present)
+    // => 0b01111110 = 0x7E, high byte = 0x00
     QByteArray pkt;
     auto appendLE16 = [&](quint16 v) {
         pkt.append(char(v & 0xFF));
         pkt.append(char((v >> 8) & 0xFF));
     };
-    appendLE16(0x003A);     // flags
+    appendLE16(0x007E);     // flags
     appendLE16(3800);       // speed: 38.00 km/h
     appendLE16(3600);       // average speed (skipped)
     appendLE16(180);        // cadence: 90.0 rpm
@@ -839,12 +841,11 @@ void TstBtleHub::testFtms_negativeInstantPower()
 {
     QSignalSpy spy(hub, &BtleHub::signal_power);
 
-    // flags 0x0040 = bit6 set (power NOT present) → must clear bit6 for power
-    // Use flags = 0x0000: speed absent flag (bit0=0 means speed IS present),
-    // cadence absent (bit2=0 means cadence IS present), power bit6=0 (power present)
+    // flags = 0x0044: bit0=0 (speed present), bit2=1 (cadence present),
+    // bit6=1 (power present).
     // Build a packet with speed+cadence+power, power = -10 W (int16 LE 0xFFF6)
     QByteArray pkt;
-    pkt.append(char(0x00)); pkt.append(char(0x00)); // flags: spd, cad, pwr present
+    pkt.append(char(0x44)); pkt.append(char(0x00)); // flags: spd, cad, pwr present
     pkt.append(char(0x00)); pkt.append(char(0x00)); // speed = 0 km/h
     pkt.append(char(0x00)); pkt.append(char(0x00)); // cadence = 0 rpm
     pkt.append(char(0xF6)); pkt.append(char(0xFF)); // power = -10 (int16 LE)
