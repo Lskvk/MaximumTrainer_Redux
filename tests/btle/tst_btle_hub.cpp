@@ -97,6 +97,7 @@ private slots:
     void testFtms_allOptionalFieldsBeforePowerSkipped();
     void testFtms_negativeInstantPower();
     void testFtms_kickrCoreFlags_cadenceAndPowerPresent();
+    void testFtms_kickrCoreCapturedPacket();
     void testHrService_firesTrainerProvidesHr();
 
     // ── SimulatorHub no-op slot verification ─────────────────────────────────
@@ -893,6 +894,34 @@ void TstBtleHub::testFtms_kickrCoreFlags_cadenceAndPowerPresent()
 
     QCOMPARE(spyPwr.count(), 1);
     QCOMPARE(spyPwr.at(0).at(1).toInt(), 156);
+}
+
+/**
+ * Regression: real FTMS Indoor Bike Data packet captured from a Wahoo
+ * KICKR CORE (hardware rev 1, firmware 1.3.17), crank turned by hand:
+ *   44-00-8E-01-00-00-00-00
+ * Flags 0x0044 = speed + cadence + power present. Cadence and power are 0
+ * (no load from hand-cranking), but each field must still be read — the old
+ * inverted bit 2 / bit 6 handling emitted neither.
+ */
+void TstBtleHub::testFtms_kickrCoreCapturedPacket()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    const QByteArray pkt = QByteArray::fromHex("44008E0100000000");
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, pkt);
+
+    QCOMPARE(spySpd.count(), 1);
+    QVERIFY2(qAbs(spySpd.at(0).at(1).toDouble() - 3.98) < SPEED_TOLERANCE,
+             "KICKR CORE captured packet speed mismatch");
+
+    QCOMPARE(spyCad.count(), 1);
+    QCOMPARE(spyCad.at(0).at(1).toInt(), 0);
+
+    QCOMPARE(spyPwr.count(), 1);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 0);
 }
 
 /**
