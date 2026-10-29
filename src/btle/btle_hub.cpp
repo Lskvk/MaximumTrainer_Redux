@@ -830,7 +830,7 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
     if (flags & 0x0002) offset += 2;
 
     // Bit 2: Instantaneous Cadence present when set
-    if ((flags & 0x0004)) {
+    if (flags & 0x0004) {
         emit signal_cadence(m_userID, static_cast<int>(readU16() * 0.5));
     }
 
@@ -844,7 +844,7 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
     if (flags & 0x0020) offset += 2;
 
     // Bit 6: Instantaneous Power present when set
-    if ((flags & 0x0040)) {
+    if (flags & 0x0040) {
         qint16 power = static_cast<qint16>(readU16());
         emit signal_power(m_userID, static_cast<int>(power));
     }
