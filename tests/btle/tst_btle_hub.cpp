@@ -22,6 +22,7 @@
 #include <QSignalSpy>
 
 #include "../../src/btle/btle_hub.h"
+#include "../../src/btle/btle_sensor_config.h"
 #include "../../src/btle/simulator_hub.h"
 #include "../../src/model/intervalsummaryutil.h"
 #include "btle_device_simulator.h"
@@ -98,6 +99,12 @@ private slots:
     void testFtms_negativeInstantPower();
     void testFtms_kickrCoreFlags_cadenceAndPowerPresent();
     void testFtms_kickrCoreCapturedPacket();
+    void testFtms_truncatedPacket_noPhantomZeros();
+    void testFtms_partialPacket_emitsOnlyCompleteFields();
+    void testKickrCore_cpsAndFtms_singlePowerStream();
+    void testFtmsPlusCsc_cscOwnsCadence();
+    void testTrainerSuppliesCadence_data();
+    void testTrainerSuppliesCadence();
     void testHrService_firesTrainerProvidesHr();
 
     // ── SimulatorHub no-op slot verification ─────────────────────────────────
@@ -901,8 +908,7 @@ void TstBtleHub::testFtms_kickrCoreFlags_cadenceAndPowerPresent()
  * KICKR CORE (hardware rev 1, firmware 1.3.17), crank turned by hand:
  *   44-00-8E-01-00-00-00-00
  * Flags 0x0044 = speed + cadence + power present. Cadence and power are 0
- * (no load from hand-cranking), but each field must still be read — the old
- * inverted bit 2 / bit 6 handling emitted neither.
+ * (no load from hand-cranking), but each field must still be read.
  */
 void TstBtleHub::testFtms_kickrCoreCapturedPacket()
 {
@@ -922,6 +928,108 @@ void TstBtleHub::testFtms_kickrCoreCapturedPacket()
 
     QCOMPARE(spyPwr.count(), 1);
     QCOMPARE(spyPwr.at(0).at(1).toInt(), 0);
+}
+
+/**
+ * Flags promise speed + cadence + power but the payload stops after the flags.
+ * Missing fields must not be reported as 0 (a phantom 0 rpm trips the default
+ * cadence auto-pause and drags the 1 s power average down).
+ */
+void TstBtleHub::testFtms_truncatedPacket_noPhantomZeros()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, QByteArray::fromHex("4400"));
+
+    QCOMPARE(spySpd.count(), 0);
+    QCOMPARE(spyCad.count(), 0);
+    QCOMPARE(spyPwr.count(), 0);
+}
+
+/**
+ * Speed fits but cadence is cut off mid-field: speed is reported, cadence and
+ * the power after it are not.
+ */
+void TstBtleHub::testFtms_partialPacket_emitsOnlyCompleteFields()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, QByteArray::fromHex("4400860BB0"));
+
+    QCOMPARE(spySpd.count(), 1);
+    QCOMPARE(spyCad.count(), 0);
+    QCOMPARE(spyPwr.count(), 0);
+}
+
+/**
+ * A KICKR CORE exposes Cycling Power (0x2A63) and FTMS Indoor Bike Data
+ * (0x2AD2) on one connection and the hub subscribes to both. Once CPS has
+ * reported, FTMS power is dropped so the workout sees a single stream.
+ */
+void TstBtleHub::testKickrCore_cpsAndFtms_singlePowerStream()
+{
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+
+    const QByteArray ftms = QByteArray::fromHex("4400860BB0009A00"); // 154 W
+    hub->simulateNotification(BTLE_UUID_POWER_MEASUREMENT, BtlePacketBuilder::cyclingPower(156));
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, ftms);
+    hub->simulateNotification(BTLE_UUID_POWER_MEASUREMENT, BtlePacketBuilder::cyclingPower(160));
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, ftms);
+
+    QCOMPARE(spyPwr.count(), 2);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 156);
+    QCOMPARE(spyPwr.at(1).at(1).toInt(), 160);
+    // No CSC on this device, so FTMS stays the cadence source.
+    QCOMPARE(spyCad.count(), 2);
+}
+
+/**
+ * A device with a CSC crank sensor and FTMS cadence: CSC owns cadence, FTMS
+ * still provides power.
+ */
+void TstBtleHub::testFtmsPlusCsc_cscOwnsCadence()
+{
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    hub->simulateNotification(BTLE_UUID_CSC_MEASUREMENT,
+                              GarminTacxSim::buildCscCrankPacket(0, 0));
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA,
+                              BtlePacketBuilder::ftmsIndoorBikeData(30.0, 60.0, 200));
+    hub->simulateNotification(BTLE_UUID_CSC_MEASUREMENT,
+                              GarminTacxSim::buildCscCrankPacket(1, 512));
+
+    QCOMPARE(spyCad.count(), 1);
+    QCOMPARE(spyCad.at(0).at(1).toInt(), 120);
+    QCOMPARE(spyPwr.count(), 1);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 200);
+}
+
+void TstBtleHub::testTrainerSuppliesCadence_data()
+{
+    QTest::addColumn<QList<BtleSensorRole>>("roles");
+    QTest::addColumn<bool>("expected");
+
+    QTest::newRow("trainer only")
+        << QList<BtleSensorRole>{BtleSensorRole::Trainer} << true;
+    QTest::newRow("trainer + power meter")
+        << QList<BtleSensorRole>{BtleSensorRole::Trainer, BtleSensorRole::Power} << true;
+    QTest::newRow("trainer + cadence sensor")
+        << QList<BtleSensorRole>{BtleSensorRole::Trainer, BtleSensorRole::CadenceSpeed} << false;
+    QTest::newRow("rower + cadence sensor")
+        << QList<BtleSensorRole>{BtleSensorRole::Rower, BtleSensorRole::CadenceSpeed} << true;
+}
+
+void TstBtleHub::testTrainerSuppliesCadence()
+{
+    QFETCH(QList<BtleSensorRole>, roles);
+    QFETCH(bool, expected);
+    QCOMPARE(trainerSuppliesCadence(roles), expected);
 }
 
 /**

@@ -1716,11 +1716,12 @@ void MainWindow::wireHubsToDialog(WorkoutDialog *w,
     };
 
     // Wire the trainer first so resistance control is set up and its data takes
-    // precedence; dedicated Power/CadenceSpeed sensors then fill any gaps.
+    // precedence, except cadence: a dedicated CadenceSpeed sensor owns that.
     if (hubsByRole.contains(BtleSensorRole::Trainer)) {
         BtleHub *hub = hubsByRole.value(BtleSensorRole::Trainer);
         wirePower(hub);
-        wireCadence(hub);
+        if (trainerSuppliesCadence(hubsByRoleIn.keys()))
+            wireCadence(hub);
         wireSpeed(hub);
         // Remember when this trainer bridges an HR strap so the sensors page can
         // mark the Heart Rate slot "provided by trainer" next time it opens.

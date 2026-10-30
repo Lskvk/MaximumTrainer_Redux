@@ -102,6 +102,8 @@ void BtleHub::attemptConnection()
     delete m_batteryService;  m_batteryService  = nullptr;
 
     m_firstCscMeasurement   = true;
+    m_cpsPowerSeen          = false;
+    m_cscCadenceSeen        = false;
     m_ftmsControlRequested  = false;
     m_ftmsControlGranted    = false;
     m_ftmsOpInFlight        = false;
@@ -698,6 +700,7 @@ void BtleHub::parseCscMeasurement(const QByteArray &data)
     if (crankPresent) {
         if (data.size() < offset + 4)
             return;
+        m_cscCadenceSeen = true;
         crankRevs = static_cast<quint8>(data[offset])
                   | (static_cast<quint8>(data[offset+1]) << 8);
         crankTime = static_cast<quint8>(data[offset+2])
@@ -773,6 +776,7 @@ void BtleHub::parsePowerMeasurement(const QByteArray &data)
     qint16 power = static_cast<qint16>(
         static_cast<quint8>(data[2]) | (static_cast<quint8>(data[3]) << 8));
 
+    m_cpsPowerSeen = true;
     emit signal_power(m_userID, static_cast<int>(power));
 
     // Flag bit 0: Pedal Power Balance present. Value is uint8 at byte 4 with
@@ -812,9 +816,10 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
 
     int offset = 2;
 
-    // Helper: read little-endian uint16 and advance offset
+    // A field the flags announce but the packet is too short to hold ends
+    // parsing: emitting it as 0 would fake a stop and trip the auto-pause.
+    auto hasU16 = [&]() { return offset + 2 <= data.size(); };
     auto readU16 = [&]() -> quint16 {
-        if (offset + 2 > data.size()) return 0;
         quint16 v = static_cast<quint8>(data[offset])
                   | (static_cast<quint8>(data[offset+1]) << 8);
         offset += 2;
@@ -823,6 +828,7 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
 
     // Bit 0: More Data (Instantaneous Speed NOT present when set)
     if (!(flags & 0x0001)) {
+        if (!hasU16()) return;
         emit signal_speed(m_userID, readU16() * 0.01);
     }
 
@@ -831,7 +837,10 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
 
     // Bit 2: Instantaneous Cadence present when set
     if (flags & 0x0004) {
-        emit signal_cadence(m_userID, static_cast<int>(readU16() * 0.5));
+        if (!hasU16()) return;
+        const int cadence = static_cast<int>(readU16() * 0.5);
+        if (!m_cscCadenceSeen)
+            emit signal_cadence(m_userID, cadence);
     }
 
     // Bit 3: Average Cadence present
@@ -845,8 +854,10 @@ void BtleHub::parseFtmsIndoorBikeData(const QByteArray &data)
 
     // Bit 6: Instantaneous Power present when set
     if (flags & 0x0040) {
+        if (!hasU16()) return;
         qint16 power = static_cast<qint16>(readU16());
-        emit signal_power(m_userID, static_cast<int>(power));
+        if (!m_cpsPowerSeen)
+            emit signal_power(m_userID, static_cast<int>(power));
     }
 }
 

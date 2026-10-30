@@ -109,6 +109,10 @@ private:
     bool    m_seenFtms         = false;
     bool    m_seenCsc          = false;
     bool    m_seenMoxy         = false;
+
+    // Set once CSC has delivered crank data: it then owns cadence over FTMS,
+    // as m_seenPower makes CPS own power.
+    bool    m_seenCscCadence   = false;
 };
 
 // Alias so headers that #include "btle_hub.h" can use BtleHub type on Wasm
