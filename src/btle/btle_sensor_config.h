@@ -1,6 +1,7 @@
 #ifndef BTLE_SENSOR_CONFIG_H
 #define BTLE_SENSOR_CONFIG_H
 
+#include <QList>
 #include <QString>
 
 /*
@@ -20,6 +21,18 @@ enum class BtleSensorRole {
     Rower         // Fitness Machine / FTMS (0x1826) rower — own saved pairing so
                   // switching between cycling and rowing modes never re-pairs
 };
+
+/*
+ * Whether the trainer's cadence feeds the workout. A dedicated CadenceSpeed
+ * sensor measures crank revolutions while trainer FTMS cadence is often an
+ * estimate, and two interleaved sources make the cadence auto-pause flap.
+ * A rower's stroke rate travels on the cadence channel, so it always counts.
+ */
+inline bool trainerSuppliesCadence(const QList<BtleSensorRole> &connectedRoles)
+{
+    return connectedRoles.contains(BtleSensorRole::Rower)
+        || !connectedRoles.contains(BtleSensorRole::CadenceSpeed);
+}
 
 /*
  * BtleSavedSensor

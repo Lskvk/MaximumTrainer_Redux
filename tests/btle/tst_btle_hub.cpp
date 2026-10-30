@@ -22,6 +22,7 @@
 #include <QSignalSpy>
 
 #include "../../src/btle/btle_hub.h"
+#include "../../src/btle/btle_sensor_config.h"
 #include "../../src/btle/simulator_hub.h"
 #include "../../src/model/intervalsummaryutil.h"
 #include "btle_device_simulator.h"
@@ -96,6 +97,14 @@ private slots:
     // ── FTMS multi-field layout (field skipping) ─────────────────────────────
     void testFtms_allOptionalFieldsBeforePowerSkipped();
     void testFtms_negativeInstantPower();
+    void testFtms_kickrCoreFlags_cadenceAndPowerPresent();
+    void testFtms_kickrCoreCapturedPacket();
+    void testFtms_truncatedPacket_noPhantomZeros();
+    void testFtms_partialPacket_emitsOnlyCompleteFields();
+    void testKickrCore_cpsAndFtms_singlePowerStream();
+    void testFtmsPlusCsc_cscOwnsCadence();
+    void testTrainerSuppliesCadence_data();
+    void testTrainerSuppliesCadence();
     void testHrService_firesTrainerProvidesHr();
 
     // ── SimulatorHub no-op slot verification ─────────────────────────────────
@@ -777,13 +786,14 @@ void TstBtleHub::testCsc_tooShort_ignored()
 
 /**
  * FTMS Indoor Bike Data with all optional fields before "Instantaneous Power"
- * present: speed (bit0=0), average speed (bit1=1), cadence (bit2=0),
- * average cadence (bit3=1), total distance (bit4=1), resistance (bit5=1).
+ * present: speed (bit0=0), average speed (bit1=1), cadence (bit2=1),
+ * average cadence (bit3=1), total distance (bit4=1), resistance (bit5=1),
+ * power (bit6=1).
  * Verifies the parser correctly skips 2+2+2+2+3+2 = 13 bytes before reaching
  * the power field at offset 15 (2 flags + 13 skipped bytes).
  *
  * Raw packet layout (little-endian):
- *   [0-1]  flags  = 0x003A  (bits 1,3,4,5 set; bits 0,2,6 clear)
+ *   [0-1]  flags  = 0x007E  (bits 1-6 set; bit 0 clear)
  *   [2-3]  speed  = 3800  (38.00 km/h)
  *   [4-5]  avgSpd = 3600
  *   [6-7]  cad    = 180   (90.0 rpm in 0.5 rpm units)
@@ -798,15 +808,16 @@ void TstBtleHub::testFtms_allOptionalFieldsBeforePowerSkipped()
     QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
     QSignalSpy spyPwr(hub, &BtleHub::signal_power);
 
-    // flags: bit0=0 (spd present), bit1=1 (avgSpd present), bit2=0 (cad present),
-    //        bit3=1 (avgCad present), bit4=1 (dist present), bit5=1 (res present)
-    // => 0b00111010 = 0x3A, high byte = 0x00
+    // flags: bit0=0 (spd present), bit1=1 (avgSpd present), bit2=1 (cad present),
+    //        bit3=1 (avgCad present), bit4=1 (dist present), bit5=1 (res present),
+    //        bit6=1 (power present)
+    // => 0b01111110 = 0x7E, high byte = 0x00
     QByteArray pkt;
     auto appendLE16 = [&](quint16 v) {
         pkt.append(char(v & 0xFF));
         pkt.append(char((v >> 8) & 0xFF));
     };
-    appendLE16(0x003A);     // flags
+    appendLE16(0x007E);     // flags
     appendLE16(3800);       // speed: 38.00 km/h
     appendLE16(3600);       // average speed (skipped)
     appendLE16(180);        // cadence: 90.0 rpm
@@ -839,12 +850,11 @@ void TstBtleHub::testFtms_negativeInstantPower()
 {
     QSignalSpy spy(hub, &BtleHub::signal_power);
 
-    // flags 0x0040 = bit6 set (power NOT present) → must clear bit6 for power
-    // Use flags = 0x0000: speed absent flag (bit0=0 means speed IS present),
-    // cadence absent (bit2=0 means cadence IS present), power bit6=0 (power present)
+    // flags = 0x0044: bit0=0 (speed present), bit2=1 (cadence present),
+    // bit6=1 (power present).
     // Build a packet with speed+cadence+power, power = -10 W (int16 LE 0xFFF6)
     QByteArray pkt;
-    pkt.append(char(0x00)); pkt.append(char(0x00)); // flags: spd, cad, pwr present
+    pkt.append(char(0x44)); pkt.append(char(0x00)); // flags: spd, cad, pwr present
     pkt.append(char(0x00)); pkt.append(char(0x00)); // speed = 0 km/h
     pkt.append(char(0x00)); pkt.append(char(0x00)); // cadence = 0 rpm
     pkt.append(char(0xF6)); pkt.append(char(0xFF)); // power = -10 (int16 LE)
@@ -853,6 +863,173 @@ void TstBtleHub::testFtms_negativeInstantPower()
 
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spy.at(0).at(1).toInt(), -10);
+}
+
+/**
+ * Regression: FTMS Indoor Bike Data as sent by a Wahoo KICKR CORE.
+ * Flags 0x0044 = bit 2 (Instantaneous Cadence present) + bit 6
+ * (Instantaneous Power present); bit 0 clear, so speed is present too.
+ * Bits 2 and 6 mean "present" when SET — only bit 0 ("More Data") is
+ * inverted. Built from raw bytes (not BtlePacketBuilder) so the test does
+ * not share the encoder's reading of the flags.
+ *
+ *   [0-1] flags   = 0x0044
+ *   [2-3] speed   = 2950 (29.50 km/h)
+ *   [4-5] cadence = 176  (88.0 rpm in 0.5 rpm units)
+ *   [6-7] power   = 156 W
+ */
+void TstBtleHub::testFtms_kickrCoreFlags_cadenceAndPowerPresent()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    QByteArray pkt;
+    pkt.append(char(0x44)); pkt.append(char(0x00)); // flags
+    pkt.append(char(0x86)); pkt.append(char(0x0B)); // speed = 2950
+    pkt.append(char(0xB0)); pkt.append(char(0x00)); // cadence = 176
+    pkt.append(char(0x9C)); pkt.append(char(0x00)); // power = 156
+
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, pkt);
+
+    QCOMPARE(spySpd.count(), 1);
+    QVERIFY2(qAbs(spySpd.at(0).at(1).toDouble() - 29.5) < SPEED_TOLERANCE,
+             "KICKR CORE FTMS speed mismatch");
+
+    QCOMPARE(spyCad.count(), 1);
+    QCOMPARE(spyCad.at(0).at(1).toInt(), 88);
+
+    QCOMPARE(spyPwr.count(), 1);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 156);
+}
+
+/**
+ * Regression: real FTMS Indoor Bike Data packet captured from a Wahoo
+ * KICKR CORE (hardware rev 1, firmware 1.3.17), crank turned by hand:
+ *   44-00-8E-01-00-00-00-00
+ * Flags 0x0044 = speed + cadence + power present. Cadence and power are 0
+ * (no load from hand-cranking), but each field must still be read.
+ */
+void TstBtleHub::testFtms_kickrCoreCapturedPacket()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    const QByteArray pkt = QByteArray::fromHex("44008E0100000000");
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, pkt);
+
+    QCOMPARE(spySpd.count(), 1);
+    QVERIFY2(qAbs(spySpd.at(0).at(1).toDouble() - 3.98) < SPEED_TOLERANCE,
+             "KICKR CORE captured packet speed mismatch");
+
+    QCOMPARE(spyCad.count(), 1);
+    QCOMPARE(spyCad.at(0).at(1).toInt(), 0);
+
+    QCOMPARE(spyPwr.count(), 1);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 0);
+}
+
+/**
+ * Flags promise speed + cadence + power but the payload stops after the flags.
+ * Missing fields must not be reported as 0 (a phantom 0 rpm trips the default
+ * cadence auto-pause and drags the 1 s power average down).
+ */
+void TstBtleHub::testFtms_truncatedPacket_noPhantomZeros()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, QByteArray::fromHex("4400"));
+
+    QCOMPARE(spySpd.count(), 0);
+    QCOMPARE(spyCad.count(), 0);
+    QCOMPARE(spyPwr.count(), 0);
+}
+
+/**
+ * Speed fits but cadence is cut off mid-field: speed is reported, cadence and
+ * the power after it are not.
+ */
+void TstBtleHub::testFtms_partialPacket_emitsOnlyCompleteFields()
+{
+    QSignalSpy spySpd(hub, &BtleHub::signal_speed);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, QByteArray::fromHex("4400860BB0"));
+
+    QCOMPARE(spySpd.count(), 1);
+    QCOMPARE(spyCad.count(), 0);
+    QCOMPARE(spyPwr.count(), 0);
+}
+
+/**
+ * A KICKR CORE exposes Cycling Power (0x2A63) and FTMS Indoor Bike Data
+ * (0x2AD2) on one connection and the hub subscribes to both. Once CPS has
+ * reported, FTMS power is dropped so the workout sees a single stream.
+ */
+void TstBtleHub::testKickrCore_cpsAndFtms_singlePowerStream()
+{
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+
+    const QByteArray ftms = QByteArray::fromHex("4400860BB0009A00"); // 154 W
+    hub->simulateNotification(BTLE_UUID_POWER_MEASUREMENT, BtlePacketBuilder::cyclingPower(156));
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, ftms);
+    hub->simulateNotification(BTLE_UUID_POWER_MEASUREMENT, BtlePacketBuilder::cyclingPower(160));
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA, ftms);
+
+    QCOMPARE(spyPwr.count(), 2);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 156);
+    QCOMPARE(spyPwr.at(1).at(1).toInt(), 160);
+    // No CSC on this device, so FTMS stays the cadence source.
+    QCOMPARE(spyCad.count(), 2);
+}
+
+/**
+ * A device with a CSC crank sensor and FTMS cadence: CSC owns cadence, FTMS
+ * still provides power.
+ */
+void TstBtleHub::testFtmsPlusCsc_cscOwnsCadence()
+{
+    QSignalSpy spyCad(hub, &BtleHub::signal_cadence);
+    QSignalSpy spyPwr(hub, &BtleHub::signal_power);
+
+    hub->simulateNotification(BTLE_UUID_CSC_MEASUREMENT,
+                              GarminTacxSim::buildCscCrankPacket(0, 0));
+    hub->simulateNotification(BTLE_UUID_FTMS_BIKE_DATA,
+                              BtlePacketBuilder::ftmsIndoorBikeData(30.0, 60.0, 200));
+    hub->simulateNotification(BTLE_UUID_CSC_MEASUREMENT,
+                              GarminTacxSim::buildCscCrankPacket(1, 512));
+
+    QCOMPARE(spyCad.count(), 1);
+    QCOMPARE(spyCad.at(0).at(1).toInt(), 120);
+    QCOMPARE(spyPwr.count(), 1);
+    QCOMPARE(spyPwr.at(0).at(1).toInt(), 200);
+}
+
+void TstBtleHub::testTrainerSuppliesCadence_data()
+{
+    QTest::addColumn<QList<BtleSensorRole>>("roles");
+    QTest::addColumn<bool>("expected");
+
+    QTest::newRow("trainer only")
+        << QList<BtleSensorRole>{BtleSensorRole::Trainer} << true;
+    QTest::newRow("trainer + power meter")
+        << QList<BtleSensorRole>{BtleSensorRole::Trainer, BtleSensorRole::Power} << true;
+    QTest::newRow("trainer + cadence sensor")
+        << QList<BtleSensorRole>{BtleSensorRole::Trainer, BtleSensorRole::CadenceSpeed} << false;
+    QTest::newRow("rower + cadence sensor")
+        << QList<BtleSensorRole>{BtleSensorRole::Rower, BtleSensorRole::CadenceSpeed} << true;
+}
+
+void TstBtleHub::testTrainerSuppliesCadence()
+{
+    QFETCH(QList<BtleSensorRole>, roles);
+    QFETCH(bool, expected);
+    QCOMPARE(trainerSuppliesCadence(roles), expected);
 }
 
 /**

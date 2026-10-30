@@ -142,10 +142,10 @@ inline QByteArray cyclingPower(qint16 watts)
 /**
  * FTMS Indoor Bike Data (0x2AD2).
  *
- * FTMS flag convention (inverted for speed/cadence/power!):
- *   bit 0 = 0 → Instantaneous Speed present
- *   bit 2 = 0 → Instantaneous Cadence present
- *   bit 6 = 0 → Instantaneous Power present
+ * FTMS flag convention (only bit 0 is inverted):
+ *   bit 0 = 0 → Instantaneous Speed present ("More Data" clear)
+ *   bit 2 = 1 → Instantaneous Cadence present
+ *   bit 6 = 1 → Instantaneous Power present
  *
  * @param speedKmh    Speed in km/h  (encoded as uint16 × 0.01 km/h)
  * @param cadenceRpm  Cadence in RPM (encoded as uint16 × 0.5 rpm)
@@ -161,11 +161,12 @@ inline QByteArray ftmsIndoorBikeData(double speedKmh,
                                      bool includeCadence = true,
                                      bool includePower   = true)
 {
-    // Build flags: each "NOT present" bit is set when the field is absent.
+    // Build flags: bit 0 is set when speed is absent ("More Data");
+    // bits 2 and 6 are set when cadence / power are present.
     quint16 flags = 0;
-    if (!includeSpeed)   flags |= 0x0001; // bit 0: "More Data" / speed absent
-    if (!includeCadence) flags |= 0x0004; // bit 2: cadence absent
-    if (!includePower)   flags |= 0x0040; // bit 6: power absent
+    if (!includeSpeed)  flags |= 0x0001; // bit 0: "More Data" / speed absent
+    if (includeCadence) flags |= 0x0004; // bit 2: cadence present
+    if (includePower)   flags |= 0x0040; // bit 6: power present
 
     QByteArray pkt;
     pkt.append(static_cast<char>( flags        & 0xFF));

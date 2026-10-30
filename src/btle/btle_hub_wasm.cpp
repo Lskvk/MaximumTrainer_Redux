@@ -181,6 +181,7 @@ void BtleHubWasm::parseCscMeasurement(const QByteArray &data)
 
     if (flags & 0x02) { // Crank Revolution Data present
         if (data.size() < offset + 4) return;
+        m_seenCscCadence = true;
         quint16 cranks;
         std::memcpy(&cranks, data.constData() + offset, 2); offset += 2;
         quint16 eventTime;
@@ -228,10 +229,11 @@ void BtleHubWasm::parseFtmsIndoorBikeData(const QByteArray &data)
     if (flags & 0x0002) offset += 2;
 
     // Instantaneous Cadence (0.5 rpm) – bit 2
-    if (!(flags & 0x0004) && data.size() >= offset + 2) {
+    if ((flags & 0x0004) && data.size() >= offset + 2) {
         quint16 cadenceRaw;
         std::memcpy(&cadenceRaw, data.constData() + offset, 2);
-        emit signal_cadence(SOLO_USER_ID, static_cast<int>(cadenceRaw * 0.5));
+        if (!m_seenCscCadence)
+            emit signal_cadence(SOLO_USER_ID, static_cast<int>(cadenceRaw * 0.5));
         offset += 2;
     }
 
@@ -245,10 +247,11 @@ void BtleHubWasm::parseFtmsIndoorBikeData(const QByteArray &data)
     if (flags & 0x0020) offset += 2;
 
     // Instantaneous Power – bit 6
-    if (!(flags & 0x0040) && data.size() >= offset + 2) {
+    if ((flags & 0x0040) && data.size() >= offset + 2) {
         qint16 powerRaw;
         std::memcpy(&powerRaw, data.constData() + offset, 2);
-        emit signal_power(SOLO_USER_ID, static_cast<int>(powerRaw));
+        if (!m_seenPower)
+            emit signal_power(SOLO_USER_ID, static_cast<int>(powerRaw));
     }
 }
 

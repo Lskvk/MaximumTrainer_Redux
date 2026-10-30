@@ -210,6 +210,11 @@ private:
     quint16 m_lastCrankEventTime    = 0;
     bool    m_firstCscMeasurement   = true;
 
+    // Devices exposing CPS or CSC alongside FTMS report the same quantity
+    // twice; the dedicated service wins so the workout sees one stream.
+    bool    m_cpsPowerSeen          = false;
+    bool    m_cscCadenceSeen        = false;
+
     // Latched once this connection has produced a heart-rate reading (via the
     // 0x180D service), so signal_trainerProvidesHr fires only once.
     bool    m_hrSeen               = false;
