@@ -63,6 +63,7 @@ private:
     void loadSettings();
     void applyScale();
     void keepOnScreen();
+    bool inResizeGrip(const QPoint &pos) const;
     void registerHotkey();
     void unregisterHotkey();
     void paintTimeline(QPainter &p, const QRectF &rect) const;
@@ -87,10 +88,14 @@ private:
 
     int m_opacityPercent = 60;
     double m_scale = 1.0;
+    int m_baseWidth = 420;   // unscaled; actual width = m_baseWidth * m_scale
     bool m_enabled = true;
 
     bool m_dragging = false;
     QPoint m_dragOffset;
+    bool m_resizing = false;
+    int m_resizeStartX = 0;
+    int m_resizeStartWidth = 0;
 
     bool m_hotkeyRegistered = false;
     QTimer *m_topmostTimer = nullptr;

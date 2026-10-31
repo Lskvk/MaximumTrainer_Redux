@@ -28,8 +28,10 @@
 
 namespace {
 
-constexpr int kBaseWidth = 300;
-constexpr int kBaseHeight = 140;
+constexpr int kBaseWidth = 420;
+constexpr int kBaseHeight = 170;
+constexpr int kMinBaseWidth = 280;
+constexpr int kResizeGrip = 10;   // px at the right edge that resize instead of move
 const char *kSettingsGroup = "WorkoutOverlay";
 #ifdef Q_OS_WIN
 constexpr int kToggleHotkeyId = 0x4F56;
@@ -49,7 +51,8 @@ WorkoutOverlay::WorkoutOverlay(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_ShowWithoutActivating);
     setWindowTitle(tr("Workout overlay"));
-    setToolTip(tr("Drag to move · right-click for options"));
+    setToolTip(tr("Drag to move · drag the right edge to resize · right-click for options"));
+    setMouseTracking(true);   // resize cursor over the right edge
 
     loadSettings();
     registerHotkey();
@@ -175,6 +178,7 @@ void WorkoutOverlay::loadSettings()
     settings.beginGroup(kSettingsGroup);
     m_opacityPercent = qBound(10, settings.value("opacity", 60).toInt(), 100);
     m_scale = qBound(0.6, settings.value("scale", 1.0).toDouble(), 2.0);
+    m_baseWidth = qMax(kMinBaseWidth, settings.value("baseWidth", kBaseWidth).toInt());
     m_enabled = settings.value("enabled", true).toBool();
     const bool hasPos = settings.contains("pos");
     const QPoint savedPos = settings.value("pos").toPoint();
@@ -194,6 +198,7 @@ void WorkoutOverlay::saveSettings() const
     settings.beginGroup(kSettingsGroup);
     settings.setValue("opacity", m_opacityPercent);
     settings.setValue("scale", m_scale);
+    settings.setValue("baseWidth", m_baseWidth);
     settings.setValue("enabled", m_enabled);
     settings.setValue("pos", pos());
     settings.endGroup();
@@ -201,17 +206,31 @@ void WorkoutOverlay::saveSettings() const
 
 void WorkoutOverlay::applyScale()
 {
-    setFixedSize(qRound(kBaseWidth * m_scale), qRound(kBaseHeight * m_scale));
+    setFixedSize(qRound(m_baseWidth * m_scale), qRound(kBaseHeight * m_scale));
     update();
 }
 
-// A saved position can point at a monitor that is no longer connected.
+// A saved position can point at a monitor that is no longer connected, and a
+// wider/larger overlay can spill past the edge of the one it is on.
 void WorkoutOverlay::keepOnScreen()
 {
-    if (QGuiApplication::screenAt(frameGeometry().center()))
+    QScreen *screen = QGuiApplication::screenAt(frameGeometry().center());
+    if (!screen)
+        screen = QGuiApplication::primaryScreen();
+    if (!screen)
         return;
-    if (QScreen *screen = QGuiApplication::primaryScreen())
-        move(screen->availableGeometry().topRight() + QPoint(-width() - 24, 24));
+    const QRect avail = screen->availableGeometry();
+    QRect r = frameGeometry();
+    if (!avail.intersects(r))
+        r.moveTopLeft(avail.topRight() + QPoint(-r.width() - 24, 24));
+    r.moveLeft(qBound(avail.left(), r.left(), qMax(avail.left(), avail.right() - r.width() + 1)));
+    r.moveTop(qBound(avail.top(), r.top(), qMax(avail.top(), avail.bottom() - r.height() + 1)));
+    move(r.topLeft());
+}
+
+bool WorkoutOverlay::inResizeGrip(const QPoint &pos) const
+{
+    return pos.x() >= width() - qRound(kResizeGrip * m_scale);
 }
 
 
@@ -254,8 +273,14 @@ bool WorkoutOverlay::nativeEvent(const QByteArray &eventType, void *message, qin
 void WorkoutOverlay::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        m_dragging = true;
-        m_dragOffset = event->globalPosition().toPoint() - frameGeometry().topLeft();
+        if (inResizeGrip(event->position().toPoint())) {
+            m_resizing = true;
+            m_resizeStartX = event->globalPosition().toPoint().x();
+            m_resizeStartWidth = width();
+        } else {
+            m_dragging = true;
+            m_dragOffset = event->globalPosition().toPoint() - frameGeometry().topLeft();
+        }
         event->accept();
         return;
     }
@@ -264,18 +289,28 @@ void WorkoutOverlay::mousePressEvent(QMouseEvent *event)
 
 void WorkoutOverlay::mouseMoveEvent(QMouseEvent *event)
 {
+    if (m_resizing && (event->buttons() & Qt::LeftButton)) {
+        const int newWidth = m_resizeStartWidth + event->globalPosition().toPoint().x() - m_resizeStartX;
+        m_baseWidth = qMax(kMinBaseWidth, qRound(newWidth / m_scale));
+        applyScale();
+        event->accept();
+        return;
+    }
     if (m_dragging && (event->buttons() & Qt::LeftButton)) {
         move(event->globalPosition().toPoint() - m_dragOffset);
         event->accept();
         return;
     }
+    setCursor(inResizeGrip(event->position().toPoint()) ? Qt::SizeHorCursor : Qt::ArrowCursor);
     QWidget::mouseMoveEvent(event);
 }
 
 void WorkoutOverlay::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (m_dragging && event->button() == Qt::LeftButton) {
+    if ((m_dragging || m_resizing) && event->button() == Qt::LeftButton) {
         m_dragging = false;
+        m_resizing = false;
+        keepOnScreen();
         saveSettings();
         event->accept();
         return;
@@ -315,11 +350,35 @@ void WorkoutOverlay::contextMenuEvent(QContextMenuEvent *event)
         });
     }
 
+    QMenu *widthMenu = menu.addMenu(tr("Width (or drag the right edge)"));
+    const QList<QPair<QString, int>> widths = {
+        {tr("Narrow"), 320}, {tr("Normal"), kBaseWidth}, {tr("Wide"), 560}, {tr("Extra wide"), 720}};
+    for (const auto &preset : widths) {
+        QAction *action = widthMenu->addAction(preset.first);
+        action->setCheckable(true);
+        action->setChecked(preset.second == m_baseWidth);
+        const int baseWidth = preset.second;
+        connect(action, &QAction::triggered, this, [this, baseWidth] {
+            m_baseWidth = baseWidth;
+            applyScale();
+            keepOnScreen();
+            saveSettings();
+        });
+    }
+
     menu.addSeparator();
     QAction *hideAction = menu.addAction(tr("Hide  (F9 / Ctrl+Alt+O)"));
     connect(hideAction, &QAction::triggered, this, &WorkoutOverlay::toggle);
 
+    // The menus must stay above the overlay itself: mark them topmost and pause
+    // the periodic re-pin, which would otherwise push the overlay over them.
+    for (QMenu *m : {&menu, opacityMenu, sizeMenu, widthMenu})
+        m->setWindowFlag(Qt::WindowStaysOnTopHint, true);
+    if (m_topmostTimer)
+        m_topmostTimer->stop();
     menu.exec(event->globalPos());
+    if (m_topmostTimer)
+        m_topmostTimer->start();
 }
 
 
@@ -338,6 +397,13 @@ void WorkoutOverlay::paintEvent(QPaintEvent *event)
     p.setPen(QPen(QColor(255, 255, 255, 45), 1));
     p.setBrush(QColor(15, 17, 21, m_opacityPercent * 255 / 100));
     p.drawRoundedRect(QRectF(rect()).adjusted(0.5, 0.5, -0.5, -0.5), 10 * s, 10 * s);
+
+    // Resize grip hint on the right edge.
+    p.setPen(QPen(QColor(255, 255, 255, 70), qMax(1.0, 1.5 * s)));
+    for (int i = 0; i < 2; ++i) {
+        const double gx = width() - (4 + 3 * i) * s;
+        p.drawLine(QPointF(gx, height() / 2.0 - 8 * s), QPointF(gx, height() / 2.0 + 8 * s));
+    }
 
     const QFont baseFont = font();
     auto useFont = [&](double px, bool bold) {
@@ -368,14 +434,14 @@ void WorkoutOverlay::paintEvent(QPaintEvent *event)
                    Qt::AlignLeft | Qt::AlignBottom, unit);
     };
 
-    const double pad = 10 * s;
+    const double pad = 12 * s;
     const double w = width() - 2 * pad;
     double y = pad;
     const QString dash = QStringLiteral("–");
 
     // Row 1: elapsed · interval left (or status badge) · total left
-    const QRectF row1(pad, y, w, 18 * s);
-    useFont(15, true);
+    const QRectF row1(pad, y, w, 20 * s);
+    useFont(17, true);
     p.setPen(textColor);
     p.drawText(row1, Qt::AlignLeft | Qt::AlignVCenter, OverlayZones::formatDuration(secondsOf(m_elapsed)));
     if (!m_openRide) {
@@ -384,7 +450,7 @@ void WorkoutOverlay::paintEvent(QPaintEvent *event)
                    QStringLiteral("-%1").arg(OverlayZones::formatDuration(secondsOf(m_remaining))));
     }
     if (!m_status.isEmpty()) {
-        useFont(12, true);
+        useFont(13, true);
         const double badgeW = textWidth(m_status) + 14 * s;
         const QRectF badge(row1.center().x() - badgeW / 2, row1.top(), badgeW, row1.height());
         p.setPen(Qt::NoPen);
@@ -400,20 +466,20 @@ void WorkoutOverlay::paintEvent(QPaintEvent *event)
     y += row1.height() + 6 * s;
 
     // Row 2: power (coloured against target) · heart rate
-    const QRectF row2(pad, y, w, 36 * s);
+    const QRectF row2(pad, y, w, 42 * s);
     const bool hasTarget = !m_openRide && m_target > 0;
     const OverlayZones::TargetState state =
         hasTarget ? OverlayZones::targetState(m_power, m_target, m_targetRange) : OverlayZones::TargetState::None;
     drawValueUnit(row2, m_power >= 0 ? QString::number(m_power) : dash,
                   hasTarget ? tr("W / %1").arg(m_target) : tr("W"),
-                  32, 13, OverlayZones::targetColor(state), false);
+                  36, 14, OverlayZones::targetColor(state), false);
 
-    useFont(24, true);
+    useFont(28, true);
     const QString hrText = m_hr >= 0 ? QString::number(m_hr) : dash;
     const double hrW = textWidth(hrText);
     p.setPen(textColor);
     p.drawText(row2, Qt::AlignRight | Qt::AlignVCenter, hrText);
-    useFont(18, false);
+    useFont(20, false);
     const QString heart = QStringLiteral("♥");
     p.setPen(QColor(255, 69, 58));
     p.drawText(QRectF(row2.left(), row2.top(), w - hrW - 5 * s, row2.height()),
@@ -421,15 +487,15 @@ void WorkoutOverlay::paintEvent(QPaintEvent *event)
     y += row2.height() + 4 * s;
 
     // Row 3: cadence · speed
-    const QRectF row3(pad, y, w, 20 * s);
+    const QRectF row3(pad, y, w, 24 * s);
     drawValueUnit(row3, m_cadence >= 0 ? QString::number(m_cadence) : dash, tr("rpm"),
-                  17, 12, textColor, false);
+                  19, 13, textColor, false);
     QString speedText = dash;
     if (m_speedKmh >= 0) {
         const double speed = m_useMiles ? m_speedKmh * constants::GLOBAL_CONST_CONVERT_KMH_TO_MILES : m_speedKmh;
         speedText = QString::number(speed, 'f', 1);
     }
-    drawValueUnit(row3, speedText, m_useMiles ? tr("mph") : tr("km/h"), 17, 12, textColor, true);
+    drawValueUnit(row3, speedText, m_useMiles ? tr("mph") : tr("km/h"), 19, 13, textColor, true);
     y += row3.height() + 8 * s;
 
     // Row 4: program timeline
