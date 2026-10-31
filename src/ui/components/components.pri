@@ -24,7 +24,8 @@ SOURCES +=\
     $$PWD/oxygenwidget.cpp \
     $$PWD/userstudiowidget.cpp \
     $$PWD/toggleswitch.cpp \
-    $$PWD/webbrowserview.cpp
+    $$PWD/webbrowserview.cpp \
+    $$PWD/workoutoverlay.cpp
 
 
 HEADERS +=\
@@ -51,7 +52,9 @@ HEADERS +=\
     $$PWD/userstudiowidget.h \
     $$PWD/toggleswitch.h \
     $$PWD/myqwebenginepage.h \
-    $$PWD/webbrowserview.h
+    $$PWD/webbrowserview.h \
+    $$PWD/workoutoverlay.h \
+    $$PWD/overlayzones.h
 
 
 

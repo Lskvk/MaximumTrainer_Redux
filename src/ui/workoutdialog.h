@@ -40,6 +40,7 @@ class WebBrowserView;   // forward declaration (lazily created web video player)
 class QQuickWidget;
 class RetroRaceController;   // retro ghost-race view
 class ZwiftClickManager;     // Zwift Click v2 (right) controller input, direct BLE
+class WorkoutOverlay;        // translucent in-game summary window
 
 namespace Ui {
 class WorkoutDialog;
@@ -282,6 +283,10 @@ private:
 
     void sureYouWantToQuit();
 
+    void createOverlay();
+    void updateOverlay(double workoutSec);
+    void updateOverlayStatus();
+
 
 private:
     bool isUsingSlopeMode;
@@ -330,6 +335,10 @@ private:
     RetroRaceController *raceController = nullptr;
     QQuickWidget *ensureRaceView();
     QVariantList buildWorkoutProfile() const;   // normalised target-power samples
+
+    // Created on first show (its transient parent must be the mapped dialog, or
+    // the dialog's application modality blocks dragging it). Null on WASM.
+    WorkoutOverlay *overlay = nullptr;
     void onToggleGameFullscreen();              // collapse/restore the data panes
     bool m_gameFullscreen = false;
     QList<int> m_savedSplitterSizes;

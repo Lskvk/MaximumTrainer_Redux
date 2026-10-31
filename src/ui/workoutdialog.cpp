@@ -50,6 +50,7 @@
 #include "intervalsicuservice.h"
 #include "extrequest.h"
 #include "intervalsummaryutil.h"
+#include "workoutoverlay.h"
 
 
 WorkoutDialog::~WorkoutDialog() {
@@ -1076,6 +1077,7 @@ void WorkoutDialog::update1sec(double totalTimeElapsed_sec) {
         ui->widget_topMenu->setWorkoutRemainingTime(timeWorkoutRemaining);
 
     }
+    updateOverlay(totalTimeElapsed_sec);
 
     // Early exit
     if (workout.getWorkoutNameEnum() == Workout::OPEN_RIDE) {
@@ -1249,6 +1251,7 @@ void WorkoutDialog::adjustWorkoutDifficulty(int percentageIncrease) {
     Workout workoutEdited(workout.getFilePath(), workout.getWorkoutNameEnum(), lstIntervalAdjusted,
                           workout.getName(), workout.getCreatedBy(), workout.getDescription(), workout.getPlan(), workout.getType());
     this->workout = workoutEdited;
+    if (overlay) overlay->setWorkout(workout);
 
     // refresh view
     ui->widget_workoutPlot->setWorkoutData(workout, false);
@@ -1306,6 +1309,7 @@ void WorkoutDialog::insertInterval() {
     Workout workoutEdited(workout.getFilePath(), workout.getWorkoutNameEnum(), lstIntervalModified,
                           workout.getName(), workout.getCreatedBy(), workout.getDescription(), workout.getPlan(), workout.getType());
     this->workout = workoutEdited;
+    if (overlay) overlay->setWorkout(workout);
 
     // refresh view
     ui->widget_workoutPlot->setWorkoutData(workout, false);
@@ -1422,6 +1426,7 @@ void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
 
 
     this->workout = workoutEdited;
+    if (overlay) overlay->setWorkout(workout);
 
     // refresh view
     ui->widget_workoutPlot->setWorkoutData(workout, false);
@@ -1467,6 +1472,7 @@ void WorkoutDialog::applyMoveToInterval(int nbIntervalToDelete) {
     }
     ui->widget_time->setWorkoutRemainingTime(timeWorkoutRemaining);
     ui->widget_topMenu->setWorkoutRemainingTime(timeWorkoutRemaining);
+    updateOverlay(timeElapsed_sec);
 
     //start timer ignore click (click on QDialog response trigger a new click event)
     bignoreClickPlot = true;
@@ -1545,6 +1551,7 @@ void WorkoutDialog::workoutOver() {
     ui->widget_workoutPlot->setDisplayIntervalMessage(true, tr("Workout Completed!"), 20000);
 
     isWorkoutPaused = true;
+    updateOverlayStatus();
     ui->widget_topMenu->setButtonStartReady(false);
     ui->widget_topMenu->setButtonLapVisible(false);
     ui->widget_workoutPlot->setSpinBoxDisabled();
@@ -1698,6 +1705,7 @@ void WorkoutDialog::start_or_pause_workout() {
     // Keep the race in sync with workout pause/resume.
     if (raceController && isWorkoutStarted && !isWorkoutOver)
         raceController->setRacePaused(isWorkoutPaused);
+    updateOverlayStatus();
 }
 
 
@@ -1748,6 +1756,8 @@ void WorkoutDialog::sendLastSecondData(int seconds) {
 
 void WorkoutDialog::HrDataReceived(int userID, int value) {
 
+    if (overlay && userID == 1)
+        overlay->setHr(value);
 
     // invalid value, show "-" to the user
     if (value == -1) {
@@ -1812,6 +1822,8 @@ void WorkoutDialog::CadenceDataReceived(int userID, int value) {
     // Animate the race player's legs at the rider's real cadence.
     if (raceController && userID == 1 && value >= 0 && value <= 250)
         raceController->setLiveCadenceRpm(value);
+    if (overlay && userID == 1)
+        overlay->setCadence(value);
 
     // invalid value, show "-" to the user
     if (value == -1 || value > 250) {
@@ -1998,6 +2010,8 @@ void WorkoutDialog::speedDataChosen(int userID, double value) {
 
 
     ui->wid_4_infoBoxSpeed->setValue(value);
+    if (overlay && userID == 1)
+        overlay->setSpeedKmh(value);
 
 }
 
@@ -2006,6 +2020,8 @@ void WorkoutDialog::PowerDataReceived(int userID, int value) {
 
     // invalid value, show "-" to the user
     if (value == -1) {
+        if (overlay && userID == 1)
+            overlay->setPower(value);
         ui->wid_2_infoBoxPower->setValue(value);
         ui->wid_2_workoutPlot_PowerZoom->updateTextLabelValue(value);
         if (account->enable_studio_mode) {
@@ -2023,6 +2039,8 @@ void WorkoutDialog::PowerDataReceived(int userID, int value) {
     // Drive the player in the retro race with live (solo) power.
     if (raceController && userID == 1)
         raceController->setLivePowerWatts(value);
+    if (overlay && userID == 1)
+        overlay->setPower(value);
 
     // Track for sensor dropout detection (non-studio, user 1 only)
     if (!account->enable_studio_mode && isWorkoutStarted && !isWorkoutOver)
@@ -2434,6 +2452,8 @@ void WorkoutDialog::targetPowerChanged_f(double percentageTarget, int range) {
 
     currentTargetPower = qRound(percentageTarget * account->FTP);
     currentTargetPowerRange =  range;
+    if (overlay)
+        overlay->setTarget(currentTargetPower, currentTargetPowerRange);
     // Keep the workout pacer on the current interval target (rest → soft-pedal
     // at ~45% FTP so it keeps rolling rather than stopping dead).
     if (raceController) {
@@ -3121,6 +3141,11 @@ void WorkoutDialog::showEvent(QShowEvent *event) {
 
     QDialog::showEvent(event);
 
+    if (!overlay)
+        createOverlay();
+    if (overlay)
+        overlay->restoreVisibility();
+
     // Build and load the web player once, in the background, just after the
     // dialog is mapped — while its container is still hidden, so the native
     // window is realized invisibly and switching to it later never flickers the
@@ -3208,6 +3233,39 @@ void WorkoutDialog::sureYouWantToQuit() {
         QDialog::accept();
     }
 
+}
+
+
+void WorkoutDialog::createOverlay() {
+#ifndef GC_WASM_BUILD
+    overlay = new WorkoutOverlay(this);
+    overlay->setUseMiles(!account->distance_in_km);
+    overlay->setWorkout(workout);
+    overlay->setTarget(currentTargetPower, currentTargetPowerRange);
+    updateOverlay(timeElapsed_sec);
+    updateOverlayStatus();
+    connect(this, &QDialog::finished, overlay, &WorkoutOverlay::shutdown);
+#endif
+}
+
+void WorkoutDialog::updateOverlay(double workoutSec) {
+    if (!overlay)
+        return;
+    overlay->setTimes(timeElapsedTotal, timeInterval, timeWorkoutRemaining);
+    overlay->setProgress(workoutSec);
+}
+
+void WorkoutDialog::updateOverlayStatus() {
+    if (!overlay)
+        return;
+    if (isWorkoutOver)
+        overlay->setStatusText(tr("DONE"));
+    else if (!isWorkoutStarted)
+        overlay->setStatusText(tr("READY"));
+    else if (isWorkoutPaused)
+        overlay->setStatusText(tr("PAUSED"));
+    else
+        overlay->setStatusText(QString());
 }
 
 
@@ -4011,6 +4069,12 @@ bool WorkoutDialog::eventFilter(QObject *watched, QEvent *event) {
         // --- Fullscreen
         else if (keyEvent->key() == Qt::Key_F11) {
             expandWindow();
+            return true;
+        }
+        // --- In-game overlay (Ctrl+Alt+O also works while a game has focus)
+        else if (keyEvent->key() == Qt::Key_F9) {
+            if (overlay)
+                overlay->toggle();
             return true;
         }
 

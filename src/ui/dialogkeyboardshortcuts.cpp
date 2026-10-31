@@ -47,6 +47,7 @@ DialogKeyboardShortcuts::DialogKeyboardShortcuts(QWidget *parent)
         {tr("L  /  Backspace"),  tr("Manual lap")},
         {tr("F6 / F7 / F8"),     tr("Radio: previous / play-pause / next")},
         {tr("F11"),              tr("Toggle fullscreen")},
+        {tr("F9  /  Ctrl+Alt+O"), tr("Show / hide in-game overlay (Ctrl+Alt+O works inside games)")},
         {tr("?  /  F1"),         tr("Show keyboard shortcuts")},
         {tr("Escape"),           tr("Exit workout (with confirmation)")},
     };

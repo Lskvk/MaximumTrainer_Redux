@@ -362,6 +362,14 @@ jobs:
         jom /J $env:NUMBER_OF_PROCESSORS
       shell: powershell
 
+    - name: Build overlay test
+      run: |
+        New-Item -ItemType Directory -Force -Path build\tests | Out-Null
+        Set-Location tests\overlay
+        qmake overlay_tests.pro
+        jom /J $env:NUMBER_OF_PROCESSORS
+      shell: powershell
+
     - name: Build UI navigation test
       run: |
         New-Item -ItemType Directory -Force -Path build\tests | Out-Null
@@ -412,7 +420,7 @@ jobs:
           "online_mode_tests", "login_screen_tests", "workout_ui_tests",
           "workout_parsing_tests", "ui_navigation_tests", "ui_screens_tests",
           "workout_io_tests", "workout_creator_tests",
-          "intervals_icu_integration_tests"
+          "intervals_icu_integration_tests", "overlay_tests"
         )
         foreach ($t in $tests) {
           $exe = "build\tests\$t.exe"
@@ -509,6 +517,10 @@ jobs:
 
     - name: Workout creator tests
       run: .\build\tests\workout_creator_tests.exe -v2
+      shell: powershell
+
+    - name: Overlay helper tests
+      run: .\build\tests\overlay_tests.exe -v2
       shell: powershell
 
     - name: Workout parsing tests
